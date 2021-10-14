@@ -1,0 +1,47 @@
+#text-h4{ 
+    color:brown; 
+    background-color: aquamarine;
+}
+
+#fundo{
+    background-color:lightblue;
+}
+#paragrafo{
+    margin: 30px 15px 20px 10px;
+    color: red;
+}
+body{ 
+    text-align: center;
+    color:blue;
+}
+
+#divinput{
+    margin-top: 20 px;
+    margin-bottom:  10 px;
+    color: brown;
+}
+
+#divfacebook{
+    margin-top: 30px;
+    margin-bottom: 15px;
+    color: burlywood;
+}
+input{
+    border: solid 2px rgb(40, 43, 231);
+    border-radius: 7px;
+    font-size: 20px;
+}
+#btcalcular{
+font-size: 20px;
+background-color: bisque;
+}
+
+#resultado{
+    font-size: 20px;
+    color: brown;
+}
+
+#indiceimc{
+    font-size: 20px;
+    color: brown;
+}
