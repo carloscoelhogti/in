@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Simple Map</title>
+    <script src="www.google.com.br"></script>
+    <link rel="stylesheet" type="text/css" href="mapa.css" />
+    <script src="mapa.js"></script>
+  </head>
+  <body>
+    <p>Mapa de Localização de Ativos</p>
+    <button id="ho" onclick="initMap()">Home</button>
+    <button id="sw" onclick="switchs()">SW</button>
+    <div id="map"></div>
+
+    <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDjvFKHcwDE9InraR9AkD412KsfkByOA-0&callback=initMap&v=weekly"async>
+    </script>
+  </body>
+</html>
