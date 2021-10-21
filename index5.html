@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <title>Eventos</title>
+        <meta charset="utf-8">
+        <script src="index5.js"></script>
+    </head>
+    <body>
+        <h1 id="h1" onclick="document.getElementById('h1').innerHTML = 'Obrigado'"
+        ondblclick="document.getElementById('h1').innerHTML = 'Clicou 2x'">Clique Aqui</h1>
+        <input type="text" 
+        onchange="inputonchange(this.value)" 
+        onblur="inputonblur()"
+        onkeydown="console.log('onkeydown')"
+        onkeyup="console.log('onkeyup')"
+        onkeypress="console.log('onkeypress')">
+        <br>
+        <h2 id="h2" onmouseover="document.getElementById('h2').innerHTML =' Mouse em Cima'"
+        onmouseout="document.getElementById('h2').innerHTML = 'Mouse Fora'">Testando Mouse</h2>
+    </body>
+</html>
