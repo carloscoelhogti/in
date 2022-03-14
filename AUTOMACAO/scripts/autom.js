@@ -46,4 +46,13 @@ function verificar(){
 
 }
 
+function loadDoc() {
+    const xhttp = new XMLHttpRequest();
+    xhttp.onload = function() {
+    document.getElementById("teste").innerHTML = this.responseText;
+    }
+    xhttp.open("GET", "Report/MCABalEntrada.txt", true);
+    xhttp.send();
+}
+
 
