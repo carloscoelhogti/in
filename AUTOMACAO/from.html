@@ -9,14 +9,7 @@
 </head>
 <body>
     <p id="teste">...</p>
-    <script>
-        $.ajax({
-    url: "Report/MCABalEntrada.txt",
-    dataType: "text",
-    success: function (data) {
-         $("#teste").value(data);
-    }
-});
-        </script>
+    <embed src="Report/MCABalEntrada.txt"> // This will show the text contained in file.txt in the page
+
 </body>
 </html>
