@@ -1,7 +1,7 @@
 //Efetuando a leitura do arquivo
 {
     let fs = require('fs'); //variavel deve ser criada para que possamos ler o arquivo
-    fs.readFile("c:/MCABalEntrada.txt",'utf8', function(err,data){
+    fs.readFile("MCABalEntrada.txt",'utf8', function(err,data){
         //Enviando para o console o resultado da leitura
         console.log(data);
     });
