@@ -3,6 +3,6 @@ function loadDoc() {
     xhttp.onload = function() {
       document.getElementById("demo").innerHTML = this.responseText;
       }
-    xhttp.open("GET", "c:/MCABalEntrada.txt", true);
+    xhttp.open("GET", "MCABalEntrada.txt", true);
     xhttp.send();
   }
