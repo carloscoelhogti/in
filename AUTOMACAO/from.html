@@ -10,7 +10,13 @@
 <body>
     <p id="teste">...</p>
     <script>
-        $( "#teste" ).load( "AUTOMACAO/Report/MCABalEntrada.txt #teste" );
+        $.ajax({
+    url: "Report/MCABalEntrada.txt",
+    dataType: "text",
+    success: function (data) {
+         $("#teste").value(data);
+    }
+});
         </script>
 </body>
 </html>
