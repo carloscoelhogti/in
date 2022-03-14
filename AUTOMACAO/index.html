@@ -5,6 +5,18 @@
         <meta charset="utf-8" >
         <link rel="stylesheet" href="./css/autom.css">
         <script src="./scripts/autom.js"></script>
+        
+                <script>
+                        function loadDoc() {
+                            const xhttp = new XMLHttpRequest();
+                               xhttp.onload = function() {
+                               document.getElementById("teste").innerHTML = this.responseText;
+                               }
+                        xhttp.open("GET", "MCABalEntrada.txt", true);
+                        xhttp.send();
+                        }
+          </script>
+        
     </head>
     <body>
         <p id="data"></p>
@@ -57,15 +69,6 @@
             <button type="button" onclick="LoadDoc()">Teste</button>
         </p>
         <p id="teste">...</p>
-        <script>
-function loadDoc() {
-    const xhttp = new XMLHttpRequest();
-    xhttp.onload = function() {
-      document.getElementById("teste").innerHTML = this.responseText;
-      }
-    xhttp.open("GET", "c:/MCABalEntrada.txt", true);
-    xhttp.send();
-  }
-          </script>
+
     </body>
 </html>
