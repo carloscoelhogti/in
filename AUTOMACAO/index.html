@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <title>MONITORAMENTO AUTOMAÇÃO | EM DESENVOLVIMENTO</title>
+        <meta charset="utf-8" >
+        <link rel="stylesheet" href="./css/autom.css">
+        <script src="./scripts/autom.js"></script>
+    </head>
+    <body>
+        <p id="data"></p>
+
+        <script>
+            const d = new Date();
+            document.getElementById("data").innerHTML = d;
+        </script>
+        <br>
+        <P>Layout de Automação</P>
+        <P id = "texto"style="color:tomato">...</P>
+        <br>
+        <button type="button" onclick= "automacao_offline()">AUTOMAÇÃO OFFLINE</button>
+        <br>
+        <br>
+        <button type="button" onclick= "cancela_offline()">Cancela Offline</button>
+        <button type="button" onclick= "celula_offline()">Celula de Carga Offline</button>
+        <button type="button" onclick= "conversor_offline()">Conversor Ethernet Offline</button>
+        <button type="button" onclick= "display_offline()">Display Offline</button>
+        <button type="button" onclick= "leitor_offline()">Leitor Offline</button>
+        <button type="button" onclick= "mca_offline()">MCA Offline</button>
+        <button type="button" onclick= "semaforo_offline()">Semáforo Offline</button>
+        <br>
+        <br>
+        <button type="button" onclick= "automacao_online()">RESTAURAR AUTOMAÇÃO</button>
+        <br>
+        <button type="button" onclick="verificar()">VERIFICAR</button>
+        <br>
+        <br>
+        <img id = "layout" height="800" width="1100" src=".\imagens\automacao_on.png" border=1>
+        <p id="statusbalentrada">
+            <H1>BALANÇA DE ENTRADA</H1>
+            <iframe id="mcabalentrada" src="c://MCABalEntrada.txt" onload="readfile()" title="MCA BALANÇA ENTRADA" height="70" width="350" frameborder="no"></iframe>
+            <iframe id="antenaladoa" src="c://ANTENABALENTLADOA.txt" onload="readfile()" title="ANTENA BAL ENTRADA LADO A" height="70" width="350" frameborder="no"></iframe>
+            <iframe id="antenaladob" src="c://ANTENABALENTLADOB.txt" onload="readfile()" title="ANTENA BAL ENTRADA LADO B" height="70" width="350" frameborder="no"></iframe>
+        </p>
+        <p id="statusbalsaida">
+            <H1>BALANÇA DE SAIDA</H1>
+            <iframe id="mcabalsaida" src="c://MCABalSaida.txt" onload="readfile()" title="MCA BALANÇA ENTRADA" height="70" width="350" frameborder="no"></iframe>
+            <iframe id="antenaladoa" src="c://ANTENABALSAILADOA.txt" onload="readfile()" title="ANTENA BAL ENTRADA LADO A" height="70" width="350" frameborder="no"></iframe>
+            <iframe id="antenaladob" src="c://ANTENABALSAILADOB.txt" onload="readfile()" title="ANTENA BAL ENTRADA LADO B" height="70" width="350" frameborder="no"></iframe>
+        </p>
+        <p id="statusacessocentral">
+            <H1>ACESSO CENTRAL</H1>
+            <iframe id="mcaacessocentral" src="c://MCAAcesso.txt" onload="readfile()" title="MCA BALANÇA ENTRADA" height="70" width="350" frameborder="no"></iframe>
+            <iframe id="antenaladoa" src="c://ANTENAACESSOLADOA.txt" onload="readfile()" title="ANTENA BAL ENTRADA LADO A" height="70" width="350" frameborder="no"></iframe>
+            <iframe id="antenaladob" src="c://ANTENAACESSOLADOB.txt" onload="readfile()" title="ANTENA BAL ENTRADA LADO B" height="70" width="350" frameborder="no"></iframe>
+        </p>
+        <p>
+            <button type="button" onclick="LoadDoc()">Teste</button>
+        </p>
+        <p id="teste">...</p>
+        <script>
+function loadDoc() {
+    const xhttp = new XMLHttpRequest();
+    xhttp.onload = function() {
+      document.getElementById("teste").innerHTML = this.responseText;
+      }
+    xhttp.open("GET", "c:/MCABalEntrada.txt", true);
+    xhttp.send();
+  }
+          </script>
+    </body>
+</html>

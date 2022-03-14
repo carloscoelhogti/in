@@ -1,0 +1,14 @@
+body{ 
+    text-align: center;
+    color:blue;
+}
+figure{
+    border-style: solid;
+    border-color: black;
+}
+iframe:focus{
+    outline: none;
+}
+iframe[seamless]{
+    display: block;
+}
