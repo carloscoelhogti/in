@@ -51,7 +51,7 @@ function loadDoc() {
     xhttp.onload = function() {
     document.getElementById("teste").innerHTML = this.responseText;
     }
-    xhttp.open("GET", "Report/MCABalEntrada.txt", true);
+    xhttp.open("GET", "AUTOMACAO/Report/MCABalEntrada.txt", true);
     xhttp.send();
 }
 
