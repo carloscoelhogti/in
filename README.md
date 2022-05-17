@@ -1,3 +1,4 @@
 # Analista de Dados | BI
 # Analista de Integração de Ambiente
-# Estudante FrontEnd | HTML | Javascript |CSS | Node.js | Python 
+# Estudante FrontEnd | HTML - JavaScript - CSS - Python - React - JSX - EJS - Express
+
