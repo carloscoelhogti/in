@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rocket News</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;500;700&family=Work+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          fontFamily:{
+            'sans': ['Spartan','Work Sans']
+          },
+          extend: {
+            colors: {
+              clifford: '#da373d',
+              bg_fundo: '#e5e7eb',
+            },
+            backgroundImage: {
+                blur:'url(./Images/read_news.jpg)'
+              }
+          }
+        }
+      }
+    </script>
+
+</head>
+<body class="bg-slate-200 bg-blur bg-cover bg-no-repeat min-h-screen">
+    <div class="flex flex-wrap min-h-screen">
+        <!--Side Left-->
+        <div id="side_left" class="flex flex-col w-3/5 text-sm text-gray-400 gap-8 pt-8 min-h-screen pl-2 ">
+            <div id="div_logo" class="flex justify-start bg-black opacity-75 rounded-lg shadow-lg max-w-fit p-2">
+                <img src="./Images/logo.svg" alt="" width="500">
+            </div>
+            <div id="div_texto" class="flex flex-col bg-black opacity-75 rounded-lg shadow-lg p-2">
+                <span class="text-3xl text-green-400 font-bold hover:text-yellow-400 cursor-pointer">Atualize ideias e informações em 5 minutos.</span>
+                <span class="text-2xl text-gray-100 font-bold">Tudo que você precisa saber para começar seu dia bem e informado</span>
+                <span class="text-2xl text-gray-100 font-bold">Noticias sobre o universo Rocketseat, e tudo o que precisa para começar o dia melhor. perfeito para se preparar para codar ☕</span>
+            </div>
+            <div class="flex bg-white max-w-fit rounded-lg p-2 shadow-lg items-center">
+                <span class="text- text-gray-900 font-bold">Insira seu e-mail:</span>
+                <input id="txt_email" type="email" placeholder="email@dominio.com" class="pl-2 text-center">
+                <a href=""><img src="./Images/send.svg" title="Enviar" class="" onclick="Alerteme()"></a>
+            </div>
+            <div class="flex">
+                <span class="text-2xl text-purple-500 font-bold hover:text-yellow-400 cursor-pointer">Deixe-me ler primeiro</span>
+                <a href=""><img src="./Images/arrow-right.svg" title="Seguir Adiante" width="36" class=""></a>
+            </div>
+        </div>
+
+
+    </div>
+
+    <script>
+      function Alerteme(){
+        email = document.getElementById('txt_email').value
+        if( email == ''){
+          alert("Campo em Branco")
+        }else{
+        alert(`Você já está cadastrado! ${email}`)
+        }
+      }
+    </script>
+</body>
+</html>
