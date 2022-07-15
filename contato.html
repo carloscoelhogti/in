@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contato</title>
+
+    <style>
+        fieldset {
+            width: 30%;
+            
+        }
+    </style>
+
+</head>
+<body>
+    
+    <fieldset>
+        <legend>Entre em Contato</legend>
+        <span>Nome Completo</span><br>
+        <input type="text" placeholder="Seu Nome" id="txt_nome"><br>
+        <span>E-mail</span><br>
+        <input type="email" placeholder="Seu Email" id="txt_email"><br>
+        <span>Mensagem</span><br>
+        <textarea name="" id="msg" cols="30" rows="10" placeholder="Sua Mensagem Aqui"></textarea><br>
+        <input type="checkbox" id="validar">
+        <span>Aceito receber novidades por e-mail</span>
+        <button type="button" onclick="Enviar()">Enviar</button>
+        
+    </fieldset>
+<footer>
+    <a href="./projects.html">HOME</a><br>
+    <a href="">Criado por 🐇 2022</a>
+</footer>
+    <script>
+        function Enviar(){
+            nome = document.getElementById('txt_nome').value
+            email = document.getElementById('txt_email').value
+            aceite = document.getElementById('validar').checked
+            if(nome == '' || email == '' || aceite == false){
+                alert('Campo em branco')
+            }else{
+                alert(`Dados Enviados com sucesso! Obrigado ${nome}`)
+                document.getElementById('txt_nome').value = ''
+                document.getElementById('txt_email').value = ''
+                document.getElementById('msg').value = ''
+                document.getElementById('validar').checked = false
+            }
+        }
+    </script>
+
+</body>
+</html>
