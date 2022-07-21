@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CountDown</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily:{
+                'sans': ['Poppins','Sans']
+            },
+            colors: {
+              clifford: '#da373d',
+              colorBlack: '#4D4C59',
+              colorPurple: '#6C63FF',
+              colorLightGray: '#C8C8C8',
+              colorText: '#9C9AB6'
+
+            }
+          }
+        }
+      }
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body class=" flex bg-gray-100 bg-no-repeat min-h-screen max-w-screen-xl">
+    <div class="flex flex-wrap p-4 w-[1280px] items-center">
+
+        <header class="flex ">
+            
+            <img src="./Images/top-image.svg" alt="">
+        </header>
+
+        <aside class="flex-1 ">
+            <div class="flex justify-center p-12">
+                <span class="text-colorPurple text-5xl ">READY TO LAUNCH IN...</span>
+            </div>
+            <div class="flex justify-center p-4">
+               <span id="contagem" class="text-gray-600 text-5xl"> 08:12:44:28 </span>
+            </div>
+            <div class="flex justify-center p-4">
+                <span class="text-gray-500">Inscreva-se para saber mais sobre o lançamento</span>
+            </div>
+            <div class="flex justify-center p-4">
+                <span class="rounded-lg bg-colorPurple w-32 text-center hover:text-yellow-400 cursor-pointer shadow hover:shadow-lg" title="Você será direcionado para o site de cadastro"><a href="./projects.html">Inscreva-se</a> </span>
+                
+            </div>
+            <div class="bg-gray-300">
+
+            </div>
+        </aside>
+
+        <main class="flex">
+            
+            <img src="./Images/rocket.svg" alt="">
+        </main>
+
+        <footer class="">
+            
+            <img src="./Images/bottom-image.svg" alt="">
+            <span class="text-gray-400 flex justify-center p-4" title="Carlos Coelho">Feito por 🐇</span>
+            <span class="text-gray-400 flex justify-center hover:text-yellow-400"><a href="./projects.html">HOME</a> </span>
+        </footer>
+
+    </div>
+    <script>
+        // Set the date we're counting down to
+        var countDownDate = new Date("Dec 31, 2022 15:37:25").getTime();
+        
+        // Update the count down every 1 second
+        var x = setInterval(function() {
+        
+          // Get today's date and time
+          var now = new Date().getTime();
+            
+          // Find the distance between now and the count down date
+          var distance = countDownDate - now;
+            
+          // Time calculations for days, hours, minutes and seconds
+          var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+          var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+          var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            
+          // Output the result in an element with id="contagem"
+          document.getElementById("contagem").innerHTML = days + "d " + hours + "h "
+          + minutes + "m " + seconds + "s ";
+            
+          // If the count down is over, write some text 
+          if (distance < 0) {
+            clearInterval(x);
+            document.getElementById("contagem").innerHTML = "EXPIRED";
+          }
+        }, 1000);
+        </script>
+</body>
+</html>
