@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Tree</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oxygen&family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          fontFamily:{
+            'sans': ['Poppins','Sans']
+          },
+          extend: {
+            colors: {
+              clifford: '#da373d',
+              bg_fundo: '#e5e7eb',
+              contorner: '#eec40e'
+            }
+          }
+        }
+      }
+    </script>
+
+  </head>
+</head>
+<body>
+    <div class="flex flex-col items-center p-48 gap-8">
+        <div class="flex">
+            <img src="https://avatars.githubusercontent.com/u/77030632?v=4" width="150" alt="" class="rounded-full shadow-lg">
+        </div>
+
+        <div class="flex">
+            <span><a href="https://carloscoelhogti.github.io/in/index.html" title="home" class="hover:text-yellow-400">@home</a></span>
+        </div>
+
+        <div class="flex">
+            <ol class="flex flex-col justify-center gap-2 ">
+                <li class="border border-contorner rounded-lg px-24 hover:font-bold cursor-pointer shadow-lg text-center"><a href="./devs.html">Em Desenvolvimento </a></li>
+                <li class="border border-contorner rounded-lg px-24 hover:font-bold cursor-pointer shadow-lg text-center"><a href="./projects.html">Projetos</a></li>
+
+            </ol>
+        </div>
+
+        <div class="flex gap-4">
+            <a href="https://www.linkedin.com/in/carloscoelhogti/" title="linkedin.com"><img src="Images/linkedin_coelho.svg" alt="linkedin"></a>
+            <a href="https://github.com/carloscoelhogti" title="github.com"><img src="Images/github_coelho.svg" alt="github" class="color-gray-400"></a>
+        </div>
+        <div title="Carlos Coelho">
+            <footer class="text-pop text-gray-700 hover:text-yellow-400" >Criado por 🐇 &copy 2022</footer>  
+        </div>
+
+    </div>  
+    
+</body>
+</html>
