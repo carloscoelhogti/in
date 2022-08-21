@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Form</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily:{
+                'sans': ['Poppins','Sans']
+            },
+            colors: {
+              clifford: '#da373d',
+              textBase: '#afb6c2',
+              textTitle: '#d4ccb6',
+              background: '#191816',
+              formBackground: '#bbf7d0',
+              primaryColor: '#ffc632',
+
+            }
+          }
+        }
+      }
+    </script>
+
+</head>
+<body class="flex   bg-black text-white antialiased">
+    <div class="flex flex-cols items-center p-4">
+      <img src="./Images/logo.svg" alt="" class="absolute top-10 left-4 cursor-pointer">
+        <div class="flex-wrap rounded-lg w-[40%] bg-background h-[500px] " id="menus">
+          
+          <header class="flex-cols">
+            <div class="flex p-4 justify-center items-center ">
+            <img src="./Images/log-in.svg" alt="" class="flex" width="40">
+            <span class="flex font-bold pl-2">Faça seu login</span>
+            </div>
+            <span class="flex justify-center items-center ">Entre com suas informações de cadastro.</span>
+          </header>
+
+            <div class="flex-cols">
+              
+            <div class="flex-cols p-4 pl-[30%]">
+            <label for="" class="flex">E-mail</label>
+            <input type="email" placeholder="Digite seu e-mail" class="border rounded hover:border-primaryColor bg-transparent p-4">
+            </div>
+
+            <div class="flex-cols p-4 pl-[30%]">
+            <label for="" class="flex ">Senha</label>
+            <input type="text" placeholder="Digite sua senha" class=" border rounded hover:border-primaryColor bg-transparent p-4 ">
+            </div>
+
+            <div class="flex justify-center items-center">
+            <input type="checkbox" name="" id="" class="flex">Lembrar-me</input>
+            <span class="flex text-primaryColor text-sm pl-4">Esqueci minha senha</span>
+            </div>
+  
+            <div class="flex-cols pt-4 pl-[25%]">
+            <button class="flex rounded-lg bg-primaryColor p-2 w-[270px] text-gray-900 justify-center hover:bg-yellow-700 transition ease-in-out delay-150" title="Clique para entrar">ENTRAR</button>
+            <span class="flex text-primaryColor text-sm pl-4">Não tem uma conta? Registre-se</span>
+            </div>
+
+            </div>
+
+            <div class="text-center flex flex-col">
+              <span class="text-green-400 font-bold hover:text-yellow-400 cursor-pointer text-center">Criado por 🐇 &copy 2022</span>
+              <span class="text-green-900 font-bold hover:text-yellow-400 cursor-pointer text-center"><a href="./projects.html">Home</a></span>
+            </div>
+
+            
+
+        </div>
+
+        <div class="flex w-[500px] w-[60%] pl-4" id="foto">
+            <img src="./Images/side-image-2x.jpg" alt="" class="w-screen">
+        </div>
+
+    </div>
+</body>
+</html>
