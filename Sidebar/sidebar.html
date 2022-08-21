@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sidebar</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily:{
+                'sans': ['Poppins','Sans']
+            },
+            colors: {
+              clifford: '#da373d',
+
+            }
+          }
+        }
+      }
+    </script>
+
+<script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+</head>
+<body class="flex w-max-screen p-4 justify-center" x-data="{ open: false }">
+    <div class="flex">
+        <aside class="flex-wrap bg-green-300 w-80 p-4">
+             <div class="flex pb-4 justify-between">
+                <img src="./Images/logo.svg" alt="" title="Vet" class="">
+                <img src="./Images/menu.svg" alt="" title="Expandir/Recolher" class="cursor-pointer"
+                @click="open = true"
+                >
+                
+             </div>
+
+             <div class="flex gap-4 py-4 cursor-pointer hover:bg-gray-100 opacity-60 rounded-lg " title="Buscar">
+                
+                <img src="./Images/search.svg" alt="" class="">
+                <span class="">Buscar</span>
+             </div>
+
+             <div class="flex gap-4 py-4 cursor-pointer hover:bg-gray-100 opacity-60 rounded-lg "title="Dashboard">
+                
+                <img src="./Images/grid.svg" alt="">
+                <span>Dashboard</span>
+             </div>
+
+             <div class="flex gap-4 py-4 cursor-pointer hover:bg-gray-100 opacity-60 rounded-lg "title="Pets">
+                
+                <img src="./Images/pet.svg" alt="">
+                <span>Pets</span>
+             </div>
+
+             <div class="flex gap-4 py-4 cursor-pointer hover:bg-gray-100 opacity-60 rounded-lg "title="Clientes">
+                
+                <img src="./Images/user.svg" alt="">
+                <span>Clientes</span>
+             </div>
+
+             <div class="flex gap-4 py-4 cursor-pointer hover:bg-gray-100 opacity-60 rounded-lg "title="Vets">
+                
+                <img src="./Images/vet.svg" alt="">
+                <span>Vets</span>
+             </div>
+
+             <div class="flex gap-4 py-4 cursor-pointer hover:bg-gray-100 opacity-60 rounded-lg "title="Ajustes">
+                
+                <img src="./Images/settings.svg" alt="">
+                <span>Ajustes</span>
+             </div>
+
+             <div class="flex py-48">
+
+             </div>
+
+             <div class="flex justify-between border gap-4 py-2 items-center bg-green-100 opacity-75 rounded-lg "title="Developer">
+               <img src="https://avatars.githubusercontent.com/u/77030632?v=4" alt="" class="rounded-full shadow-lg " width="64" title="Carlos Coelho">
+               <div>
+                  <a href="https://carloscoelhogti.github.io/in/projects.html">
+                  <span class="flex text-sm">Carlos Coelho</span>
+                  <span class="flex text-sm">Developer</span>
+                  </a>
+               </div>
+               <div>
+                  <img src="./Images/log-out.svg" alt="" title="Sair" class="cursor-pointer p-2" onclick="Fechar()">
+               </div>
+             </div>
+        </aside>
+
+        <main class="flex bg-orange-200 min-h-fit">
+            
+            <img src="./Images/photo.jpg" alt=""  height="700">
+            
+        </main>
+
+    </div>
+
+    <script>
+      function Fechar(){
+         alert('Saindo')
+         window.close()
+      }
+    </script>
+</body>
+</html>
