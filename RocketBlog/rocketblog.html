@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Rocket Blog</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily:{
+                'sans': ['Roboto','Sans']
+            },
+            colors: {
+              purplebg: '#290742',
+              darkbg: '#170027',
+              buttonbg: '#9e6dc2',
+              white: '#fff',
+              lightpurple: '#fbf6ff',
+              green: '#4fff4b',
+              
+
+            }
+          }
+        }
+      }
+    </script>
+
+</head>
+<body class="">
+    <div class="flex-cols h-screen ">
+        <nav class="flex justify-between items-center border bg-purplebg min-h-[400px] p-8">
+          <header class="flex absolute top-4 left-32 right-32 gap-4 justify-between items-center" >
+
+            <img src="./images/logo.svg" class="flex cursor-pointer" title="Onde sua ideia faz sentido!">
+
+            <ol class="flex font-bold gap-16 text-white ">
+                <li class="hover:text-3xl  ease-in-out duration-300 cursor-pointer">Home</li>
+                <li class="hover:text-3xl  ease-in-out duration-300 cursor-pointer">Sobre</li>
+                <li class="hover:text-3xl  ease-in-out duration-300 cursor-pointer">Categorias</li>
+                <li class="hover:text-3xl  ease-in-out duration-300 cursor-pointer">Contato</li>
+            </ol>
+
+            <div class="flex rounded gap-2 bg-black">
+            <input type="text" placeholder="busca" class="flex rounded pl-4 bg-black text-white">
+            <img src="./images/search.svg" class="flex bg-black rounded p-2 cursor-pointer" onclick="alert('Irei pesquisar!')">
+            </div>
+
+          </header>
+
+        
+        <div id="text-group" class="flex pt-28">
+
+            <div class="flex-grow w-[40%] p-12">
+            <h1 class="flex text-4xl text-white pl-12">Veja o guia definitivo para conquistar seus objetivos como DEV em 2022</h1>
+            <p class="flex text-white pl-12 pt-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nibh nibh eu in aliquet ut adipiscing neque. Sed volutpat aenean sit vitae, sed tristique placerat hac.</p>
+            
+
+            <a href="" class="flex text-white pl-12 pt-4 hover:text-3xl  ease-in-out duration-300" title="Acesse as informações em detalhes">Veja Mais
+              <img src="./images/arrow-right.svg" class="flex">
+            </a>
+            </div>
+        
+
+            <div id="featured-image" class="flex">
+                <img src="./images/featured-image.png">
+            </div>
+
+        </div>
+        
+
+        </nav>
+    
+
+    <main class="flex border bg-gray-100 min-h-screen">
+        
+        <div class="flex-wrap">
+          <div id="post-1" class="flex p-4 max-w-screen gap-4">
+
+            <div class="flex-cols w-[50%] p-4">
+            <img src="./images/post-1.png" alt="" class="">
+
+            <span class="flex">Janeiro 04, 2022</span>
+
+            <h1 class="flex text-2xl text-purple-900 font-bold pt-4 cursor-pointer hover:text-3xl  ease-in-out duration-300">Começando no ReactJS em 2022</h1>
+
+            <p class="flex pt-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nibh nibh eu in aliquet ut adipiscing neque. Sed volutpat aenean sit vitae, sed tristique nibh nibh eu in aliquet ut adipiscing neque. Sed volutpat aenean sit vitae, sed tristique. Sed volutpat aenean.</p>
+
+          </div>
+
+          <div id="side-post" class="flex-cols p-4 w-[50%] ">
+
+              <div class="flex-1">
+              <span class="flex">Janeiro 04, 2022</span>
+
+              <h1 class="flex text-2xl text-purple-900 font-bold pt-4 cursor-pointer hover:text-3xl  ease-in-out duration-300">Conheça as principais técnicas para conseguir uma vaga internacional em programação</h1>
+
+              <p class="flex pt-4 pb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nibh nibh eu in aliquet ut adipiscing neque. Sed volutpat aenean sit vitae, sed tristique.</p>
+            </div>
+
+            <div id="side-post2" class="flex-1">
+              <span class="flex">Janeiro 04, 2022</span>
+
+              <h1 class="flex text-2xl text-purple-900 font-bold pt-4 cursor-pointer hover:text-3xl  ease-in-out duration-300">Veja a evolução do Front-end na prática</h1>
+
+              <p class="flex pt-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nibh nibh eu in aliquet ut adipiscing neque. Sed volutpat aenean sit vitae, sed tristique.</p>
+            </div>
+
+          </div>
+
+          </div>
+
+          <div class="flex gap-4 p-4">
+
+            <div id="post2" class="flex-1">
+              <img src="./images/post-2.png" alt="" class="p-4">
+              <span class="p-4">Janeiro 04, 2022</span>
+              <h1 class="p-4 text-2xl text-purple-900 font-bold cursor-pointer hover:text-3xl  ease-in-out duration-300">10 dicas para conseguir a vaga desejada</h1>
+              <p class="p-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nibh nibh eu in aliquet ut adipiscing neque. Sed volutpat aenean sit vitae, sed tristique.</p>
+            </div>
+
+            <div id="post3" class="flex-1">
+              <img src="./images/post-3.png" alt="" class="p-4">
+              <span class="p-4">Janeiro 04, 2022</span>
+              <h1 class="p-4 text-2xl text-purple-900 font-bold cursor-pointer hover:text-3xl  ease-in-out duration-300">Deixe seu código mais semântico com essas dicas</h1>
+              <p class="p-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nibh nibh eu in aliquet ut adipiscing neque. Sed volutpat aenean sit vitae, sed tristique.</p>
+            </div>
+
+            <div id="post4" class="flex-1">
+              <img src="./images/post-4.png" alt="" class="p-4">
+              <span class="p-4">Janeiro 04, 2022</span>
+              <h1 class="p-4 text-2xl text-purple-900 font-bold cursor-pointer hover:text-3xl  ease-in-out duration-300">Use essas dicas nas suas aplicações mobile</h1>
+              <p class="p-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nibh nibh eu in aliquet ut adipiscing neque. Sed volutpat aenean sit vitae, sed tristique.</p>
+            </div>
+
+          </div>
+        </div>
+        
+    </main>
+      
+      <footer class="text-center text-gray-400 cursor-pointer" title="Carlos Coelho"><a href="https://carloscoelhogti.github.io/in/projects.html">Feito por 🐇 2022</a>
+      
+     
+    </div>
+    
+
+    
+</body>
+</html>
