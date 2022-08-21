@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RocketShoes</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily:{
+                'sans': ['Poppins','Sans']
+            },
+            colors: {
+              colorButton: '#FF0000',
+              textAll: '#000',
+              background: '#191816',
+              mainBackground: '#C4C4C4',
+              footerAll: '#000',
+              textDescription: '#9C9696',
+
+            }
+          }
+        }
+      }
+    </script>
+
+</head>
+<body>
+
+
+    <div class="flex flex-cols  h-screen">
+        <nav class="flex absolute top-4 left-32 right-32 gap-4 justify-between items-center">
+
+            <img src="./Images/logo.svg" alt="" class="flex" title="RocketShoes Sua moda aos seus pés!">
+    
+            <ol class="flex font-bold gap-16 ">
+                <li><a href="" class="hover:text-gray-500 delay-150" title="Moda Masculina">HOMEM</a></li>
+                <li><a href=""class="hover:text-gray-500 delay-150" title="Moda Feminina">MULHER</a></li>
+                <li><a href=""class="hover:text-gray-500 delay-150" title="Moda Infantil">CRIANÇA</a></li>
+                <li><a href=""class="hover:text-gray-500 delay-150" title="Moda ao seu Gosto">CUSTOMIZAR</a></li>
+            </ol>
+            
+            <div class="flex bg-white rounded-lg gap-2">
+            <img src="./Images/icon-search.svg" alt="" class="flex pl-2">
+            <input type="text" placeholder="Pesquisar" class="flex rounded-lg" onchange="alert('Sua pesquisa deu certo!')">
+            </div>
+
+            <img src="./Images/icon-bag.svg" alt="" class="flex cursor-pointer" title="Carrinho de Compras" onclick="alert('Seu carrinho')">
+    
+        </nav>
+
+        <aside class="flex  bg-mainBackground items-center justify-between w-[30%]">
+
+                <div class="flex-cols p-4">
+                <span class="flex text-gray-900 text-5xl pb-4">
+                    Tênis Esportivo Para Corrida Top
+                </span>
+
+                <span class="flex pb-4">
+                    Esse tênis tem o intuito de te deixar ainda mais fitness, focado, e musculoso.
+                </span>
+
+                <span class="flex text-3xl pb-4">
+                    R$ 1.000,00
+                </span>
+
+                <button class="flex rounded bg-colorButton p-2 hover:bg-red-900 delay-150 cursor-pointer" onclick="alert('Indo para Check-out')" title="Faça sua compra agora!"> Comprar</button>
+                </div>
+
+        </aside>
+
+        <main class="flex-grow  bg-textDescription w-[70%] p-2">
+            <img src="./Images/tenis-1-ampliado.png" alt="" class="flex pl-[12%] pt-12">
+            <div class="flex gap-2 pt-[10%]">
+            <img src="./Images/tenis-1-galeria.png" alt="" width="100" class="flex w-[300px] h-[200px] cursor-pointer hover:shadow-black shadow-lg ease-in-out duration-300" title="Frente">
+            <img src="./Images/tenis-2-galeria.png" alt="" width="" class="flex w-[300px] h-[200px] cursor-pointer hover:shadow-black shadow-lg ease-in-out duration-300" title="Perfil">
+            <img src="./Images/tenis-3-galeria.png" alt="" width="" class="flex w-[300px] h-[200px] cursor-pointer hover:shadow-black shadow-lg ease-in-out duration-300" title="Lado">
+            </div>
+        </main>
+
+    </div>
+
+    <footer class="flex  bg-mainBackground justify-between items-center">
+        <a href="" title="Acesse nossa Playlist" onclick="alert('Indo para Youtube')"><img src="./Images/img-video.png"></img></a>
+        <ol class="flex font-bold gap-16">
+            <li><a href="" title="Facebook" class="hover:text-gray-500 delay-150">FACEBOOK</a></li>
+            <li><a href="" title="Instagram" class="hover:text-gray-500 delay-150">INSTAGRAM</a></li>
+            <li><a href="" title="Youtube" class="hover:text-gray-500 delay-150">YOUTUBE</a></li>
+            <li><a href="" title="Twitter" class="hover:text-gray-500 delay-150">TWITTER</a></li>
+        </ol>
+        <button class="flex bg-background h-40 min-h-full w-[20%] text-gray-400 justify-center items-center hover:text-gray-200 hover:text-2xl  ease-in-out duration-300" title="Acesse mais infos" onclick="alert('Descubra um mundo novo!')">Explore Mais</button>
+
+    </footer>
+
+    <div class="text-center flex flex-col">
+        <span class="text-green-400 font-bold hover:text-yellow-400 cursor-pointer text-center">Criado por 🐇 &copy 2022</span>
+        <span class="text-gray-900 font-bold hover:text-yellow-400 cursor-pointer text-center"><a href="https://carloscoelhogti.github.io/in/projects.html">Home</a></span>
+      </div>
+
+
+</body>
+</html>
