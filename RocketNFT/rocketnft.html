@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rocket NFTs</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily:{
+                'sans': ['Montserrat ','Sans']
+            },
+            colors: {
+                bodyBackground: '#0e0e0e',      
+                colorLogo: '#ff5b50',
+                cardColor: '#252525',
+                textColor: '#fff',
+                subtitleColor: '#5a5757',
+                blackText: '#000',
+                colorInput: '#0D0D0D'
+            },
+            backgroundImage: {
+                'hero': "url('./Assets/background.png')"
+            }
+          }
+        }
+      }
+    </script>
+
+</head>
+<body class="bg-[url('./Assets/background.png')] text-textColor bg-no-repeat bg-cover">
+    <header id="div_menu" class="flex flex-wrap justify-between p-12">
+
+        <img src="./Assets/logo.svg" alt="" title="Onde sua figurinha vale mais!">
+
+        <ol class="flex items-center gap-16">
+            <li class="hover:text-yellow-400 "><a href="" title="Compre NFTs">Comprar NFT</a></li>
+            <li class="hover:text-yellow-400"><a href="" title="Sobre nós">Sobre</a> </li>
+            <li class="hover:text-yellow-400"><a href="" title="Perguntas e Respostas">FAQ</a></li>
+        </ol>
+
+        <div class="flex bg-gray-100 max-w-fit p-2 rounded-lg">
+            <img src="./Assets/logo_MetaMask.svg" alt="" title="Junte mais figurinhas!" class="opacity-50 cursor-pointer hover:opacity-100 ease-in-out duration-300 ">
+            <button class="text-black font-bold">Conectar Carteira</button>
+        </div>
+
+    </header>
+
+    <div id="div_main1" class="grid grid-flow-col h-[300px]">
+        <div class="flex-cols">
+            <p class="flex pl-2">Mercado digital para colecionáveis em criptos e tokens não fungível (NFT). Compre, venda e descubra ativos digitais exclusivos para você.</p>
+            <div class="flex pt-24">
+                <img src="./Assets/artista-1.png" alt="" class="absolute left-0 z-40">
+                <img src="./Assets/artista-2.png" alt="" class="absolute left-16 z-30">
+                <img src="./Assets/artista-3.png" alt="" class="absolute left-24 z-20">
+                <img src="./Assets/artista-4.png" alt="" class="absolute left-36 z-10">
+                <img src="./Assets/artista-5.png" alt="" class="absolute left-48 z-0">
+            </div>
+            <p class="flex justify-end pt-6">+10<br> Artistas selecionados</p>
+        </div>
+
+        <p class="text-5xl">Descubra a verdadeira arte digital e colecione diversas NFTs</p>
+
+        <img src="./Assets/badge.svg" alt="" class="pt-[20%]">
+    </div>
+
+
+    <div id="div_galery" class="flex flex-wrap justify-between gap-4 p-2">
+        <img src="./Assets/galeria-1.png" alt="" class="shadow-lg shadow-gray-900 hover:shadow-yellow-400 ease-in-out duration-300 cursor-pointer">
+        <img src="./Assets/galeria-2.png" alt="" class="shadow-lg shadow-gray-900 hover:shadow-yellow-400 ease-in-out duration-300 cursor-pointer">
+        <img src="./Assets/galeria-3.png" alt="" class="shadow-lg shadow-gray-900 hover:shadow-yellow-400 ease-in-out duration-300 cursor-pointer">
+        <img src="./Assets/galeria-4.png" alt="" class="shadow-lg shadow-gray-900 hover:shadow-yellow-400 ease-in-out duration-300 cursor-pointer">
+        <img src="./Assets/galeria-5.png" alt="" class="shadow-lg shadow-gray-900 hover:shadow-yellow-400 ease-in-out duration-300 cursor-pointer">
+        <img src="./Assets/galeria-6.png" alt="" class="shadow-lg shadow-gray-900 hover:shadow-yellow-400 ease-in-out duration-300 cursor-pointer">
+        <img src="./Assets/galeria-7.png" alt="" class="shadow-lg shadow-gray-900 hover:shadow-yellow-400 ease-in-out duration-300 cursor-pointer">
+        <img src="./Assets/galeria-8.png" alt="" class="shadow-lg shadow-gray-900 hover:shadow-yellow-400 ease-in-out duration-300 cursor-pointer">
+
+    </div>
+
+    <div id="div_main2" class="flex flex-cols bg-black pb-24 items-center gap-12">
+
+        <div class="grid grid-flow-row justify-center items-center">
+            <div class="">
+            <span class="text-3xl font-bold">10K+</span>
+            <span>Artes</span>
+            </div>
+            <div class>
+            <span class="text-3xl font-bold">200+</span>
+            <span>Vendas</span>
+            </div>
+            <div class>
+            <span class="text-3xl font-bold">20</span>
+            <span>Artistas</span>
+            </div>
+        </div>
+
+        <div class="flex-grow">
+
+            <div class="flex flex-cols h-[40%] justify-between items-center p-4">
+                <p class="flex">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Congue malesuada amet pretium lacus. Id potenti diam et cras odio viverra. Amet, velit ut hac sit. Enim ultricies mauris mattis nunc semper.</p>
+
+                <p class="flex">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Congue malesuada amet pretium lacus. Id potenti diam et cras odio viverra. Amet, velit ut hac sit. Enim ultricies mauris mattis nunc semper.</p>
+            </div>
+
+            <div class="flex w-screen max-h-[300px]">
+                <img src="./Assets/bg_nft.png" alt="" class="w-[1800px]">
+            </div>
+
+        </div>
+
+    </div>
+
+    <div id="div_main3" class="bg-black">
+
+        <div class="pb-12">
+            <h1 class="text-5xl text-orange-700 font-bold">Populares da semana</h1>
+        </div>
+
+        <div class="flex justify-between p-12" id="div_astros">
+            <div id="div_left">
+                <div class="p-4" id="div_astro1">
+                    <div class="flex justify-between pb-8">
+                    <h1 class="text-3xl font-bold">Astrounauta 1</h1>
+                    <img src="./Assets/arrow-white.svg" alt="">
+                    </div>
+                    <div class="flex justify-between pb-4">
+                    <span class="hover:text-yellow-400 cursor-pointer">Mayk Brito</span>
+                    <span class="text-orange-700">1.50 RKT</span>
+                    </div>
+                    <img src="./Assets/astronauta 1.png" alt="" class="shadow-lg shadow-gray-900 hover:shadow-yellow-400 ease-in-out duration-300 cursor-grabbing">
+                </div>
+
+                <div class="p-4" id="div_astro2">
+                    <div class="flex justify-between pb-8">
+                    <h1 class="text-3xl font-bold">Astrounauta 2</h1>
+                    <img src="./Assets/arrow-white.svg" alt="">
+                    </div>
+                    <div class="flex justify-between pb-4">
+                    <span class="hover:text-yellow-400 cursor-pointer">Jakeliny Gracielly</span>
+                    <span class="text-orange-700">2.0 RKT</span>
+                    </div>
+                    <img src="./Assets/astronauta-2.png" alt="" class="shadow-lg shadow-gray-900 hover:shadow-yellow-400 ease-in-out duration-300 cursor-grabbing">
+                </div>
+        
+            </div>
+        
+            <div id="div_right">
+                <div class="p-4" id="div_astro3">
+                    <div class="flex justify-between pb-8">
+                    <h1 class="text-3xl font-bold">Astrounauta 3</h1>
+                    <img src="./Assets/arrow-white.svg" alt="">
+                    </div>
+                    <div class="flex justify-between pb-4">
+                    <span class="hover:text-yellow-400 cursor-pointer">João Inácio (Biro)</span>
+                    <span class="text-orange-700">3.75 RKT</span>
+                    </div>
+                    <img src="./Assets/astronauta-3.png" alt="" class="shadow-lg shadow-gray-900 hover:shadow-yellow-400 ease-in-out duration-300 cursor-grabbing">
+                </div>
+        
+
+            
+                <div class="p-4" id="div_astro4">
+                    <div class="flex justify-between pb-8">
+                    <h1 class="text-3xl font-bold">Astrounauta 4</h1>
+                    <img src="./Assets/arrow-white.svg" alt="">
+                    </div>
+                    <div class="flex justify-between pb-4">
+                    <span class="hover:text-yellow-400 cursor-pointer">Tamires Santos</span>
+                    <span class="text-orange-700">4.30 RKT</span>
+                    </div>
+                    <img src="./Assets/astronauta-4.png" alt="" class="shadow-lg shadow-gray-900 hover:shadow-yellow-400 ease-in-out duration-300 cursor-grabbing">
+                </div>
+            </div>
+
+        </div>
+
+        
+           
+       
+
+    </div>
+
+    <div id="div_main4" class="p-12 bg-black items-center">
+        <div class="pb-8">
+            <h1 class="text-5xl font-bold text-orange-700">Melhores Artistas</h1>
+        </div>
+
+        <div id="div_artistas" class="grid grid-cols-3 gap-12">
+            
+            <div id="div_artista1" class="flex bg-subtitleColor w-fit p-4 rounded-lg justify-center items-center hover:bg-gray-600">
+                <img src="./Assets/artista-1.png" alt="" class="rounded-full" >
+                <div class="flex-cols p-4">
+                <span class="flex font-bold">Mayk Brito</span>
+                <span class="text-orange-700 font-bold">80 Fotografias</span>
+                </div>
+
+            </div>
+
+            <div id="div_artista2" class="flex bg-red-400 w-fit p-4 rounded-lg justify-center items-center hover:bg-gray-600">
+                <img src="./Assets/artista-2.png" alt="" class="rounded-full" >
+                <div class="flex-cols p-4">
+                <span class="flex font-bold">Jakeliny G.</span>
+                <span class="text-orange-700 font-bold">99 Fotografias</span>
+                </div>
+
+            </div>
+
+            <div id="div_artista3" class="flex bg-subtitleColor w-fit p-4 rounded-lg justify-center items-center hover:bg-gray-600">
+                <img src="./Assets/artista-3.png" alt="" class="rounded-full" >
+                <div class="flex-cols p-4">
+                <span class="flex font-bold">João I. (Biro)</span>
+                <span class="text-orange-700 font-bold">50 Fotografias</span>
+                </div>
+
+            </div>
+
+            <div id="div_artista4" class="flex bg-subtitleColor w-fit p-4 rounded-lg justify-center items-center hover:bg-gray-600">
+                <img src="./Assets/artista-4.png" alt="" class="rounded-full" >
+                <div class="flex-cols p-4">
+                <span class="flex font-bold">Tamires Santos</span>
+                <span class="text-orange-700 font-bold">43 Fotografias</span>
+                </div>
+
+            </div>
+
+            <div id="div_artista5" class="flex bg-subtitleColor w-fit p-4 rounded-lg justify-center items-center hover:bg-gray-600">
+                <img src="./Assets/artista-5.png" alt="" class="rounded-full" >
+                <div class="flex-cols p-4">
+                <span class="flex font-bold">Ana Silva</span>
+                <span class="text-orange-700 font-bold">28 Fotografias</span>
+                </div>
+
+            </div>
+
+            <div id="div_artista6" class="flex bg-subtitleColor w-fit p-4 rounded-lg justify-center items-center hover:bg-gray-600">
+                <img src="./Assets/artista-6.png" alt="" class="rounded-full" >
+                <div class="flex-cols p-4">
+                <span class="flex font-bold">Diego F.</span>
+                <span class="text-orange-700 font-bold">20 Fotografias</span>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="flex w-fit gap-4 pt-8">
+            <a href="" class="cursor-pointer hover:text-yellow-400">Ver todos os artitas</a>
+            <img src="./Assets/arrow-orange.svg" alt="" class="">
+        </div>
+
+    </div>
+
+    <footer class="bg-black p-12 justify-between items-center">
+
+        <div id="top_footer" class="flex flex-wrap justify-between">
+            <img src="./Assets/logo.svg" alt="" title="Onde sua figurinha vale mais!">
+            <img src="./Assets/arrow-black.svg" alt="" class="bg-colorLogo rounded-lg p-4">
+        </div>
+
+        <div id="div_middle_footer" class="flex flex-cols p-4 gap-12">
+            
+            <div class="flex-cols w-[460px]">
+                <h1 class="text-2xl">Fique por dentro de todas as novidades</h1>
+                <input type="text" placeholder="nft@rocketseat.com.br" class="bg-subtitleColor text-center p-2">
+                <button type="button" class="bg-white text-black p-2">Enviar</button>
+            </div>
+
+            <div  class="flex flex-cols w-screen justify-between">
+
+            <div>
+                <h1 class="text-2xl font-bold">Empresa</h1>
+                <ol>
+                    <li><a href="" class="hover:text-yellow-400">Sobre</a></li>
+                    <li><a href="" class="hover:text-yellow-400">Serviços</a></li>
+                    <li><a href="" class="hover:text-yellow-400">Time</a></li>
+                    <li><a href="" class="hover:text-yellow-400">Carreira</a></li>
+                </ol>
+            </div>
+
+            <div>
+                <h1 class="text-2xl font-bold">Mapa</h1>
+                <ol>
+                    <li><a href="" class="hover:text-yellow-400">Galeria</a></li>
+                    <li><a href="" class="hover:text-yellow-400">Populares</a></li>
+                    <li><a href="" class="hover:text-yellow-400">Vendas</a></li>
+                    <li><a href="" class="hover:text-yellow-400">Contato</a></li>
+                </ol>
+            </div>
+
+            <div>
+                <h1 class="text-2xl font-bold">Links</h1>
+                <ol>
+                    <li><a href="" class="hover:text-yellow-400">FAQs</a></li>
+                    <li><a href="" class="hover:text-yellow-400">Termos</a></li>
+                    <li><a href="" class="hover:text-yellow-400">Politica</a></li>
+                    <li><a href="" class="hover:text-yellow-400">Ajuda</a></li>
+                </ol>
+            </div>
+
+            </div>
+        </div>
+
+        <div id="div_bottom_footer" class="flex justify-between">
+            <div>
+                <a href="" class="hover:text-yellow-400">www.rocketseta.com.br</a>
+            </div>
+
+            <div class="text-center flex flex-col">
+                <span class="text-green-400 font-bold hover:text-yellow-400 cursor-pointer text-center">Criado por 🐇 &copy 2022</span>
+                <span class="text-gray-900 font-bold hover:text-yellow-400 cursor-pointer text-center"><a href="https://carloscoelhogti.github.io/in/projects.html">Home</a></span>
+              </div>
+
+            <div class="flex gap-12">
+                <a href=""><img src="./Assets/instagram.svg" alt="" title="Instagram" class="hover:bg-yellow-400 rounded-lg"></a>
+                <a href=""><img src="./Assets/youtube.svg" alt="" title="YouTube" class="hover:bg-yellow-400 rounded-lg"></a>
+                <a href=""><img src="./Assets/twitter.svg" alt="" title="Twitter" class="hover:bg-yellow-400 rounded-lg"></a>
+                <a href=""><img src="./Assets/email.svg" alt="" title="Email" class="hover:bg-yellow-400 rounded-lg"></a>
+            </div>
+        </div>
+    </footer>
+    
+</body>
+</html>
