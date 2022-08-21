@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rocketflix</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <script src="./main.js"></script>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily:{
+                'sans': ['Poppins','Sans']
+            },
+            colors: {
+                titleColor: '#fffcf9',
+                subtitleColor: '#b3b3b3',
+                buttonColor: '#e9e6e3',
+                backgroundColor: 'linear-gradient(43deg, #102d71 0%, #000000 52%, #c12a23 100%'             
+
+            }
+          }
+        }
+      }
+    </script>
+
+</head>
+<body class="bg-gradient-to-r from-blue-600 via-stone-600 to-red-600 p-4">
+    
+    
+        <div class="flex flex-col items-center">
+        
+            
+            <img src="./assets/shuffle.svg" alt="" class="pt-4 cursor-pointer hover:w-[15%] ease-in-out duration-300" width="60" height="60" title="Rocketflix. Playlists à sua escolha!">
+            <p class="text-titleColor text-6xl pb-4">Não sabe o que assistir?</p>
+
+            <div id="div_posts" class="p-4 flex flex-cols" >
+
+                <div class="">
+                <img src="./assets/filme.jpg" alt="" title="Se tiver sorte clique no botão abaixo!" class="flex opacity-50 shadow-lg shadow-black  hover:opacity-100 ease-in-out duration-300 cursor-pointer" id="folder_filmes">
+                </div>
+
+                <div class="p-4 ">
+                  <h1 id="info_filme" class=" flex text-xl text-white pb-12"></h1>
+                  <p id="info_resumo" class=" flex text-white pb-8"></p>
+                  <span id="info_ano" class="flex text-white  text-sm pb-4"></span>
+                  <span id="info_diretor" class=" flex text-subtitleColor pb-4"></span>
+                  <a href="" id="info_site" class=" flex text-blue-400 pb-4"></a>
+                  <div class="flex-cols">
+                  <span id="info_texto" class="flex text-gray-400"></span>
+                  <span id="info_nota" class=" flex text-cyan-500"></span>
+                  </div>
+                </div>
+            </div>
+            
+          
+           <div class="flex items-center p-4 min-w-fit" id="div_info" style="display: none;">
+                <img src="./assets/poster_none.png" alt="" class="pl-5 hover:opacity-80 ease-in-out duration-300 cursor-pointer" title="Infelizmente não foi dessa vez!">
+                    
+                <p class="pt-6 z-40 text-yellow-400 hover:text-yellow-100 delay-150">Ops, hoje não é dia de assistir filme. Bora codar! 🚀</p>
+            </div>
+            
+            
+            <div class="flex rounded bg-buttonColor  gap-4 p-2 items-center max-w-fit hover:bg-subtitleColor cursor-pointer duration-150">
+                <img src="./assets/shuffle.svg" alt="" width="24" height="24" class="flex justify-center">
+                <button class="flex " onclick="getFilme()" title="Clique para assistir algo legal!">Encontrar um filme</button>
+            </div>
+
+        
+            <p class=" text-titleColor p-4 text-">Clique em "Encontrar filme" que traremos informações de algum filme para você assistir hoje.</p>
+            <footer class="cursor-pointer" title="Carlos Coelho">
+              <div class="text-center flex flex-col">
+                <span class="text-green-400 font-bold hover:text-yellow-400 cursor-pointer text-center">Criado por 🐇 &copy 2022</span>
+                <span class="text-gray-900 font-bold hover:text-yellow-400 cursor-pointer text-center"><a href="https://carloscoelhogti.github.io/in/projects.html">Home</a></span>
+              </div>
+            </footer>
+        </div>
+  
+
+</body>
+
+
+
+</html>
