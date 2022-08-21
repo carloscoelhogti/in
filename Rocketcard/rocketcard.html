@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rocketcard</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@100;400;700&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <script src="./rocketcardmain.js"></script>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily:{
+                'sans': ['Prompt','Sans']
+            },
+            colors: {
+                bgColor: '#000000',
+                bgColorCard: '#0E1218',
+                textColor: '#F1F1F1',
+                imgColorprofile: '#8257e5',
+                buttonsColor: '#FFF',
+                borderbuttonColor: '#1A1A1A',          
+
+            }
+          }
+        }
+      }
+    </script>
+
+</head>
+<body class="bg-bgColor text-textColor p-6">
+  
+  <div class="flex flex-cols justify-center items-center gap-6">
+    
+    <div id="div_card" class="bg-gray-900 rounded-lg p-2 w-[400px] h-[600px] border-4" onclick="cont()" title="Clique para imprimir">
+      
+      <header id="div_header" class="flex flex-wrap p-2 w-fit rounded-full justify-start items-center">
+
+        <img id="img_logo" src="./Images/img_avatar.png" width="36" alt="" class="flex rounded-full border hover:w-[15%] ease-in-out duration-300 ">
+        <span id="txt_user" class="flex pl-2">usuario</span>
+
+      </header>
+
+      <div class="flex justify-end pb-4 pt-4 ">
+        <img id="img_avatar" src="./Images/img_avatar.png" alt="" width="300" class="rounded-full border-8 border-yellow-400 shadow-lg shadow-gray-400 ">
+      </div>
+
+      <div id="div_info" class="gap-2 absolute top-72 left-54 flex-cols min-w-fit p-4 justify-start w-fit bg-gradient-to-b from-gray-900 via-zinc-700 to-neutral-900 opacity-60 rounded-lg">
+        <div class="flex">
+          <img src="./Images/followers.svg" alt="" class="pr-2">
+          <span id="txt_seguidores" class="flex hover:text-3xl duration-300 cursor-pointer">Seguidores</span>
+        </div>
+        
+        <div class="flex">
+          <img src="./Images/following.svg" alt="" class="pr-2">
+          <span id="txt_seguindo" class="flex hover:text-3xl duration-300 cursor-pointer">Seguindo</span>
+        </div>
+
+        <div class="flex">
+          <img src="./Images/repository.svg" alt="" class="pr-2">
+          <span id="txt_repos" class="flex hover:text-3xl duration-300 cursor-pointer">Repositórios</span>
+        </div>
+
+        <div class="flex">
+          <img src="./Images/company.svg" alt="" class="pr-2">
+          <span id="txt_company" class="flex hover:text-3xl duration-300 cursor-pointer">RocketSeat</span>
+        </div>
+
+        <div class="flex">
+          <img src="./Images/location.svg" alt="" class="pr-2">
+          <span id="txt_cidade" class="flex hover:text-3xl duration-300 cursor-pointer">Cidade</span>
+        </div>
+      </div>
+
+      <div class="flex justify-end min-w-fit pl-2 pt-[30%]">
+        <img id="img_logo" src="./Images/logo.svg" alt="" width="24" class="pl-2">
+        <footer id="div_footer" class=" flex uppercase pl-2">rocketcard</footer>
+      </div>
+
+      <div class="flex justify-center pt-4">
+        <a href="" id="txt_site" title="">Loading...</a>
+      </div>
+
+    </div>
+
+    <div class="flex-cols p-4 items-center justify-center" >
+      <h1 class=" text-text-Color text-2xl">Customizar Rocketcard</h1>
+      <button type="button" class="flex w-[280px] justify-center rounded-lg bg-buttonsColor p-2 text-black shadow-md hover:shadow-yellow-400 " title="Deixe com a sua cara" onclick="changeBackground()" >Gerar Background</button>
+      <span class="p-4">Compartilhe seu #rocketcard</span>
+    </div>
+
+  </div>
+  <div class="text-center text-gray-400 hover:text-yellow-400 pt-4" title="Carlos Coelho">Feito por 🐇.</div>
+  <div class="text-center text-gray-400 hover:text-yellow-400 pt-4"><a href="https://carloscoelhogti.github.io/in/projects.html">HOME</a></div>
+  
+</body>
+</html>
