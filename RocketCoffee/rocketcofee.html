@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rocket Coffee</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily:{
+                'sans': ['Manrope','Sans']
+            },
+            colors: {
+                background: '#000',
+                textColor: '#FFF',
+                buttonColor: '#8257E5,',
+                borderColor: '#29292E',
+                bordermenumobileColor: '#A8A8B3',
+                textcolormenumobile: '#E1E1E6',
+              
+
+            }
+          }
+        }
+      }
+    </script>
+    
+</head>
+<body class="bg-black text-white">
+    <div id="div_container" class="flex-grow">
+        
+            <div class="flex justify-center items-center gap-12 p-4 pt-8">
+
+            <div id="div_logo_1" class="flex">
+                <img src="./Images/logo-desktop.svg" width="50" height="50" class="cursor-pointer" title="O gostinho do café à suas mãos!">
+            </div>
+
+            <div id="div_menus_2" class="flex">
+                <ul id="lista_menus" class="flex gap-12 text-white">
+                    <li> <a href="https://carloscoelhogti.github.io/in/projects.html" class="hover:text-3xl  ease-in-out duration-300" title="Home">Home</a></li>
+                    <li> <a href="" class="hover:text-3xl  ease-in-out duration-300" title="Menu">Menu</a></li>
+                    <li> <a href="" class="hover:text-3xl  ease-in-out duration-300" title="Recompensas">Recompensas</a></li>
+                    <li> <a href="" class="hover:text-3xl  ease-in-out duration-300" title="Gift Cards">Gift Cards</a></li>
+                    <li> <a href="" class="hover:text-3xl  ease-in-out duration-300" title="Lojas">Lojas</a></li>                 
+                </ul>
+            </div>
+
+            <div id="div_button_pegarmeucafe_3" class="flex">
+                <button type="button" class="border border-violet-800 bg-transparent p-2 rounded uppercase hover:bg-violet-800 duration-300 text-white cursor-alias" onclick="TakemyCoffee()">Pegar Meu Café</button>
+            </div>                     
+ 
+            </div>
+
+            <div id="div_texto_central_5" class="flex-cols pt-4">
+                <h1 class="flex text-6xl justify-center text-white  font-bold hover:text-yellow-400 cursor-pointer"> Great Coffe</h1>
+                <p class="flex text-5xl text-black justify-center font-bold cursor-wait" style="text-shadow: 0 0 4px #996DFF" onclick="Code()">
+                    <!-- Para fazer borde nos textos
+                    
+                    -->
+                    &ltGreat Code/&gt</p>
+
+            </div>
+            
+            <div id="div_imagem_central" class="flex justify-center pt-16">
+                <img src="./Images/rocket_coffee.png" class="flex max-w-[1050px]">
+            </div>
+            
+            <div class="absolute bottom-96 left-0 h-16 pb-48">
+                <img src="./Images/blur-1.png" alt="" class="flex">
+            </div>
+            <div class="absolute top-0 right-0 h-16 w-200 " style="z-index: -1"> 
+                <!-- Para sobrepor elementos
+                https://www.w3schools.com/CSSref/playdemo.asp?filename=playcss_z-index
+                -->
+                <img src="./Images/blur-2.png" alt="" class="flex">
+            </div>
+
+    </div>
+   
+ 
+    <script>
+        function TakemyCoffee(){
+            alert('Seu café está à caminho')
+        }
+        function Code(){
+            alert('Sempre é hora de Codar!')
+        }
+    </script>
+    
+</body>
+</html>
