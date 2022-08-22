@@ -13,11 +13,31 @@
         }
     </style>
 
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+    tailwind.config = {
+        theme: {
+        extend: {
+            fontFamily:{
+                'sans': ['Poppins','Sans']
+            },
+            colors: {
+                titleColor: '#fffcf9',
+                subtitleColor: '#b3b3b3',
+                buttonColor: '#e9e6e3',
+                backgroundColor: 'linear-gradient(43deg, #102d71 0%, #000000 52%, #c12a23 100%'             
+
+            }
+        }
+        }
+    }
+    </script>
+
 </head>
-<body>
+<body class="bg-gray-500 flex flex-wrap justify-center items-center">
     
-    <fieldset>
-        <legend>Entre em Contato</legend>
+    <fieldset class="flex">
+        <legend class="text-blue-400">Entre em Contato</legend>
         <span>Nome Completo</span><br>
         <input type="text" placeholder="Seu Nome" id="txt_nome"><br>
         <span>E-mail</span><br>
@@ -29,8 +49,8 @@
         <button type="button" onclick="Enviar()">Enviar</button>
         
     </fieldset>
-<footer>
-    <a href="./projects.html">HOME</a><br>
+<footer class="flex">
+    <a href="https://carloscoelhogti.github.io/in/projects.html">HOME</a><br>
     <a href="">Criado por 🐇 2022</a>
 </footer>
     <script>
