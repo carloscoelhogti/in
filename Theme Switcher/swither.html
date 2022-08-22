@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Switcher</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily:{
+                'sans': ['Poppins','Sans']
+            },
+            colors: {
+              clifford: '#da373d',
+              escuro: '#292C35',
+              claro: ' #F1F1F1',
+              etiqueta: '#111'
+
+            }
+          }
+        }
+      }
+    </script>
+
+    <style>
+    .changeBackground {
+      background-color: #000000;
+    }
+    </style>
+
+</head>
+<body class="flex place-content-center  p-8">
+        <div class="flex flex-wrap items-center py-48">
+
+
+            <label for="large-toggle" class="inline-flex relative items-center cursor-pointer" >
+              <input type="checkbox" value="" id="large-toggle" class="sr-only peer" onclick="changeBackg()">
+              <img src="./Images/assets/sun.svg" alt="" class="absolute top-2.4 left-0" >
+              <img src="./Images/assets/moon.svg" alt="" class="absolute top-2.4 left-10" >
+              <div class="w-16 h-10 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-1 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-8 after:w-8 after:transition-all dark:border-gray-600 peer-checked:bg-gray-600"></div>
+              
+            </label>
+          
+        </div>
+
+        
+</body>
+
+  <script>
+    function changeBackg(){
+      var element = document.body
+      element.classList.toggle("changeBackground")
+    }
+  </script>
+</html>
