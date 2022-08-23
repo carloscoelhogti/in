@@ -4,31 +4,56 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog do 🐇 · Devs · Bootstrap v5.2</title>
-    <link href="https://getbootstrap.com/docs/5.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Playfair&#43;Display:700,900&amp;display=swap" rel="stylesheet">
-    <link href="./Css/blog.css" rel="stylesheet">
-</head>
+    <title>Blog do 🐇 · Projects · </title>
     
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+
+    
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily:{
+                'sans': ['Poppins','Sans']
+            },
+            colors: {
+              clifford: '#da373d',
+              bg_fundo: '#e5e7eb',
+              contorner: '#eec40e'
+
+            }
+          }
+        }
+      }
+    </script>
+    
+</head>
 <body>
     <header>
         <p></p>
     </header>
     <main class="container">
-        <div class="col-md-8">   
-        <h1>Desenvolvimento</h1>
-        <ul>
-            <li><a href="https://pingador.vercel.app/">Pingador</li>
-                <li><a href="https://cost-three.vercel.app/">Costs</li>
+        <h1 class="text-3xl font-bold text-center text-contorner drop-shadow-lg">Desenvolvimento React</h1>
+        <div class="col-md-8 p-4">
+        
+        <ul class="pl-4 list-disc w-fit">
+            <li class="hover:text-2xl ease-in-out duration-300"><a href="https://pingador.vercel.app/">Pingador</a></li>
+            <li class="hover:text-2xl ease-in-out duration-300"><a href="https://cost-three.vercel.app/">Costs</a></li>   
+            
         </ul>
-        </div> 
-    </main>    
+        </div>
+
+    </main>
     <footer class="blog-footer">
-        <p>Blog template built for <a href="https://getbootstrap.com/">Bootstrap</a> by <a href="https://twitter.com/mdo">@mdo</a>.</p>
-        <p>
-          <a href="#">Back to top</a>
-          <a href="./index.html">Home</a>
-        </p>
+        
+        <div class="text-center flex flex-col">
+            <span class="text-gray-800 font-bold hover:text-yellow-500 cursor-pointer text-center">Criado por 🐇 &copy 2022</span>
+            <span class="text-contorner font-bold hover:text-yellow-500 cursor-pointer"><a href="https://carloscoelhogti.github.io/in" class="visited:text-yellow-500">Home</a></span>
+          </div>
       </footer>
 </body>
 </html>
