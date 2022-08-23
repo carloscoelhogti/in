@@ -4,11 +4,29 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog do 🐇 · Projects · Bootstrap v5.2</title>
+    <title>Blog do 🐇 · Projects · </title>
     <link href="https://getbootstrap.com/docs/5.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Playfair&#43;Display:700,900&amp;display=swap" rel="stylesheet">
     <link href="./Css/blog.css" rel="stylesheet">
 
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily:{
+                'sans': ['Poppins','Sans']
+            },
+            colors: {
+              clifford: '#da373d',
+              bg_fundo: '#e5e7eb',
+              contorner: '#eec40e'
+
+            }
+          }
+        }
+      }
+    </script>
     
 </head>
 <body>
@@ -16,31 +34,31 @@
         <p></p>
     </header>
     <main class="container">
-        <h1>Projetos Criados</h1>
+        <h1 class="text-3xl font-bold text-center text-contorner drop-shadow-lg">Projetos Criados</h1>
         <div class="col-md-8">
         
-        <ul>
-            <li><a href="./imc.html">IMC</a></li>
-            <li><a href="./exe01.html">Hora do Dia</a></li>
-            <li><a href="./exe02.html">Verificador de Idade</a></li>
-            <li><a href="./exe03.html">Contador</a></li>
-            <li><a href="./contato.html">Contato</a></li>
-            <li><a href="./countdown.html">Countdown</a></li>
-            <li><a href="./Login Form/loginform.html">Login Form</a></li>
-            <li><a href="./exe04.html">Tabuada</a></li>
-            <li><a href="./exe05.html">Analisador de Números</a></li>
-            <li><a href="./Portfolio/portfolio.html">Portfolio</a></li>
-            <li><a href="./Pricing Table/princing.html">Princing Table</a></li>
-            <li><a href="./receitas.html">Receitas</a></li>
-            <li><a href="./Rocketcard/rocketcard.html">Rocket Card</a></li>
-            <li><a href="./RocketCoffee/rocketcofee.html">Rocket Coffee</a></li>
-            <li><a href="./RocketBlog/rocketblog.html">Rocket Blog</a></li>
-            <li><a href="./Rocketflix/rocketflix.html">Rocket Flix</a></li>
-            <li><a href="./rocketnews.html">Rocket News</a></li>
-            <li><a href="./RocketNFT/rocketnft.html">Rocket NFT</a></li>
-            <li><a href="./RocketShoes/rocketshoes.html">Rocket Shoes</a></li>
-            <li><a href="./Sidebar/sidebar.html">Sidebar</a></li>
-            <li><a href="./socialtree.html">Social Tree</a></li>
+        <ul class="pl-4 list-disc w-fit">
+            <li class="hover:text-2xl ease-in-out duration-300"><a href="./imc.html">IMC</a></li>
+            <li class="hover:text-2xl ease-in-out duration-300"><a href="./exe01.html">Hora do Dia</a></li>
+            <li class="hover:text-2xl ease-in-out duration-300"><a href="./exe02.html">Verificador de Idade</a></li>
+            <li class="hover:text-2xl ease-in-out duration-300"><a href="./exe03.html">Contador</a></li>
+            <li class="hover:text-2xl ease-in-out duration-300"><a href="./contato.html">Contato</a></li>
+            <li class="hover:text-2xl ease-in-out duration-300"><a href="./countdown.html">Countdown</a></li>
+            <li class="hover:text-2xl ease-in-out duration-300"><a href="./Login Form/loginform.html">Login Form</a></li>
+            <li class="hover:text-2xl ease-in-out duration-300"><a href="./exe04.html">Tabuada</a></li>
+            <li class="hover:text-2xl ease-in-out duration-300"><a href="./exe05.html">Analisador de Números</a></li>
+            <li class="hover:text-2xl ease-in-out duration-300"><a href="./Portfolio/portfolio.html">Portfolio</a></li>
+            <li class="hover:text-2xl ease-in-out duration-300"><a href="./Pricing Table/princing.html">Princing Table</a></li>
+            <li class="hover:text-2xl ease-in-out duration-300"><a href="./receitas.html">Receitas</a></li>
+            <li class="hover:text-2xl ease-in-out duration-300"><a href="./Rocketcard/rocketcard.html">Rocket Card</a></li>
+            <li class="hover:text-2xl ease-in-out duration-300"><a href="./RocketCoffee/rocketcofee.html">Rocket Coffee</a></li>
+            <li class="hover:text-2xl ease-in-out duration-300"><a href="./RocketBlog/rocketblog.html">Rocket Blog</a></li>
+            <li class="hover:text-2xl ease-in-out duration-300"><a href="./Rocketflix/rocketflix.html">Rocket Flix</a></li>
+            <li class="hover:text-2xl ease-in-out duration-300"><a href="./rocketnews.html">Rocket News</a></li>
+            <li class="hover:text-2xl ease-in-out duration-300"><a href="./RocketNFT/rocketnft.html">Rocket NFT</a></li>
+            <li class="hover:text-2xl ease-in-out duration-300"><a href="./RocketShoes/rocketshoes.html">Rocket Shoes</a></li>
+            <li class="hover:text-2xl ease-in-out duration-300"><a href="./Sidebar/sidebar.html">Sidebar</a></li>
+            <li class="hover:text-2xl ease-in-out duration-300"><a href="./socialtree.html">Social Tree</a></li>
             
             
         </ul>
@@ -48,11 +66,11 @@
 
     </main>
     <footer class="blog-footer">
-        <p>Blog template built for <a href="https://getbootstrap.com/">Bootstrap</a> by <a href="https://twitter.com/mdo">@mdo</a>.</p>
-        <p>
-          <a href="#">Back to top</a>
-          <a href="./index.html">Home</a>
-        </p>
+        
+        <div class="text-center flex flex-col">
+            <span class="text-gray-800 font-bold hover:text-yellow-500 cursor-pointer text-center">Criado por 🐇 &copy 2022</span>
+            <span class="text-contorner font-bold hover:text-yellow-500 cursor-pointer"><a href="https://carloscoelhogti.github.io/in" class="visited:text-yellow-500">Home</a></span>
+          </div>
       </footer>
 </body>
 </html>
