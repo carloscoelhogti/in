@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de QR Code</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-in-out',
+                        'bounce-in': 'bounceIn 0.6s ease-out'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            box-sizing: border-box;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes bounceIn {
+            0% { transform: scale(0.3); opacity: 0; }
+            50% { transform: scale(1.05); }
+            70% { transform: scale(0.9); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body class="min-h-full bg-gradient-to-br from-purple-600 via-blue-600 to-indigo-800 p-4">
+    <div class="min-h-full flex items-center justify-center">
+        <div class="bg-white rounded-3xl shadow-2xl p-8 w-full max-w-md">
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <div class="text-6xl mb-4">📱</div>
+                <h1 class="text-3xl font-bold text-gray-800 mb-2">Gerador de QR Code</h1>
+                <p class="text-gray-600">Transforme qualquer texto em código QR</p>
+            </div>
+
+            <!-- Form -->
+            <form id="qrForm" class="space-y-6">
+                <div>
+                    <label for="qrText" class="block text-sm font-semibold text-gray-700 mb-2">
+                        Digite o texto, número ou link:
+                    </label>
+                    <input 
+                        type="text" 
+                        id="qrText" 
+                        placeholder="Ex: https://meusite.com, telefone, texto..."
+                        class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:ring-4 focus:ring-purple-100 transition-all duration-300 text-gray-700"
+                        required
+                    >
+                </div>
+
+                <button 
+                    type="submit" 
+                    class="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold py-3 px-6 rounded-xl hover:from-purple-700 hover:to-blue-700 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
+                >
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M3 11h8V3H3v8zm2-6h4v4H5V5zm8-2v8h8V3h-8zm6 6h-4V5h4v4zM3 21h8v-8H3v8zm2-6h4v4H5v-4z"/>
+                        <path d="M15 15h2v2h-2zm0 2h2v2h-2zm2 0h2v2h-2z"/>
+                    </svg>
+                    Gerar QR Code
+                </button>
+            </form>
+
+            <!-- Loading -->
+            <div id="loading" class="hidden text-center py-8">
+                <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
+                <p class="text-gray-600 mt-2">Gerando QR Code...</p>
+            </div>
+
+            <!-- QR Result -->
+            <div id="qrResult" class="hidden mt-8 text-center animate-fade-in">
+                <div class="bg-gray-50 rounded-2xl p-6">
+                    <h3 class="text-lg font-semibold text-green-600 mb-4 flex items-center justify-center gap-2">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/>
+                        </svg>
+                        QR Code Gerado!
+                    </h3>
+                    
+                    <div id="qrcode" class="flex justify-center mb-6 animate-bounce-in"></div>
+                    
+                    <div class="space-y-3">
+                        <button 
+                            id="shareWhatsApp" 
+                            class="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-6 rounded-xl transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
+                        >
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.465 3.516"/>
+                            </svg>
+                            Compartilhar no WhatsApp
+                        </button>
+
+                        <button 
+                            id="downloadQR" 
+                            class="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-6 rounded-xl transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
+                        >
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"/>
+                            </svg>
+                            Baixar QR Code
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Success Message -->
+                <div id="successMessage" class="hidden mt-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-xl animate-fade-in">
+                    <div class="flex items-center justify-center gap-2">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/>
+                        </svg>
+                        <span id="successText">Ação realizada com sucesso!</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentQRData = '';
+        let currentQRCanvas = null;
+
+        // Função para gerar QR Code usando API pública
+        function generateQRCode(text) {
+            return new Promise((resolve, reject) => {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                const size = 200;
+                canvas.width = size;
+                canvas.height = size;
+
+                // Usar API do QR Server para gerar QR Code
+                const img = new Image();
+                img.crossOrigin = 'anonymous';
+                img.onload = function() {
+                    ctx.drawImage(img, 0, 0, size, size);
+                    resolve(canvas);
+                };
+                img.onerror = function() {
+                    reject(new Error('Erro ao gerar QR Code'));
+                };
+                
+                // API gratuita para gerar QR Code
+                const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${encodeURIComponent(text)}`;
+                img.src = qrUrl;
+            });
+        }
+
+        // Mostrar mensagem de sucesso
+        function showSuccess(message) {
+            const successDiv = document.getElementById('successMessage');
+            const successText = document.getElementById('successText');
+            successText.textContent = message;
+            successDiv.classList.remove('hidden');
+            setTimeout(() => {
+                successDiv.classList.add('hidden');
+            }, 3000);
+        }
+
+        // Form submit
+        document.getElementById('qrForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const text = document.getElementById('qrText').value.trim();
+            if (!text) return;
+
+            // Mostrar loading
+            document.getElementById('loading').classList.remove('hidden');
+            document.getElementById('qrResult').classList.add('hidden');
+
+            try {
+                // Gerar QR Code
+                const canvas = await generateQRCode(text);
+                currentQRCanvas = canvas;
+                currentQRData = text;
+
+                // Adicionar estilo ao canvas
+                canvas.className = 'rounded-xl shadow-lg border-4 border-white';
+
+                // Mostrar resultado
+                const qrcodeDiv = document.getElementById('qrcode');
+                qrcodeDiv.innerHTML = '';
+                qrcodeDiv.appendChild(canvas);
+
+                document.getElementById('loading').classList.add('hidden');
+                document.getElementById('qrResult').classList.remove('hidden');
+
+            } catch (error) {
+                document.getElementById('loading').classList.add('hidden');
+                showSuccess('Erro ao gerar QR Code. Tente novamente.');
+            }
+        });
+
+        // Compartilhar no WhatsApp
+        document.getElementById('shareWhatsApp').addEventListener('click', function() {
+            if (!currentQRCanvas || !currentQRData) return;
+            
+            // Converter canvas para base64
+            const imageDataUrl = currentQRCanvas.toDataURL('image/png');
+            
+            // Criar um link temporário para download automático
+            const downloadLink = document.createElement('a');
+            downloadLink.href = imageDataUrl;
+            downloadLink.download = 'qrcode-compartilhar.png';
+            
+            // Fazer download automático da imagem
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+            
+            // Aguardar um pouco e abrir WhatsApp Web
+            setTimeout(() => {
+                const message = `🔗 Confira este QR Code que gerei!\n\nConteúdo: ${currentQRData}\n\n📱 A imagem foi baixada automaticamente - anexe ela na conversa do WhatsApp!`;
+                const whatsappUrl = `https://web.whatsapp.com/send?text=${encodeURIComponent(message)}`;
+                
+                window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+                showSuccess('Imagem baixada! WhatsApp Web aberto - anexe a imagem na conversa.');
+            }, 500);
+        });
+
+        // Download QR Code
+        document.getElementById('downloadQR').addEventListener('click', function() {
+            if (!currentQRCanvas) return;
+            
+            const link = document.createElement('a');
+            link.download = 'qrcode.png';
+            link.href = currentQRCanvas.toDataURL();
+            link.click();
+            showSuccess('QR Code baixado com sucesso!');
+        });
+
+        // Enter para gerar
+        document.getElementById('qrText').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('qrForm').dispatchEvent(new Event('submit'));
+            }
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98f0339db66af41e',t:'MTc2MDU0MDU4OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
