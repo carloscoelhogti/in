@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Vouchers WiFi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-gray-800 mb-2">🔐 Gerador de Vouchers WiFi</h1>
+            <p class="text-gray-600">Gere códigos de acesso seguros para sua rede WiFi</p>
+        </div>
+
+        <!-- Generator Card -->
+        <div class="max-w-md mx-auto bg-white rounded-xl shadow-lg p-6 mb-6">
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span class="text-2xl">📶</span>
+                </div>
+                <h2 class="text-xl font-semibold text-gray-800">Novo Voucher</h2>
+            </div>
+
+            <button 
+                id="generateBtn" 
+                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 transform hover:scale-105 shadow-md"
+            >
+                Gerar Código WiFi
+            </button>
+        </div>
+
+        <!-- Voucher Display -->
+        <div id="voucherCard" class="max-w-md mx-auto bg-white rounded-xl shadow-lg p-6 hidden">
+            <div class="text-center mb-4">
+                <h3 class="text-lg font-semibold text-gray-800 mb-2">Voucher Gerado</h3>
+                <div class="bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg p-4 mb-4">
+                    <div class="text-2xl font-mono font-bold text-blue-600 tracking-wider" id="voucherCode"></div>
+                </div>
+                
+                <div class="text-sm text-gray-500 mb-4">
+                    <div>📅 <span id="voucherDate"></span></div>
+                    <div>🕒 <span id="voucherTime"></span></div>
+                </div>
+            </div>
+
+            <div class="space-y-3">
+                <button 
+                    id="copyBtn" 
+                    class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200"
+                >
+                    📋 Copiar Código
+                </button>
+                
+                <button 
+                    id="whatsappBtn" 
+                    class="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-200"
+                >
+                    📱 Compartilhar no WhatsApp
+                </button>
+                
+                <button 
+                    id="newVoucherBtn" 
+                    class="w-full bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200"
+                >
+                    Gerar Novo Voucher
+                </button>
+            </div>
+        </div>
+
+        <!-- History -->
+        <div class="max-w-md mx-auto mt-8">
+            <h3 class="text-lg font-semibold text-gray-800 mb-4 text-center">Histórico de Vouchers</h3>
+            <div id="voucherHistory" class="space-y-2"></div>
+        </div>
+    </div>
+
+    <script>
+        let voucherHistory = JSON.parse(localStorage.getItem('voucherHistory')) || [];
+
+        function generateRandomCode() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let result = '';
+            for (let i = 0; i < 12; i++) {
+                result += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return result;
+        }
+
+        function formatDate(date) {
+            return date.toLocaleDateString('pt-BR');
+        }
+
+        function formatTime(date) {
+            return date.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+        }
+
+        function displayVoucher(code, date, time) {
+            document.getElementById('voucherCode').textContent = code;
+            document.getElementById('voucherDate').textContent = date;
+            document.getElementById('voucherTime').textContent = time;
+            document.getElementById('voucherCard').classList.remove('hidden');
+        }
+
+        function saveToHistory(code, date, time) {
+            const voucher = { code, date, time, timestamp: Date.now() };
+            voucherHistory.unshift(voucher);
+            
+            // Manter apenas os últimos 10 vouchers
+            if (voucherHistory.length > 10) {
+                voucherHistory = voucherHistory.slice(0, 10);
+            }
+            
+            localStorage.setItem('voucherHistory', JSON.stringify(voucherHistory));
+            updateHistoryDisplay();
+        }
+
+        function updateHistoryDisplay() {
+            const historyContainer = document.getElementById('voucherHistory');
+            historyContainer.innerHTML = '';
+            
+            voucherHistory.forEach(voucher => {
+                const historyItem = document.createElement('div');
+                historyItem.className = 'bg-white rounded-lg p-3 shadow-sm border';
+                historyItem.innerHTML = `
+                    <div class="flex justify-between items-center">
+                        <div class="font-mono text-sm font-semibold text-gray-700">${voucher.code}</div>
+                        <div class="text-xs text-gray-500">${voucher.date} ${voucher.time}</div>
+                    </div>
+                `;
+                historyContainer.appendChild(historyItem);
+            });
+        }
+
+        // Event Listeners
+        document.getElementById('generateBtn').addEventListener('click', function() {
+            const code = generateRandomCode();
+            const now = new Date();
+            const date = formatDate(now);
+            const time = formatTime(now);
+            
+            displayVoucher(code, date, time);
+            saveToHistory(code, date, time);
+        });
+
+        document.getElementById('copyBtn').addEventListener('click', function() {
+            const code = document.getElementById('voucherCode').textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                const btn = document.getElementById('copyBtn');
+                const originalText = btn.textContent;
+                btn.textContent = '✅ Copiado!';
+                btn.classList.add('bg-green-700');
+                
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.classList.remove('bg-green-700');
+                }, 2000);
+            });
+        });
+
+        document.getElementById('whatsappBtn').addEventListener('click', function() {
+            const code = document.getElementById('voucherCode').textContent;
+            const date = document.getElementById('voucherDate').textContent;
+            const time = document.getElementById('voucherTime').textContent;
+            
+            const message = `🔐 *Voucher WiFi*\n\n📶 Código: *${code}*\n📅 Gerado em: ${date} às ${time}\n\n_Use este código para acessar a rede WiFi_`;
+            const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+            
+            window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+        });
+
+        document.getElementById('newVoucherBtn').addEventListener('click', function() {
+            document.getElementById('voucherCard').classList.add('hidden');
+        });
+
+        // Carregar histórico ao inicializar
+        updateHistoryDisplay();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'988ca9c5d26e8461',t:'MTc1OTQ5Njg1My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
