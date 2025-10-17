@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Questionário de Segurança Digital</title>
+    <style>
+        body {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            padding: 30px;
+            text-align: center;
+            color: white;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+
+        .header p {
+            margin: 10px 0 0 0;
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .progress-section {
+            padding: 30px;
+            text-align: center;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .plant-container {
+            font-size: 4em;
+            margin: 20px 0;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4facfe, #00f2fe);
+            width: 0%;
+            transition: width 0.5s ease;
+            border-radius: 10px;
+        }
+
+        .quiz-section {
+            padding: 40px;
+        }
+
+        .question-card {
+            background: #fff;
+            border: 2px solid #e9ecef;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            display: none;
+        }
+
+        .question-card.active {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .question-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        .options {
+            display: grid;
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        .option {
+            padding: 15px 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+            font-size: 1.1em;
+        }
+
+        .option:hover {
+            border-color: #4facfe;
+            background: #f8f9ff;
+            transform: translateY(-2px);
+        }
+
+        .option.selected {
+            border-color: #4facfe;
+            background: #4facfe;
+            color: white;
+        }
+
+        .option.correct {
+            border-color: #28a745;
+            background: #28a745;
+            color: white;
+        }
+
+        .option.incorrect {
+            border-color: #dc3545;
+            background: #dc3545;
+            color: white;
+        }
+
+        .next-btn {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .next-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .celebration {
+            display: none;
+            text-align: center;
+            padding: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .celebration.active {
+            display: block;
+            animation: celebrationPulse 2s ease-in-out;
+        }
+
+        @keyframes celebrationPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .floating-leaves {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .leaf {
+            position: absolute;
+            font-size: 2em;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+        }
+
+        .badge {
+            background: white;
+            color: #333;
+            padding: 30px;
+            border-radius: 20px;
+            margin: 30px auto;
+            max-width: 400px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .badge h2 {
+            margin: 0 0 15px 0;
+            font-size: 2em;
+        }
+
+        .score-display {
+            font-size: 1.5em;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+
+        .restart-btn {
+            background: white;
+            color: #667eea;
+            border: 2px solid white;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .restart-btn:hover {
+            background: transparent;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔐 Questionário de Segurança Digital</h1>
+            <p>Teste seus conhecimentos sobre segurança de dados!</p>
+        </div>
+
+        <div class="progress-section">
+            <div class="plant-container" id="plantContainer">
+                🧱
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <p id="progressText">Pergunta 1 de 5</p>
+        </div>
+
+        <div class="quiz-section" id="quizSection">
+            <div class="question-card active" data-question="0">
+                <div class="question-title">
+                    🔑 Qual é a característica mais importante de uma senha segura?
+                </div>
+                <div class="options">
+                    <div class="option" data-answer="0">📝 Ser fácil de lembrar, como seu nome</div>
+                    <div class="option" data-answer="1">🔢 Ter pelo menos 8 caracteres com letras, números e símbolos</div>
+                    <div class="option" data-answer="2">📅 Usar sua data de nascimento</div>
+                    <div class="option" data-answer="3">🔤 Usar apenas letras maiúsculas</div>
+                </div>
+                <button class="next-btn" onclick="nextQuestion()">Próxima Pergunta ➡️</button>
+            </div>
+
+            <div class="question-card" data-question="1">
+                <div class="question-title">
+                    📧 O que você deve fazer ao receber um email suspeito?
+                </div>
+                <div class="options">
+                    <div class="option" data-answer="0">👆 Clicar em todos os links para verificar</div>
+                    <div class="option" data-answer="1">🗑️ Deletar imediatamente sem abrir anexos</div>
+                    <div class="option" data-answer="2">📤 Encaminhar para todos os contatos</div>
+                    <div class="option" data-answer="3">💾 Baixar todos os anexos</div>
+                </div>
+                <button class="next-btn" onclick="nextQuestion()">Próxima Pergunta ➡️</button>
+            </div>
+
+            <div class="question-card" data-question="2">
+                <div class="question-title">
+                    🔄 Com que frequência você deve fazer backup dos seus dados importantes?
+                </div>
+                <div class="options">
+                    <div class="option" data-answer="0">📅 Regularmente (diário, semanal ou mensal)</div>
+                    <div class="option" data-answer="1">🎂 Apenas no seu aniversário</div>
+                    <div class="option" data-answer="2">❌ Nunca, não é necessário</div>
+                    <div class="option" data-answer="3">💥 Apenas quando o computador quebrar</div>
+                </div>
+                <button class="next-btn" onclick="nextQuestion()">Próxima Pergunta ➡️</button>
+            </div>
+
+            <div class="question-card" data-question="3">
+                <div class="question-title">
+                    🛡️ O que é autenticação de dois fatores (2FA)?
+                </div>
+                <div class="options">
+                    <div class="option" data-answer="0">🔐 Uma camada extra de segurança além da senha</div>
+                    <div class="option" data-answer="1">🔢 Usar duas senhas diferentes</div>
+                    <div class="option" data-answer="2">👥 Compartilhar sua conta com duas pessoas</div>
+                    <div class="option" data-answer="3">💻 Usar dois computadores</div>
+                </div>
+                <button class="next-btn" onclick="nextQuestion()">Próxima Pergunta ➡️</button>
+            </div>
+
+            <div class="question-card" data-question="4">
+                <div class="question-title">
+                    📱 Qual é a melhor prática ao usar WiFi público?
+                </div>
+                <div class="options">
+                    <div class="option" data-answer="0">🏦 Fazer transações bancárias normalmente</div>
+                    <div class="option" data-answer="1">🔒 Evitar acessar informações sensíveis ou usar VPN</div>
+                    <div class="option" data-answer="2">📤 Compartilhar a senha com todos</div>
+                    <div class="option" data-answer="3">💳 Inserir dados de cartão de crédito livremente</div>
+                </div>
+                <button class="next-btn" onclick="finishQuiz()">Finalizar Quiz 🎉</button>
+            </div>
+        </div>
+
+        <div class="celebration" id="celebration">
+            <div class="floating-leaves" id="floatingLeaves"></div>
+            <h1>🎉 Parabéns! 🎉</h1>
+            <div class="badge">
+                <h2>🏆 Colaborador Seguro 🏆</h2>
+                <div style="font-size: 3em; margin: 20px 0;">💻🔐🛡️</div>
+                <div class="score-display" id="finalScore">Pontuação: 0/5</div>
+                <p>Você demonstrou excelente conhecimento em segurança digital!</p>
+            </div>
+            <button class="restart-btn" onclick="restartQuiz()">🔄 Fazer Novamente</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            { correct: 1 },
+            { correct: 1 },
+            { correct: 0 },
+            { correct: 0 },
+            { correct: 1 }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let answered = false;
+
+        const plantStages = ['🌱', '🌿', '🌳', '🌲', '🎄'];
+
+        function selectOption(questionIndex, optionIndex) {
+            if (answered) return;
+
+            const questionCard = document.querySelector(`[data-question="${questionIndex}"]`);
+            const options = questionCard.querySelectorAll('.option');
+            const nextBtn = questionCard.querySelector('.next-btn');
+
+            // Remove previous selections
+            options.forEach(opt => opt.classList.remove('selected'));
+            
+            // Select current option
+            options[optionIndex].classList.add('selected');
+            
+            // Show correct/incorrect after a short delay
+            setTimeout(() => {
+                const correctIndex = questions[questionIndex].correct;
+                
+                options.forEach((opt, idx) => {
+                    opt.classList.remove('selected');
+                    if (idx === correctIndex) {
+                        opt.classList.add('correct');
+                    } else if (idx === optionIndex && idx !== correctIndex) {
+                        opt.classList.add('incorrect');
+                    }
+                });
+
+                if (optionIndex === correctIndex) {
+                    score++;
+                    updatePlant();
+                }
+
+                answered = true;
+                nextBtn.style.display = 'block';
+            }, 500);
+        }
+
+        function updatePlant() {
+            const plantContainer = document.getElementById('plantContainer');
+            plantContainer.textContent = plantStages[Math.min(score, plantStages.length - 1)];
+            
+            // Add growth animation
+            plantContainer.style.transform = 'scale(1.2)';
+            setTimeout(() => {
+                plantContainer.style.transform = 'scale(1)';
+            }, 300);
+        }
+
+        function updateProgress() {
+            const progressFill = document.getElementById('progressFill');
+            const progressText = document.getElementById('progressText');
+            
+            const percentage = ((currentQuestion + 1) / questions.length) * 100;
+            progressFill.style.width = percentage + '%';
+            progressText.textContent = `Pergunta ${currentQuestion + 1} de ${questions.length}`;
+        }
+
+        function nextQuestion() {
+            const currentCard = document.querySelector(`[data-question="${currentQuestion}"]`);
+            currentCard.classList.remove('active');
+            
+            currentQuestion++;
+            answered = false;
+            
+            if (currentQuestion < questions.length) {
+                const nextCard = document.querySelector(`[data-question="${currentQuestion}"]`);
+                nextCard.classList.add('active');
+                updateProgress();
+            }
+        }
+
+        function finishQuiz() {
+            document.getElementById('quizSection').style.display = 'none';
+            document.querySelector('.progress-section').style.display = 'none';
+            
+            const celebration = document.getElementById('celebration');
+            celebration.classList.add('active');
+            
+            document.getElementById('finalScore').textContent = `Pontuação: ${score}/${questions.length}`;
+            
+            createFloatingLeaves();
+        }
+
+        function createFloatingLeaves() {
+            const container = document.getElementById('floatingLeaves');
+            const leaves = ['🍃', '🌿', '💚', '✨'];
+            
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    const leaf = document.createElement('div');
+                    leaf.className = 'leaf';
+                    leaf.textContent = leaves[Math.floor(Math.random() * leaves.length)];
+                    leaf.style.left = Math.random() * 100 + '%';
+                    leaf.style.animationDelay = Math.random() * 2 + 's';
+                    leaf.style.animationDuration = (3 + Math.random() * 2) + 's';
+                    
+                    container.appendChild(leaf);
+                    
+                    setTimeout(() => {
+                        leaf.remove();
+                    }, 5000);
+                }, i * 200);
+            }
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            answered = false;
+            
+            // Reset all question cards
+            document.querySelectorAll('.question-card').forEach((card, index) => {
+                card.classList.remove('active');
+                if (index === 0) card.classList.add('active');
+                
+                // Reset options
+                card.querySelectorAll('.option').forEach(opt => {
+                    opt.classList.remove('selected', 'correct', 'incorrect');
+                });
+                
+                // Hide next button
+                card.querySelector('.next-btn').style.display = 'none';
+            });
+            
+            // Reset plant and progress
+            document.getElementById('plantContainer').textContent = '🌱';
+            updateProgress();
+            
+            // Show quiz sections
+            document.getElementById('quizSection').style.display = 'block';
+            document.querySelector('.progress-section').style.display = 'block';
+            
+            // Hide celebration
+            document.getElementById('celebration').classList.remove('active');
+        }
+
+        // Add click event listeners to all options
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.option').forEach((option, optionIndex) => {
+                option.addEventListener('click', function() {
+                    const questionCard = this.closest('.question-card');
+                    const questionIndex = parseInt(questionCard.dataset.question);
+                    selectOption(questionIndex, optionIndex % 4);
+                });
+            });
+            
+            updateProgress();
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'987c654fd359e0f7',t:'MTc1OTMyNjI3Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
