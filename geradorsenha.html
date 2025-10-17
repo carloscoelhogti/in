@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Senhas Seguras</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md">
+        <div class="text-center mb-8">
+            <div class="text-4xl mb-4">🔐</div>
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">Gerador de Senhas</h1>
+            <p class="text-gray-600">Crie senhas seguras para seus dispositivos</p>
+        </div>
+
+        <div class="space-y-6">
+            <!-- Controle de tamanho -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                    Tamanho da senha: <span id="lengthValue" class="text-blue-600 font-bold">16</span> caracteres
+                </label>
+                <input type="range" id="lengthSlider" min="12" max="50" value="16" 
+                       class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider">
+            </div>
+
+            <!-- Opções de caracteres -->
+            <div class="space-y-3">
+                <h3 class="text-sm font-medium text-gray-700">Incluir:</h3>
+                
+                <label class="flex items-center space-x-3 cursor-pointer">
+                    <input type="checkbox" id="uppercase" checked class="w-4 h-4 text-blue-600 rounded">
+                    <span class="text-sm text-gray-700">Letras maiúsculas (A-Z)</span>
+                </label>
+                
+                <label class="flex items-center space-x-3 cursor-pointer">
+                    <input type="checkbox" id="lowercase" checked class="w-4 h-4 text-blue-600 rounded">
+                    <span class="text-sm text-gray-700">Letras minúsculas (a-z)</span>
+                </label>
+                
+                <label class="flex items-center space-x-3 cursor-pointer">
+                    <input type="checkbox" id="numbers" checked class="w-4 h-4 text-blue-600 rounded">
+                    <span class="text-sm text-gray-700">Números (0-9)</span>
+                </label>
+                
+                <label class="flex items-center space-x-3 cursor-pointer">
+                    <input type="checkbox" id="symbols" checked class="w-4 h-4 text-blue-600 rounded">
+                    <span class="text-sm text-gray-700">Símbolos (!@#$%^&*)</span>
+                </label>
+            </div>
+
+            <!-- Botão gerar -->
+            <button id="generateBtn" 
+                    class="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-3 px-6 rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg">
+                🎲 Gerar Nova Senha
+            </button>
+
+            <!-- Resultado -->
+            <div id="result" class="hidden">
+                <div class="bg-gray-50 rounded-lg p-4 border-2 border-dashed border-gray-300">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Sua senha segura:</label>
+                    <div class="flex items-center space-x-2">
+                        <input type="text" id="passwordOutput" readonly 
+                               class="flex-1 bg-white border border-gray-300 rounded-md px-3 py-2 text-sm font-mono text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <button id="copyBtn" 
+                                class="bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded-md transition-colors duration-200 text-sm font-medium">
+                            📋 Copiar
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Indicador de força -->
+                <div class="mt-4">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-sm font-medium text-gray-700">Força da senha:</span>
+                        <span id="strengthText" class="text-sm font-bold"></span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2">
+                        <div id="strengthBar" class="h-2 rounded-full transition-all duration-300"></div>
+                    </div>
+                </div>
+
+                <!-- Botões de ação -->
+                <div class="flex space-x-3 mt-4">
+                    <button id="whatsappBtn" 
+                            class="flex-1 bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2">
+                        <span>📱</span>
+                        <span>Compartilhar no WhatsApp</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const lengthSlider = document.getElementById('lengthSlider');
+        const lengthValue = document.getElementById('lengthValue');
+        const generateBtn = document.getElementById('generateBtn');
+        const result = document.getElementById('result');
+        const passwordOutput = document.getElementById('passwordOutput');
+        const copyBtn = document.getElementById('copyBtn');
+        const whatsappBtn = document.getElementById('whatsappBtn');
+        const strengthBar = document.getElementById('strengthBar');
+        const strengthText = document.getElementById('strengthText');
+
+        // Conjuntos de caracteres
+        const charSets = {
+            uppercase: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+            lowercase: 'abcdefghijklmnopqrstuvwxyz',
+            numbers: '0123456789',
+            symbols: '!@#$%^&*()_+-=[]{}|;:,.<>?'
+        };
+
+        // Atualizar valor do slider
+        lengthSlider.addEventListener('input', function() {
+            lengthValue.textContent = this.value;
+        });
+
+        // Gerar senha
+        generateBtn.addEventListener('click', function() {
+            const length = parseInt(lengthSlider.value);
+            const options = {
+                uppercase: document.getElementById('uppercase').checked,
+                lowercase: document.getElementById('lowercase').checked,
+                numbers: document.getElementById('numbers').checked,
+                symbols: document.getElementById('symbols').checked
+            };
+
+            // Verificar se pelo menos uma opção está selecionada
+            if (!Object.values(options).some(option => option)) {
+                alert('Por favor, selecione pelo menos um tipo de caractere!');
+                return;
+            }
+
+            const password = generatePassword(length, options);
+            passwordOutput.value = password;
+            result.classList.remove('hidden');
+            
+            // Avaliar força da senha
+            evaluatePasswordStrength(password);
+        });
+
+        function generatePassword(length, options) {
+            let charset = '';
+            let password = '';
+
+            // Construir conjunto de caracteres
+            if (options.uppercase) charset += charSets.uppercase;
+            if (options.lowercase) charset += charSets.lowercase;
+            if (options.numbers) charset += charSets.numbers;
+            if (options.symbols) charset += charSets.symbols;
+
+            // Garantir que pelo menos um caractere de cada tipo selecionado seja incluído
+            if (options.uppercase) password += getRandomChar(charSets.uppercase);
+            if (options.lowercase) password += getRandomChar(charSets.lowercase);
+            if (options.numbers) password += getRandomChar(charSets.numbers);
+            if (options.symbols) password += getRandomChar(charSets.symbols);
+
+            // Preencher o restante da senha
+            for (let i = password.length; i < length; i++) {
+                password += getRandomChar(charset);
+            }
+
+            // Embaralhar a senha
+            return password.split('').sort(() => Math.random() - 0.5).join('');
+        }
+
+        function getRandomChar(charset) {
+            return charset.charAt(Math.floor(Math.random() * charset.length));
+        }
+
+        function evaluatePasswordStrength(password) {
+            let score = 0;
+            let feedback = '';
+
+            // Critérios de avaliação
+            if (password.length >= 12) score += 25;
+            if (password.length >= 16) score += 10;
+            if (/[a-z]/.test(password)) score += 15;
+            if (/[A-Z]/.test(password)) score += 15;
+            if (/[0-9]/.test(password)) score += 15;
+            if (/[^A-Za-z0-9]/.test(password)) score += 20;
+
+            // Determinar força
+            if (score >= 90) {
+                feedback = 'Muito Forte';
+                strengthBar.className = 'h-2 rounded-full transition-all duration-300 bg-green-500';
+                strengthBar.style.width = '100%';
+                strengthText.className = 'text-sm font-bold text-green-600';
+            } else if (score >= 70) {
+                feedback = 'Forte';
+                strengthBar.className = 'h-2 rounded-full transition-all duration-300 bg-blue-500';
+                strengthBar.style.width = '80%';
+                strengthText.className = 'text-sm font-bold text-blue-600';
+            } else if (score >= 50) {
+                feedback = 'Média';
+                strengthBar.className = 'h-2 rounded-full transition-all duration-300 bg-yellow-500';
+                strengthBar.style.width = '60%';
+                strengthText.className = 'text-sm font-bold text-yellow-600';
+            } else {
+                feedback = 'Fraca';
+                strengthBar.className = 'h-2 rounded-full transition-all duration-300 bg-red-500';
+                strengthBar.style.width = '40%';
+                strengthText.className = 'text-sm font-bold text-red-600';
+            }
+
+            strengthText.textContent = feedback;
+        }
+
+        // Copiar senha
+        copyBtn.addEventListener('click', function() {
+            passwordOutput.select();
+            document.execCommand('copy');
+            
+            // Feedback visual
+            const originalText = copyBtn.textContent;
+            copyBtn.textContent = '✅ Copiado!';
+            copyBtn.classList.add('bg-green-700');
+            
+            setTimeout(() => {
+                copyBtn.textContent = originalText;
+                copyBtn.classList.remove('bg-green-700');
+            }, 2000);
+        });
+
+        // Compartilhar no WhatsApp
+        whatsappBtn.addEventListener('click', function() {
+            const password = passwordOutput.value;
+            const message = `🔐 *Nova Senha Segura Gerada*\n\nSenha: \`${password}\`\n\n⚠️ *Importante:* Guarde esta senha em local seguro e não a compartilhe com terceiros!\n\n_Gerado pelo Gerador de Senhas Seguras_`;
+            const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'988d19bda1808461',t:'MTc1OTUwMTQzOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
