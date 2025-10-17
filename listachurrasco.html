@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Lista de Churrasco</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            box-sizing: border-box;
+        }
+        .fade-in {
+            animation: fadeIn 0.3s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-orange-50 to-red-50 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-gray-800 mb-2">🔥 Gerador de Lista de Churrasco</h1>
+            <p class="text-gray-600">Calcule automaticamente os ingredientes para o seu churrasco perfeito</p>
+        </div>
+
+        <!-- Controle de Pessoas -->
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+            <div class="flex items-center justify-center space-x-6">
+                <button id="decreaseBtn" class="bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-4 rounded-full transition-colors duration-200 text-xl">
+                    −
+                </button>
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-gray-800" id="peopleCount">10</div>
+                    <div class="text-gray-600">pessoas</div>
+                </div>
+                <button id="increaseBtn" class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-4 rounded-full transition-colors duration-200 text-xl">
+                    +
+                </button>
+            </div>
+        </div>
+
+        <!-- Lista de Ingredientes -->
+        <div class="grid md:grid-cols-2 gap-6">
+            <!-- Carnes -->
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <h2 class="text-2xl font-bold text-red-600 mb-4 flex items-center">
+                    🥩 Carnes
+                </h2>
+                <div class="space-y-3" id="meatList">
+                    <!-- Carnes serão inseridas aqui -->
+                </div>
+            </div>
+
+            <!-- Acompanhamentos -->
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <h2 class="text-2xl font-bold text-green-600 mb-4 flex items-center">
+                    🥗 Acompanhamentos
+                </h2>
+                <div class="space-y-3" id="sidesList">
+                    <!-- Acompanhamentos serão inseridos aqui -->
+                </div>
+            </div>
+
+            <!-- Bebidas -->
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <h2 class="text-2xl font-bold text-blue-600 mb-4 flex items-center">
+                    🍺 Bebidas
+                </h2>
+                <div class="space-y-3" id="drinksList">
+                    <!-- Bebidas serão inseridas aqui -->
+                </div>
+            </div>
+
+            <!-- Extras -->
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <h2 class="text-2xl font-bold text-purple-600 mb-4 flex items-center">
+                    🧄 Temperos & Extras
+                </h2>
+                <div class="space-y-3" id="extrasList">
+                    <!-- Extras serão inseridos aqui -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Botão de Imprimir -->
+        <div class="text-center mt-8">
+            <button id="printBtn" class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-8 rounded-lg transition-colors duration-200 text-lg shadow-lg">
+                📋 Gerar Lista para Imprimir
+            </button>
+        </div>
+
+        <!-- Lista para Impressão (oculta) -->
+        <div id="printList" class="hidden print:block mt-8 bg-white p-8 rounded-lg">
+            <h1 class="text-3xl font-bold text-center mb-6">Lista de Compras - Churrasco</h1>
+            <p class="text-center text-gray-600 mb-8">Para <span id="printPeopleCount"></span> pessoas</p>
+            <div id="printContent"></div>
+        </div>
+    </div>
+
+    <script>
+        // Dados base para 10 pessoas
+        const baseIngredients = {
+            meats: [
+                { name: 'Picanha', amount: 1.5, unit: 'kg' },
+                { name: 'Costela', amount: 2, unit: 'kg' },
+                { name: 'Linguiça', amount: 1, unit: 'kg' },
+                { name: 'Frango', amount: 1.5, unit: 'kg' },
+                { name: 'Coração de Frango', amount: 0.5, unit: 'kg' }
+            ],
+            sides: [
+                { name: 'Pão de Alho', amount: 10, unit: 'unidades' },
+                { name: 'Farofa', amount: 500, unit: 'g' },
+                { name: 'Vinagrete', amount: 1, unit: 'tigela grande' },
+                { name: 'Queijo Coalho', amount: 500, unit: 'g' },
+                { name: 'Mandioca', amount: 1, unit: 'kg' }
+            ],
+            drinks: [
+                { name: 'Cerveja', amount: 30, unit: 'latas' },
+                { name: 'Refrigerante', amount: 4, unit: 'litros' },
+                { name: 'Água', amount: 3, unit: 'litros' },
+                { name: 'Gelo', amount: 2, unit: 'kg' }
+            ],
+            extras: [
+                { name: 'Sal Grosso', amount: 1, unit: 'pacote' },
+                { name: 'Carvão', amount: 3, unit: 'kg' },
+                { name: 'Álcool Gel', amount: 1, unit: 'frasco' },
+                { name: 'Guardanapos', amount: 2, unit: 'pacotes' },
+                { name: 'Pratos Descartáveis', amount: 1, unit: 'pacote' }
+            ]
+        };
+
+        let currentPeople = 10;
+
+        function updateIngredients() {
+            const ratio = currentPeople / 10;
+            
+            updateCategory('meatList', baseIngredients.meats, ratio);
+            updateCategory('sidesList', baseIngredients.sides, ratio);
+            updateCategory('drinksList', baseIngredients.drinks, ratio);
+            updateCategory('extrasList', baseIngredients.extras, ratio);
+        }
+
+        function updateCategory(containerId, items, ratio) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            
+            items.forEach(item => {
+                const adjustedAmount = calculateAmount(item.amount, ratio);
+                const itemElement = document.createElement('div');
+                itemElement.className = 'flex justify-between items-center p-3 bg-gray-50 rounded-lg fade-in';
+                itemElement.innerHTML = `
+                    <span class="font-medium text-gray-800">${item.name}</span>
+                    <span class="text-gray-600 font-semibold">${adjustedAmount} ${item.unit}</span>
+                `;
+                container.appendChild(itemElement);
+            });
+        }
+
+        function calculateAmount(baseAmount, ratio) {
+            const adjusted = baseAmount * ratio;
+            
+            // Arredondar para valores mais práticos
+            if (adjusted < 1) {
+                return Math.ceil(adjusted * 10) / 10;
+            } else if (adjusted < 10) {
+                return Math.ceil(adjusted * 2) / 2;
+            } else {
+                return Math.ceil(adjusted);
+            }
+        }
+
+        function updatePeopleCount() {
+            document.getElementById('peopleCount').textContent = currentPeople;
+            updateIngredients();
+        }
+
+        function generatePrintList() {
+            const ratio = currentPeople / 10;
+            let printContent = '';
+            
+            const categories = [
+                { title: 'Carnes', items: baseIngredients.meats, icon: '🥩' },
+                { title: 'Acompanhamentos', items: baseIngredients.sides, icon: '🥗' },
+                { title: 'Bebidas', items: baseIngredients.drinks, icon: '🍺' },
+                { title: 'Temperos & Extras', items: baseIngredients.extras, icon: '🧄' }
+            ];
+            
+            categories.forEach(category => {
+                printContent += `<div style="margin-bottom: 24px; page-break-inside: avoid;">`;
+                printContent += `<h2 style="font-size: 18px; font-weight: bold; margin-bottom: 12px; border-bottom: 2px solid #000; padding-bottom: 8px;">${category.icon} ${category.title}</h2>`;
+                printContent += `<ul style="list-style: none; padding: 0;">`;
+                
+                category.items.forEach(item => {
+                    const adjustedAmount = calculateAmount(item.amount, ratio);
+                    printContent += `<li style="display: flex; justify-content: space-between; margin-bottom: 8px; padding: 4px 0;">
+                        <span>☐ ${item.name}</span>
+                        <span style="font-weight: bold;">${adjustedAmount} ${item.unit}</span>
+                    </li>`;
+                });
+                
+                printContent += `</ul></div>`;
+            });
+            
+            // Criar uma nova janela para impressão
+            const printWindow = window.open('', '_blank', 'width=800,height=600');
+            
+            if (printWindow) {
+                printWindow.document.write(`
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <title>Lista de Churrasco - ${currentPeople} pessoas</title>
+                        <style>
+                            body { 
+                                font-family: Arial, sans-serif; 
+                                margin: 20px; 
+                                line-height: 1.4;
+                            }
+                            h1 { 
+                                text-align: center; 
+                                margin-bottom: 10px; 
+                                font-size: 24px;
+                            }
+                            .subtitle { 
+                                text-align: center; 
+                                color: #666; 
+                                margin-bottom: 30px; 
+                                font-size: 16px;
+                            }
+                            .print-btn {
+                                background: #f97316;
+                                color: white;
+                                border: none;
+                                padding: 12px 24px;
+                                border-radius: 8px;
+                                font-size: 16px;
+                                cursor: pointer;
+                                margin: 20px auto;
+                                display: block;
+                            }
+                            .print-btn:hover {
+                                background: #ea580c;
+                            }
+                            @media print {
+                                .print-btn { display: none; }
+                                body { margin: 0; }
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        <h1>🔥 Lista de Compras - Churrasco</h1>
+                        <p class="subtitle">Para ${currentPeople} pessoas</p>
+                        <button class="print-btn" onclick="window.print()">🖨️ Imprimir Lista</button>
+                        ${printContent}
+                        <div style="margin-top: 40px; text-align: center; color: #888; font-size: 12px;">
+                            Gerado em ${new Date().toLocaleDateString('pt-BR')}
+                        </div>
+                    </body>
+                    </html>
+                `);
+                printWindow.document.close();
+                printWindow.focus();
+            } else {
+                alert('Por favor, permita pop-ups para gerar a lista de impressão.');
+            }
+        }
+
+        // Event Listeners
+        document.getElementById('decreaseBtn').addEventListener('click', () => {
+            if (currentPeople > 1) {
+                currentPeople--;
+                updatePeopleCount();
+            }
+        });
+
+        document.getElementById('increaseBtn').addEventListener('click', () => {
+            if (currentPeople < 100) {
+                currentPeople++;
+                updatePeopleCount();
+            }
+        });
+
+        document.getElementById('printBtn').addEventListener('click', generatePrintList);
+
+        // Inicializar
+        updateIngredients();
+    </script>
+
+    <style media="print">
+        body * {
+            visibility: hidden;
+        }
+        #printList, #printList * {
+            visibility: visible;
+        }
+        #printList {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+        }
+    </style>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'987c594687f4e0f7',t:'MTc1OTMyNTc4NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

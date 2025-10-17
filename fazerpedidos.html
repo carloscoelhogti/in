@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sonhado Sabor - Cardápio Interativo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            box-sizing: border-box;
+        }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        
+        .category-appetizer { background: linear-gradient(135deg, #fef3c7, #fbbf24); }
+        .category-pasta { background: linear-gradient(135deg, #ddd6fe, #8b5cf6); }
+        .category-dessert { background: linear-gradient(135deg, #fce7f3, #ec4899); }
+        
+        .item-card {
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        .item-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .item-card.selected {
+            border-color: #3b82f6;
+            background: #eff6ff;
+        }
+        
+        .addon-chip {
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .addon-chip:hover {
+            transform: scale(1.05);
+        }
+        .addon-chip.selected {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .order-summary {
+            position: sticky;
+            top: 2rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-7xl">
+        <!-- Header -->
+        <div class="text-center mb-12">
+            <h1 class="text-5xl font-bold text-gray-800 mb-4">Sonhado Sabor</h1>
+            <p class="text-xl text-gray-600 max-w-2xl mx-auto">Monte seu pedido personalizado e descubra sabores únicos em cada combinação</p>
+        </div>
+
+        <div class="grid lg:grid-cols-3 gap-8">
+            <!-- Menu Categories -->
+            <div class="lg:col-span-2 space-y-8">
+                <!-- Entradas -->
+                <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+                    <div class="category-appetizer p-6">
+                        <h2 class="text-3xl font-bold text-gray-800 mb-2">🥗 Entradas</h2>
+                        <p class="text-gray-700">Comece sua experiência com sabores marcantes</p>
+                    </div>
+                    <div class="p-6 grid md:grid-cols-2 gap-4">
+                        <div class="item-card bg-gray-50 rounded-xl p-4 cursor-pointer" onclick="selectItem('appetizer', 'bruschetta', 45)">
+                            <div class="flex justify-between items-start mb-3">
+                                <h3 class="font-semibold text-lg text-gray-800">Bruschetta Artesanal</h3>
+                                <span class="bg-amber-100 text-amber-800 px-3 py-1 rounded-full text-sm font-medium">R$ 45</span>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-3">Pão artesanal, tomate confitado, manjericão fresco</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="addon-chip bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-xs" onclick="event.stopPropagation(); toggleAddon(this, 'Queijo de cabra', 8)">+ Queijo de cabra (+R$ 8)</span>
+                                <span class="addon-chip bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-xs" onclick="event.stopPropagation(); toggleAddon(this, 'Presunto parma', 12)">+ Presunto parma (+R$ 12)</span>
+                            </div>
+                        </div>
+                        
+                        <div class="item-card bg-gray-50 rounded-xl p-4 cursor-pointer" onclick="selectItem('appetizer', 'carpaccio', 60)">
+                            <div class="flex justify-between items-start mb-3">
+                                <h3 class="font-semibold text-lg text-gray-800">Carpaccio Premium</h3>
+                                <span class="bg-amber-100 text-amber-800 px-3 py-1 rounded-full text-sm font-medium">R$ 60</span>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-3">Fatias finas de carne, rúcula, parmesão, azeite trufado</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="addon-chip bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-xs" onclick="event.stopPropagation(); toggleAddon(this, 'Alcaparras', 5)">+ Alcaparras (+R$ 5)</span>
+                                <span class="addon-chip bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-xs" onclick="event.stopPropagation(); toggleAddon(this, 'Pinhões', 10)">+ Pinhões (+R$ 10)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Massas -->
+                <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+                    <div class="category-pasta p-6">
+                        <h2 class="text-3xl font-bold text-gray-800 mb-2">🍝 Massas</h2>
+                        <p class="text-gray-700">Massas artesanais com molhos especiais</p>
+                    </div>
+                    <div class="p-6 grid md:grid-cols-2 gap-4">
+                        <div class="item-card bg-gray-50 rounded-xl p-4 cursor-pointer" onclick="selectItem('pasta', 'carbonara', 75)">
+                            <div class="flex justify-between items-start mb-3">
+                                <h3 class="font-semibold text-lg text-gray-800">Carbonara Clássica</h3>
+                                <span class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm font-medium">R$ 75</span>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-3">Fettuccine, molho cremoso, bacon, parmesão</p>
+                            <div class="flex flex-wrap gap-2 mb-3">
+                                <span class="addon-chip bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-xs" onclick="event.stopPropagation(); toggleAddon(this, 'Frango grelhado', 15)">+ Frango grelhado (+R$ 15)</span>
+                                <span class="addon-chip bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-xs" onclick="event.stopPropagation(); toggleAddon(this, 'Camarão', 20)">+ Camarão (+R$ 20)</span>
+                            </div>
+                            <div class="border-t pt-3">
+                                <p class="text-xs text-gray-500 mb-2">Nível de tempero:</p>
+                                <div class="flex gap-2">
+                                    <span class="addon-chip bg-green-100 text-green-700 px-2 py-1 rounded text-xs" onclick="event.stopPropagation(); selectSpice(this, 'suave')">🌿 Suave</span>
+                                    <span class="addon-chip bg-yellow-100 text-yellow-700 px-2 py-1 rounded text-xs" onclick="event.stopPropagation(); selectSpice(this, 'medio')">🌶️ Médio</span>
+                                    <span class="addon-chip bg-red-100 text-red-700 px-2 py-1 rounded text-xs" onclick="event.stopPropagation(); selectSpice(this, 'picante')">🔥 Picante</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="item-card bg-gray-50 rounded-xl p-4 cursor-pointer" onclick="selectItem('pasta', 'pesto', 70)">
+                            <div class="flex justify-between items-start mb-3">
+                                <h3 class="font-semibold text-lg text-gray-800">Pesto Genovês</h3>
+                                <span class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm font-medium">R$ 70</span>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-3">Linguine, molho pesto artesanal, tomate cereja</p>
+                            <div class="flex flex-wrap gap-2 mb-3">
+                                <span class="addon-chip bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-xs" onclick="event.stopPropagation(); toggleAddon(this, 'Salmão grelhado', 25)">+ Salmão grelhado (+R$ 25)</span>
+                                <span class="addon-chip bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-xs" onclick="event.stopPropagation(); toggleAddon(this, 'Burrata', 18)">+ Burrata (+R$ 18)</span>
+                            </div>
+                            <div class="border-t pt-3">
+                                <p class="text-xs text-gray-500 mb-2">Opções especiais:</p>
+                                <div class="flex gap-2">
+                                    <span class="addon-chip bg-green-100 text-green-700 px-2 py-1 rounded text-xs" onclick="event.stopPropagation(); toggleSpecial(this, 'vegetariano')">🌱 Vegetariano</span>
+                                    <span class="addon-chip bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs" onclick="event.stopPropagation(); toggleSpecial(this, 'sem-gluten')">🌾 Sem glúten</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sobremesas -->
+                <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+                    <div class="category-dessert p-6">
+                        <h2 class="text-3xl font-bold text-gray-800 mb-2">🍰 Sobremesas</h2>
+                        <p class="text-gray-700">Finalize com doçura e sofisticação</p>
+                    </div>
+                    <div class="p-6 grid md:grid-cols-2 gap-4">
+                        <div class="item-card bg-gray-50 rounded-xl p-4 cursor-pointer" onclick="selectItem('dessert', 'tiramisu', 35)">
+                            <div class="flex justify-between items-start mb-3">
+                                <h3 class="font-semibold text-lg text-gray-800">Tiramisù Tradicional</h3>
+                                <span class="bg-pink-100 text-pink-800 px-3 py-1 rounded-full text-sm font-medium">R$ 35</span>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-3">Camadas de biscoito, café, mascarpone, cacau</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="addon-chip bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-xs" onclick="event.stopPropagation(); toggleAddon(this, 'Calda de chocolate', 6)">+ Calda de chocolate (+R$ 6)</span>
+                                <span class="addon-chip bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-xs" onclick="event.stopPropagation(); toggleAddon(this, 'Frutas vermelhas', 8)">+ Frutas vermelhas (+R$ 8)</span>
+                            </div>
+                        </div>
+                        
+                        <div class="item-card bg-gray-50 rounded-xl p-4 cursor-pointer" onclick="selectItem('dessert', 'pannacotta', 40)">
+                            <div class="flex justify-between items-start mb-3">
+                                <h3 class="font-semibold text-lg text-gray-800">Panna Cotta Premium</h3>
+                                <span class="bg-pink-100 text-pink-800 px-3 py-1 rounded-full text-sm font-medium">R$ 40</span>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-3">Creme sedoso de baunilha, calda de frutas sazonais</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="addon-chip bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-xs" onclick="event.stopPropagation(); toggleAddon(this, 'Pistache', 10)">+ Pistache (+R$ 10)</span>
+                                <span class="addon-chip bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-xs" onclick="event.stopPropagation(); toggleAddon(this, 'Crumble', 7)">+ Crumble (+R$ 7)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Summary -->
+            <div class="lg:col-span-1">
+                <div class="order-summary bg-white rounded-2xl shadow-lg p-6">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-6">Seu Pedido</h3>
+                    <div id="order-items" class="space-y-4 mb-6">
+                        <div class="text-center text-gray-500 py-8">
+                            <div class="text-4xl mb-2">🍽️</div>
+                            <p>Selecione itens do cardápio para montar seu pedido</p>
+                        </div>
+                    </div>
+                    <div class="border-t pt-4">
+                        <div class="flex justify-between items-center text-xl font-bold text-gray-800 mb-4">
+                            <span>Total:</span>
+                            <span id="total-price">R$ 0,00</span>
+                        </div>
+                        <button id="finalize-btn" onclick="finalizeOrder()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-xl transition-colors duration-200 disabled:bg-gray-300 disabled:cursor-not-allowed" disabled>
+                            Finalizar Pedido
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Finalização -->
+    <div id="order-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-6 border-b">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-2xl font-bold text-gray-800">Resumo do Pedido</h2>
+                    <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+                </div>
+                <p class="text-gray-600 mt-2">Sonhado Sabor - Cardápio Interativo</p>
+            </div>
+            
+            <div id="modal-content" class="p-6">
+                <!-- Conteúdo será preenchido dinamicamente -->
+            </div>
+            
+            <div class="p-6 border-t bg-gray-50 flex gap-4">
+                <button onclick="printOrder()" class="flex-1 bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-xl transition-colors duration-200">
+                    🖨️ Imprimir Pedido
+                </button>
+                <button onclick="closeModal()" class="flex-1 bg-gray-600 hover:bg-gray-700 text-white font-semibold py-3 px-6 rounded-xl transition-colors duration-200">
+                    Fechar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let order = [];
+        let totalPrice = 0;
+
+        function selectItem(category, itemId, basePrice) {
+            // Remove previous selection from same category
+            order = order.filter(item => item.category !== category);
+            
+            // Remove selected class from all items in category
+            document.querySelectorAll('.item-card').forEach(card => {
+                if (card.onclick.toString().includes(category)) {
+                    card.classList.remove('selected');
+                }
+            });
+            
+            // Add selected class to clicked item
+            event.currentTarget.classList.add('selected');
+            
+            // Add new item to order
+            const itemName = event.currentTarget.querySelector('h3').textContent;
+            order.push({
+                category: category,
+                id: itemId,
+                name: itemName,
+                basePrice: basePrice,
+                addons: [],
+                spice: null,
+                special: null
+            });
+            
+            updateOrderDisplay();
+        }
+
+        function toggleAddon(element, addonName, price) {
+            element.classList.toggle('selected');
+            
+            // Find current item in order
+            const card = element.closest('.item-card');
+            const itemName = card.querySelector('h3').textContent;
+            const orderItem = order.find(item => item.name === itemName);
+            
+            if (orderItem) {
+                const addonIndex = orderItem.addons.findIndex(addon => addon.name === addonName);
+                if (addonIndex > -1) {
+                    orderItem.addons.splice(addonIndex, 1);
+                } else {
+                    orderItem.addons.push({ name: addonName, price: price });
+                }
+                updateOrderDisplay();
+            }
+        }
+
+        function selectSpice(element, level) {
+            // Remove selected from siblings
+            element.parentElement.querySelectorAll('.addon-chip').forEach(chip => {
+                chip.classList.remove('selected');
+            });
+            element.classList.add('selected');
+            
+            // Update order item
+            const card = element.closest('.item-card');
+            const itemName = card.querySelector('h3').textContent;
+            const orderItem = order.find(item => item.name === itemName);
+            
+            if (orderItem) {
+                orderItem.spice = level;
+                updateOrderDisplay();
+            }
+        }
+
+        function toggleSpecial(element, special) {
+            element.classList.toggle('selected');
+            
+            const card = element.closest('.item-card');
+            const itemName = card.querySelector('h3').textContent;
+            const orderItem = order.find(item => item.name === itemName);
+            
+            if (orderItem) {
+                if (orderItem.special === special) {
+                    orderItem.special = null;
+                } else {
+                    orderItem.special = special;
+                }
+                updateOrderDisplay();
+            }
+        }
+
+        function updateOrderDisplay() {
+            const orderItemsDiv = document.getElementById('order-items');
+            const totalPriceSpan = document.getElementById('total-price');
+            
+            if (order.length === 0) {
+                orderItemsDiv.innerHTML = `
+                    <div class="text-center text-gray-500 py-8">
+                        <div class="text-4xl mb-2">🍽️</div>
+                        <p>Selecione itens do cardápio para montar seu pedido</p>
+                    </div>
+                `;
+                totalPrice = 0;
+            } else {
+                let html = '';
+                totalPrice = 0;
+                
+                order.forEach(item => {
+                    let itemTotal = item.basePrice;
+                    let addonsHtml = '';
+                    
+                    if (item.addons.length > 0) {
+                        addonsHtml = '<div class="text-xs text-gray-600 mt-1">';
+                        item.addons.forEach(addon => {
+                            addonsHtml += `<div>+ ${addon.name} (+R$ ${addon.price})</div>`;
+                            itemTotal += addon.price;
+                        });
+                        addonsHtml += '</div>';
+                    }
+                    
+                    let specialsHtml = '';
+                    if (item.spice) {
+                        specialsHtml += `<div class="text-xs text-blue-600 mt-1">Tempero: ${item.spice}</div>`;
+                    }
+                    if (item.special) {
+                        specialsHtml += `<div class="text-xs text-green-600 mt-1">${item.special}</div>`;
+                    }
+                    
+                    html += `
+                        <div class="bg-gray-50 rounded-lg p-4">
+                            <div class="flex justify-between items-start">
+                                <div class="flex-1">
+                                    <h4 class="font-medium text-gray-800">${item.name}</h4>
+                                    ${addonsHtml}
+                                    ${specialsHtml}
+                                </div>
+                                <span class="font-semibold text-gray-800">R$ ${itemTotal.toFixed(2).replace('.', ',')}</span>
+                            </div>
+                        </div>
+                    `;
+                    
+                    totalPrice += itemTotal;
+                });
+                
+                orderItemsDiv.innerHTML = html;
+            }
+            
+            totalPriceSpan.textContent = `R$ ${totalPrice.toFixed(2).replace('.', ',')}`;
+            
+            // Habilitar/desabilitar botão de finalizar
+            const finalizeBtn = document.getElementById('finalize-btn');
+            finalizeBtn.disabled = order.length === 0;
+        }
+
+        function finalizeOrder() {
+            if (order.length === 0) return;
+            
+            const modal = document.getElementById('order-modal');
+            const modalContent = document.getElementById('modal-content');
+            
+            let html = `
+                <div class="space-y-4">
+                    <div class="text-center mb-6">
+                        <h3 class="text-xl font-bold text-gray-800">Pedido #${Date.now().toString().slice(-6)}</h3>
+                        <p class="text-gray-600">${new Date().toLocaleString('pt-BR')}</p>
+                    </div>
+            `;
+            
+            let modalTotal = 0;
+            
+            order.forEach((item, index) => {
+                let itemTotal = item.basePrice;
+                
+                html += `
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-semibold text-gray-800">${item.name}</h4>
+                            <span class="font-semibold text-gray-800">R$ ${item.basePrice.toFixed(2).replace('.', ',')}</span>
+                        </div>
+                `;
+                
+                if (item.addons.length > 0) {
+                    html += '<div class="ml-4 space-y-1">';
+                    item.addons.forEach(addon => {
+                        html += `
+                            <div class="flex justify-between text-sm text-gray-600">
+                                <span>+ ${addon.name}</span>
+                                <span>+R$ ${addon.price.toFixed(2).replace('.', ',')}</span>
+                            </div>
+                        `;
+                        itemTotal += addon.price;
+                    });
+                    html += '</div>';
+                }
+                
+                if (item.spice) {
+                    html += `<div class="text-sm text-blue-600 mt-2">Tempero: ${item.spice}</div>`;
+                }
+                
+                if (item.special) {
+                    html += `<div class="text-sm text-green-600 mt-1">${item.special}</div>`;
+                }
+                
+                html += `
+                        <div class="border-t mt-2 pt-2">
+                            <div class="flex justify-between font-semibold">
+                                <span>Subtotal:</span>
+                                <span>R$ ${itemTotal.toFixed(2).replace('.', ',')}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                modalTotal += itemTotal;
+            });
+            
+            html += `
+                    <div class="border-t-2 pt-4 mt-6">
+                        <div class="flex justify-between items-center text-2xl font-bold text-gray-800">
+                            <span>TOTAL GERAL:</span>
+                            <span>R$ ${modalTotal.toFixed(2).replace('.', ',')}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-blue-50 rounded-lg p-4 mt-6">
+                        <p class="text-sm text-blue-800 text-center">
+                            📋 Imprima este pedido e apresente ao atendente para finalizar sua compra
+                        </p>
+                    </div>
+                </div>
+            `;
+            
+            modalContent.innerHTML = html;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('order-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function printOrder() {
+            const modalContent = document.getElementById('modal-content').innerHTML;
+            const printWindow = window.open('', '_blank');
+            
+            printWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Pedido - Sonhado Sabor</title>
+                    <style>
+                        body { 
+                            font-family: Arial, sans-serif; 
+                            max-width: 600px; 
+                            margin: 0 auto; 
+                            padding: 20px;
+                            line-height: 1.4;
+                        }
+                        .bg-gray-50 { background-color: #f9fafb; }
+                        .rounded-lg { border-radius: 8px; }
+                        .p-4 { padding: 16px; }
+                        .mb-2 { margin-bottom: 8px; }
+                        .mb-6 { margin-bottom: 24px; }
+                        .mt-2 { margin-top: 8px; }
+                        .mt-6 { margin-top: 24px; }
+                        .ml-4 { margin-left: 16px; }
+                        .pt-2 { padding-top: 8px; }
+                        .pt-4 { padding-top: 16px; }
+                        .border-t { border-top: 1px solid #e5e7eb; }
+                        .border-t-2 { border-top: 2px solid #e5e7eb; }
+                        .text-center { text-align: center; }
+                        .font-bold { font-weight: bold; }
+                        .font-semibold { font-weight: 600; }
+                        .text-xl { font-size: 1.25rem; }
+                        .text-2xl { font-size: 1.5rem; }
+                        .text-sm { font-size: 0.875rem; }
+                        .text-gray-800 { color: #1f2937; }
+                        .text-gray-600 { color: #4b5563; }
+                        .text-blue-600 { color: #2563eb; }
+                        .text-green-600 { color: #059669; }
+                        .text-blue-800 { color: #1e40af; }
+                        .bg-blue-50 { background-color: #eff6ff; }
+                        .space-y-1 > * + * { margin-top: 4px; }
+                        .space-y-4 > * + * { margin-top: 16px; }
+                        .flex { display: flex; }
+                        .justify-between { justify-content: space-between; }
+                        .items-start { align-items: flex-start; }
+                        .items-center { align-items: center; }
+                        @media print {
+                            body { margin: 0; padding: 10px; }
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div style="text-align: center; margin-bottom: 30px;">
+                        <h1 style="margin: 0; font-size: 2rem; color: #1f2937;">Sonhado Sabor</h1>
+                        <p style="margin: 5px 0; color: #6b7280;">Cardápio Interativo</p>
+                    </div>
+                    ${modalContent}
+                </body>
+                </html>
+            `);
+            
+            printWindow.document.close();
+            printWindow.focus();
+            printWindow.print();
+        }
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'987ca16f8715e0f7',t:'MTc1OTMyODczOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

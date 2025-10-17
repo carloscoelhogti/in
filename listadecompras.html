@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Lista de Compras</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        body {
+            box-sizing: border-box;
+        }
+        @media print {
+            .no-print { display: none !important; }
+            .print-only { display: block !important; }
+            body { background: white !important; }
+        }
+        .print-only { display: none; }
+        .item-checked {
+            background-color: #dcfce7 !important;
+            border: 1px solid #bbf7d0;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-green-50 to-blue-50 min-h-screen p-4">
+    <div class="max-w-6xl mx-auto">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-gray-800 mb-2">🛒 Lista de Compras</h1>
+            <p class="text-gray-600">Marque os itens que precisa comprar no supermercado</p>
+        </div>
+
+        <!-- Shopping List Card -->
+        <div class="bg-white rounded-2xl shadow-xl p-8 mb-6">
+            <!-- Categories Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Frutas e Verduras -->
+                <div class="space-y-4">
+                    <h2 class="text-2xl font-semibold text-green-700 border-b-2 border-green-200 pb-2">🥬 Frutas e Verduras</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        <label class="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer">
+                            <input type="checkbox" class="w-5 h-5 text-green-600 rounded focus:ring-green-500">
+                            <span class="text-gray-700">Banana</span>
+                        </label>
+                        <label class="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer">
+                            <input type="checkbox" class="w-5 h-5 text-green-600 rounded focus:ring-green-500">
+                            <span class="text-gray-700">Maçã</span>
+                        </label>
+                        <label class="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer">
+                            <input type="checkbox" class="w-5 h-5 text-green-600 rounded focus:ring-green-500">
+                            <span class="text-gray-700">Laranja</span>
+                        </label>
+                        <label class="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer">
+                            <input type="checkbox" class="w-5 h-5 text-green-600 rounded focus:ring-green-500">
+                            <span class="text-gray-700">Tomate</span>
+                        </label>
+                        <label class="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer">
+                            <input type="checkbox" class="w-5 h-5 text-green-600 rounded focus:ring-green-500">
+                            <span class="text-gray-700">Alface</span>
+                        </label>
+                        <label class="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer">
+                            <input type="checkbox" class="w-5 h-5 text-green-600 rounded focus:ring-green-500">
+                            <span class="text-gray-700">Cebola</span>
+                        </label>
+                        <label class="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer">
+                            <input type="checkbox" class="w-5 h-5 text-green-600 rounded focus:ring-green-500">
+                            <span class="text-gray-700">Batata</span>
+                        </label>
+                        <label class="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer">
+                            <input type="checkbox" class="w-5 h-5 text-green-600 rounded focus:ring-green-500">
+                            <span class="text-gray-700">Cenoura</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Carnes e Proteínas -->
+                <div class="space-y-4">
+                    <h2 class="text-2xl font-semibold text-red-700 border-b-2 border-red-200 pb-2">🥩 Carnes e Proteínas</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        <label class="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer">
+                            <input type="checkbox" class="w-5 h-5 text-red-600 rounded focus:ring-red-500">
+                            <span class="text-gray-700">Frango</span>
+                        </label>
+                        <label class="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer">
+                            <input type="checkbox" class="w-5 h-5 text-red-600 rounded focus:ring-red-500">
+                            <span class="text-gray-700">Carne Bovina</span>
+                        </label>
+                        <label class="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer">
+                            <input type="checkbox" class="w-5 h-5 text-red-600 rounded focus:ring-red-500">
+                            <span class="text-gray-700">Peixe</span>
+                        </label>
+                        <label class="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer">
+                            <input type="checkbox" class="w-5 h-5 text-red-600 rounded focus:ring-red-500">
+                            <span class="text-gray-700">Ovos</span>
+                        </label>
+                        <label class="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer">
+                            <input type="checkbox" class="w-5 h-5 text-red-600 rounded focus:ring-red-500">
+                            <span class="text-gray-700">Presunto</span>
+                        </label>
+                        <label class="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer">
+                            <input type="checkbox" class="w-5 h-5 text-red-600 rounded focus:ring-red-500">
+                            <span class="text-gray-700">Queijo</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Laticínios -->
+                <div class="space-y-4">
+                    <h2 class="text-2xl font-semibold text-blue-700 border-b-2 border-blue-200 pb-2">🥛 Laticínios</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        <label class="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer">
+                            <input type="checkbox" class="w-5 h-5 text-blue-600 rounded focus:ring-blue-500">
+                            <span class="text-gray-700">Leite</span>
+                        </label>
+                        <label class="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer">
+                            <input type="checkbox" class="w-5 h-5 text-blue-600 rounded focus:ring-blue-500">
+                            <span class="text-gray-700">Iogurte</span>
+                        </label>
+                        <label class="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer">
+                            <input type="checkbox" class="w-5 h-5 text-blue-600 rounded focus:ring-blue-500">
+                            <span class="text-gray-700">Manteiga</span>
+                        </label>
+                        <label class="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer">
+                            <input type="checkbox" class="w-5 h-5 text-blue-600 rounded focus:ring-blue-500">
+                            <span class="text-gray-700">Requeijão</span>
+                        </label>
+                        <label class="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer">
+                            <input type="checkbox" class="w-5 h-5 text-blue-600 rounded focus:ring-blue-500">
+                            <span class="text-gray-700">Cream Cheese</span>
+                        </label>
+                        <label class="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer">
+                            <input type="checkbox" class="w-5 h-5 text-blue-600 rounded focus:ring-blue-500">
+                            <span class="text-gray-700">Leite Condensado</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Grãos e Cereais -->
+                <div class="space-y-4">
+                    <h2 class="text-2xl font-semibold text-yellow-700 border-b-2 border-yellow-200 pb-2">🌾 Grãos e Cereais</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        <label class="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer">
+                            <input type="checkbox" class="w-5 h-5 text-yellow-600 rounded focus:ring-yellow-500">
+                            <span class="text-gray-700">Arroz</span>
+                        </label>
+                        <label class="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer">
+                            <input type="checkbox" class="w-5 h-5 text-yellow-600 rounded focus:ring-yellow-500">
+                            <span class="text-gray-700">Feijão</span>
+                        </label>
+                        <label class="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer">
+                            <input type="checkbox" class="w-5 h-5 text-yellow-600 rounded focus:ring-yellow-500">
+                            <span class="text-gray-700">Macarrão</span>
+                        </label>
+                        <label class="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer">
+                            <input type="checkbox" class="w-5 h-5 text-yellow-600 rounded focus:ring-yellow-500">
+                            <span class="text-gray-700">Pão</span>
+                        </label>
+                        <label class="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer">
+                            <input type="checkbox" class="w-5 h-5 text-yellow-600 rounded focus:ring-yellow-500">
+                            <span class="text-gray-700">Aveia</span>
+                        </label>
+                        <label class="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer">
+                            <input type="checkbox" class="w-5 h-5 text-yellow-600 rounded focus:ring-yellow-500">
+                            <span class="text-gray-700">Farinha de Trigo</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Produtos de Limpeza -->
+                <div class="space-y-4">
+                    <h2 class="text-2xl font-semibold text-purple-700 border-b-2 border-purple-200 pb-2">🧽 Limpeza</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        <label class="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer">
+                            <input type="checkbox" class="w-5 h-5 text-purple-600 rounded focus:ring-purple-500">
+                            <span class="text-gray-700">Detergente</span>
+                        </label>
+                        <label class="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer">
+                            <input type="checkbox" class="w-5 h-5 text-purple-600 rounded focus:ring-purple-500">
+                            <span class="text-gray-700">Sabão em Pó</span>
+                        </label>
+                        <label class="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer">
+                            <input type="checkbox" class="w-5 h-5 text-purple-600 rounded focus:ring-purple-500">
+                            <span class="text-gray-700">Papel Higiênico</span>
+                        </label>
+                        <label class="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer">
+                            <input type="checkbox" class="w-5 h-5 text-purple-600 rounded focus:ring-purple-500">
+                            <span class="text-gray-700">Papel Toalha</span>
+                        </label>
+                        <label class="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer">
+                            <input type="checkbox" class="w-5 h-5 text-purple-600 rounded focus:ring-purple-500">
+                            <span class="text-gray-700">Desinfetante</span>
+                        </label>
+                        <label class="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer">
+                            <input type="checkbox" class="w-5 h-5 text-purple-600 rounded focus:ring-purple-500">
+                            <span class="text-gray-700">Amaciante</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Bebidas -->
+                <div class="space-y-4">
+                    <h2 class="text-2xl font-semibold text-indigo-700 border-b-2 border-indigo-200 pb-2">🥤 Bebidas</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        <label class="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer">
+                            <input type="checkbox" class="w-5 h-5 text-indigo-600 rounded focus:ring-indigo-500">
+                            <span class="text-gray-700">Água</span>
+                        </label>
+                        <label class="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer">
+                            <input type="checkbox" class="w-5 h-5 text-indigo-600 rounded focus:ring-indigo-500">
+                            <span class="text-gray-700">Refrigerante</span>
+                        </label>
+                        <label class="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer">
+                            <input type="checkbox" class="w-5 h-5 text-indigo-600 rounded focus:ring-indigo-500">
+                            <span class="text-gray-700">Suco</span>
+                        </label>
+                        <label class="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer">
+                            <input type="checkbox" class="w-5 h-5 text-indigo-600 rounded focus:ring-indigo-500">
+                            <span class="text-gray-700">Café</span>
+                        </label>
+                        <label class="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer">
+                            <input type="checkbox" class="w-5 h-5 text-indigo-600 rounded focus:ring-indigo-500">
+                            <span class="text-gray-700">Chá</span>
+                        </label>
+                        <label class="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer">
+                            <input type="checkbox" class="w-5 h-5 text-indigo-600 rounded focus:ring-indigo-500">
+                            <span class="text-gray-700">Cerveja</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col sm:flex-row gap-4 mt-8 pt-6 border-t border-gray-200 no-print">
+                <button onclick="printList()" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-xl transition-colors duration-200 flex items-center justify-center space-x-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
+                    </svg>
+                    <span>Imprimir Lista</span>
+                </button>
+                <button onclick="shareWhatsApp()" class="flex-1 bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-xl transition-colors duration-200 flex items-center justify-center space-x-2">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.700"/>
+                    </svg>
+                    <span>Compartilhar no WhatsApp</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Print Version -->
+        <div class="print-only">
+            <h1 class="text-2xl font-bold mb-4">Lista de Compras</h1>
+            <div id="printContent"></div>
+        </div>
+    </div>
+
+    <script>
+        // Add event listeners to all checkboxes for background color change
+        document.addEventListener('DOMContentLoaded', function() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    const label = this.parentElement;
+                    if (this.checked) {
+                        label.classList.add('item-checked');
+                    } else {
+                        label.classList.remove('item-checked');
+                    }
+                });
+            });
+        });
+
+        function printList() {
+            // Get all checked items
+            const checkedItems = [];
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+            
+            checkboxes.forEach(checkbox => {
+                const label = checkbox.parentElement;
+                const categoryDiv = label.closest('.space-y-4');
+                const category = categoryDiv.querySelector('h2').textContent;
+                const item = label.querySelector('span').textContent;
+                checkedItems.push({ category, item });
+            });
+
+            if (checkedItems.length === 0) {
+                alert('Selecione pelo menos um item para imprimir!');
+                return;
+            }
+
+            // Group items by category
+            const groupedItems = {};
+            checkedItems.forEach(({ category, item }) => {
+                if (!groupedItems[category]) {
+                    groupedItems[category] = [];
+                }
+                groupedItems[category].push(item);
+            });
+
+            // Create a new window for printing
+            const printWindow = window.open('', '_blank');
+            
+            let printHTML = `
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <title>Lista de Compras</title>
+                <style>
+                    body { 
+                        font-family: Arial, sans-serif; 
+                        max-width: 800px; 
+                        margin: 0 auto; 
+                        padding: 20px;
+                        line-height: 1.6;
+                    }
+                    h1 { 
+                        text-align: center; 
+                        color: #333; 
+                        margin-bottom: 30px; 
+                        border-bottom: 2px solid #4CAF50; 
+                        padding-bottom: 10px;
+                    }
+                    .subtitle { 
+                        text-align: center; 
+                        color: #666; 
+                        margin-bottom: 30px;
+                    }
+                    .category { 
+                        margin-bottom: 25px; 
+                        page-break-inside: avoid;
+                    }
+                    .category-title { 
+                        color: #4CAF50; 
+                        margin-bottom: 15px; 
+                        font-size: 18px; 
+                        border-left: 4px solid #4CAF50; 
+                        padding-left: 10px;
+                    }
+                    .items-grid { 
+                        display: grid; 
+                        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+                        gap: 8px; 
+                        margin-left: 20px;
+                    }
+                    .item { 
+                        display: flex; 
+                        align-items: center; 
+                        margin-bottom: 8px; 
+                        padding: 5px;
+                    }
+                    .checkbox { 
+                        margin-right: 10px; 
+                        font-size: 16px;
+                    }
+                    .item-name { 
+                        color: #333;
+                    }
+                    .footer { 
+                        margin-top: 40px; 
+                        text-align: center; 
+                        color: #999; 
+                        font-size: 12px; 
+                        border-top: 1px solid #ddd; 
+                        padding-top: 20px;
+                    }
+                </style>
+            </head>
+            <body>
+                <h1>🛒 Lista de Compras</h1>
+                <p class="subtitle">Produtos selecionados para comprar</p>
+            `;
+            
+            Object.keys(groupedItems).forEach(category => {
+                printHTML += `<div class="category">`;
+                printHTML += `<h2 class="category-title">${category}</h2>`;
+                printHTML += '<div class="items-grid">';
+                groupedItems[category].forEach(item => {
+                    printHTML += `<div class="item">`;
+                    printHTML += `<span class="checkbox">✅</span>`;
+                    printHTML += `<span class="item-name">${item}</span>`;
+                    printHTML += `</div>`;
+                });
+                printHTML += '</div></div>';
+            });
+            
+            printHTML += `<div class="footer">`;
+            printHTML += `Gerado em: ${new Date().toLocaleDateString('pt-BR')} às ${new Date().toLocaleTimeString('pt-BR')}`;
+            printHTML += `</div></body></html>`;
+
+            printWindow.document.write(printHTML);
+            printWindow.document.close();
+            
+            // Wait for content to load then print
+            printWindow.onload = function() {
+                printWindow.print();
+                printWindow.close();
+            };
+        }
+
+        function shareWhatsApp() {
+            // Get all checked items
+            const checkedItems = [];
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+            
+            checkboxes.forEach(checkbox => {
+                const label = checkbox.parentElement;
+                const item = label.querySelector('span').textContent;
+                checkedItems.push(item);
+            });
+
+            if (checkedItems.length === 0) {
+                alert('Selecione pelo menos um item para compartilhar!');
+                return;
+            }
+
+            // Create WhatsApp message
+            let message = '🛒 *Lista de Compras*\n\n';
+            checkedItems.forEach(item => {
+                message += `✅ ${item}\n`;
+            });
+            message += '\n_Gerado pelo Gerador de Lista de Compras_';
+
+            // Encode message for URL
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappURL = `https://wa.me/?text=${encodedMessage}`;
+            
+            // Open WhatsApp in new tab
+            window.open(whatsappURL, '_blank', 'noopener,noreferrer');
+        }
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'987e5119818d645a',t:'MTc1OTM0NjQyMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
