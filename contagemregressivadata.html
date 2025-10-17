@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contagem Regressiva</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body class="bg-slate-800 min-h-screen flex items-center justify-center p-4">
+    <div class="w-full max-w-md">
+        <!-- Título -->
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-slate-100 mb-2">Contagem Regressiva</h1>
+            <p class="text-slate-300">Descubra quantos dias faltam para sua data especial</p>
+        </div>
+
+        <!-- Card Principal -->
+        <div class="bg-slate-100 rounded-2xl shadow-xl p-6 space-y-6">
+            <!-- Data Atual -->
+            <div class="space-y-2">
+                <label class="block text-sm font-medium text-slate-700">Data de Hoje</label>
+                <input type="date" id="currentDate" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-slate-700 font-medium" readonly>
+            </div>
+
+            <!-- Data Futura -->
+            <div class="space-y-2">
+                <label for="futureDate" class="block text-sm font-medium text-slate-700">Data Futura</label>
+                <div class="flex gap-2">
+                    <input type="date" id="futureDate" class="flex-1 px-4 py-3 bg-white border border-slate-200 rounded-lg text-slate-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
+                    <button id="clearButton" class="px-4 py-3 bg-slate-500 hover:bg-slate-600 text-white rounded-lg transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                        Limpar
+                    </button>
+                </div>
+            </div>
+
+            <!-- Card de Resultado -->
+            <div id="countdownCard" class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-100 hidden">
+                <h3 class="text-lg font-semibold text-slate-700 text-center mb-4">Tempo Restante</h3>
+                
+                <!-- Grid de Contagem -->
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div class="text-center">
+                        <div id="days" class="text-2xl font-bold text-blue-600">0</div>
+                        <div class="text-sm text-slate-600">Dias</div>
+                    </div>
+                    <div class="text-center">
+                        <div id="hours" class="text-2xl font-bold text-blue-600">0</div>
+                        <div class="text-sm text-slate-600">Horas</div>
+                    </div>
+                    <div class="text-center">
+                        <div id="minutes" class="text-2xl font-bold text-blue-600">0</div>
+                        <div class="text-sm text-slate-600">Minutos</div>
+                    </div>
+                    <div class="text-center">
+                        <div id="seconds" class="text-2xl font-bold text-blue-600">0</div>
+                        <div class="text-sm text-slate-600">Segundos</div>
+                    </div>
+                </div>
+
+                <!-- Mensagem -->
+                <div id="message" class="text-center text-slate-600 text-sm"></div>
+            </div>
+
+            <!-- Mensagem de Erro -->
+            <div id="errorMessage" class="bg-red-50 border border-red-200 rounded-lg p-4 text-red-700 text-sm hidden">
+                Por favor, selecione uma data futura válida.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let countdownInterval;
+
+        // Definir data atual
+        function setCurrentDate() {
+            const today = new Date();
+            const formattedDate = today.toISOString().split('T')[0];
+            document.getElementById('currentDate').value = formattedDate;
+        }
+
+        // Calcular e exibir contagem regressiva
+        function updateCountdown() {
+            const futureDate = new Date(document.getElementById('futureDate').value);
+            const now = new Date();
+            
+            // Verificar se a data é válida e futura
+            if (!futureDate || futureDate <= now) {
+                document.getElementById('countdownCard').classList.add('hidden');
+                document.getElementById('errorMessage').classList.remove('hidden');
+                if (countdownInterval) {
+                    clearInterval(countdownInterval);
+                }
+                return;
+            }
+
+            // Esconder mensagem de erro e mostrar card
+            document.getElementById('errorMessage').classList.add('hidden');
+            document.getElementById('countdownCard').classList.remove('hidden');
+
+            // Calcular diferença
+            const difference = futureDate - now;
+            
+            const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+            // Atualizar elementos
+            document.getElementById('days').textContent = days;
+            document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+            document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+            document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+
+            // Atualizar mensagem
+            const totalDays = Math.ceil(difference / (1000 * 60 * 60 * 24));
+            document.getElementById('message').textContent = `Faltam ${totalDays} dias para sua data especial!`;
+        }
+
+        // Função para limpar data
+        function clearDate() {
+            document.getElementById('futureDate').value = '';
+            document.getElementById('countdownCard').classList.add('hidden');
+            document.getElementById('errorMessage').classList.add('hidden');
+            document.getElementById('clearButton').disabled = true;
+            
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+            }
+        }
+
+        // Event listener para mudança de data
+        document.getElementById('futureDate').addEventListener('change', function() {
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+            }
+            
+            // Habilitar/desabilitar botão limpar
+            document.getElementById('clearButton').disabled = !this.value;
+            
+            updateCountdown();
+            
+            // Iniciar atualização a cada segundo
+            if (this.value) {
+                countdownInterval = setInterval(updateCountdown, 1000);
+            }
+        });
+
+        // Event listener para botão limpar
+        document.getElementById('clearButton').addEventListener('click', clearDate);
+
+        // Inicializar página
+        setCurrentDate();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'987e16e38449e0f7',t:'MTc1OTM0NDAzNi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

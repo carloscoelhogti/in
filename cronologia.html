@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evolução dos Computadores - Linha do Tempo Interativa</title>
+    <style>
+        body {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .header {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 2.5rem;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.1rem;
+            margin: 0.5rem 0 0 0;
+        }
+
+        .timeline-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem 4rem 2rem;
+            position: relative;
+        }
+
+        .timeline-line {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(to bottom, #4facfe, #00f2fe);
+            transform: translateX(-50%);
+            border-radius: 2px;
+            box-shadow: 0 0 20px rgba(79, 172, 254, 0.5);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin: 3rem 0;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .timeline-item:nth-child(even) {
+            animation-delay: 0.2s;
+        }
+
+        .timeline-item:nth-child(odd) {
+            animation-delay: 0.1s;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .timeline-content {
+            width: 45%;
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .timeline-content:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .timeline-item:nth-child(odd) .timeline-content {
+            margin-left: 0;
+        }
+
+        .timeline-item:nth-child(even) .timeline-content {
+            margin-left: 55%;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: 50%;
+            top: 2rem;
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(45deg, #4facfe, #00f2fe);
+            border-radius: 50%;
+            transform: translateX(-50%);
+            border: 4px solid white;
+            box-shadow: 0 0 20px rgba(79, 172, 254, 0.6);
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-item:hover .timeline-dot {
+            transform: translateX(-50%) scale(1.3);
+            box-shadow: 0 0 30px rgba(79, 172, 254, 0.8);
+        }
+
+        .year {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #4facfe;
+            margin-bottom: 0.5rem;
+        }
+
+        .title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .inventor {
+            font-size: 1rem;
+            color: #666;
+            font-style: italic;
+            margin-bottom: 1rem;
+        }
+
+        .description {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .expanded-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+        }
+
+        .expanded-content.active {
+            max-height: 500px;
+        }
+
+        .impact {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 1rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+        }
+
+        .impact h4 {
+            margin: 0 0 0.5rem 0;
+            font-size: 1.1rem;
+        }
+
+        .expand-btn {
+            background: linear-gradient(45deg, #4facfe, #00f2fe);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            margin-top: 0.5rem;
+        }
+
+        .expand-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(79, 172, 254, 0.4);
+        }
+
+        .icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .timeline-line {
+                left: 2rem;
+            }
+
+            .timeline-content {
+                width: calc(100% - 4rem);
+                margin-left: 4rem !important;
+            }
+
+            .timeline-dot {
+                left: 2rem;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🖥️ Evolução dos Computadores</h1>
+        <p>Uma jornada através da história da computação - Clique nos cartões para explorar!</p>
+    </div>
+
+    <div class="timeline-container">
+        <div class="timeline-line"></div>
+
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content" onclick="toggleExpand(this)">
+                <div class="icon">🧮</div>
+                <div class="year">1642</div>
+                <div class="title">Máquina de Pascal</div>
+                <div class="inventor">Blaise Pascal</div>
+                <div class="description">A primeira calculadora mecânica capaz de realizar adições e subtrações automaticamente.</div>
+                <button class="expand-btn">Saiba Mais</button>
+                <div class="expanded-content">
+                    <div class="impact">
+                        <h4>💡 Impacto Histórico</h4>
+                        <p>Revolucionou os cálculos comerciais e estabeleceu os fundamentos para futuras máquinas calculadoras. Pascal tinha apenas 19 anos quando a inventou!</p>
+                    </div>
+                    <p><strong>Funcionamento:</strong> Utilizava rodas dentadas e engrenagens para realizar cálculos. Cada dígito era representado por uma roda com números de 0 a 9.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content" onclick="toggleExpand(this)">
+                <div class="icon">⚙️</div>
+                <div class="year">1822</div>
+                <div class="title">Máquina Diferencial</div>
+                <div class="inventor">Charles Babbage</div>
+                <div class="description">Primeira máquina projetada para calcular automaticamente tabelas matemáticas complexas.</div>
+                <button class="expand-btn">Saiba Mais</button>
+                <div class="expanded-content">
+                    <div class="impact">
+                        <h4>🎯 Importância</h4>
+                        <p>Babbage é considerado o "pai do computador" por suas ideias visionárias sobre máquinas programáveis.</p>
+                    </div>
+                    <p><strong>Curiosidade:</strong> A máquina nunca foi completamente construída na época devido às limitações tecnológicas, mas o conceito era revolucionário.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content" onclick="toggleExpand(this)">
+                <div class="icon">🎭</div>
+                <div class="year">1843</div>
+                <div class="title">Primeiro Algoritmo</div>
+                <div class="inventor">Ada Lovelace</div>
+                <div class="description">Ada escreveu o primeiro algoritmo destinado a ser processado por uma máquina.</div>
+                <button class="expand-btn">Saiba Mais</button>
+                <div class="expanded-content">
+                    <div class="impact">
+                        <h4>👩‍💻 Pioneirismo</h4>
+                        <p>Ada Lovelace é reconhecida como a primeira programadora da história e visionária do potencial dos computadores além de simples cálculos.</p>
+                    </div>
+                    <p><strong>Visão:</strong> Ela previu que as máquinas poderiam ser usadas para música, arte e ciência, não apenas matemática.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content" onclick="toggleExpand(this)">
+                <div class="icon">🔌</div>
+                <div class="year">1946</div>
+                <div class="title">ENIAC</div>
+                <div class="inventor">John Mauchly e J. Presper Eckert</div>
+                <div class="description">O primeiro computador eletrônico digital de uso geral, pesando 30 toneladas!</div>
+                <button class="expand-btn">Saiba Mais</button>
+                <div class="expanded-content">
+                    <div class="impact">
+                        <h4>⚡ Era Eletrônica</h4>
+                        <p>Marcou o início da era dos computadores eletrônicos, sendo 1000 vezes mais rápido que as máquinas mecânicas.</p>
+                    </div>
+                    <p><strong>Especificações:</strong> Usava 18.000 válvulas, consumia 150kW de energia e ocupava uma sala inteira de 167m².</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content" onclick="toggleExpand(this)">
+                <div class="icon">🧠</div>
+                <div class="year">1947</div>
+                <div class="title">Transistor</div>
+                <div class="inventor">Bell Labs (Bardeen, Brattain, Shockley)</div>
+                <div class="description">Invenção do transistor, substituindo as válvulas e revolucionando a eletrônica.</div>
+                <button class="expand-btn">Saiba Mais</button>
+                <div class="expanded-content">
+                    <div class="impact">
+                        <h4>🚀 Revolução Tecnológica</h4>
+                        <p>Permitiu computadores menores, mais rápidos e confiáveis. Base para toda a eletrônica moderna.</p>
+                    </div>
+                    <p><strong>Impacto:</strong> Reduziu drasticamente o tamanho e consumo de energia dos computadores, tornando-os mais acessíveis.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content" onclick="toggleExpand(this)">
+                <div class="icon">💾</div>
+                <div class="year">1971</div>
+                <div class="title">Microprocessador Intel 4004</div>
+                <div class="inventor">Intel (Ted Hoff, Federico Faggin)</div>
+                <div class="description">O primeiro microprocessador comercial, colocando toda a CPU em um único chip.</div>
+                <button class="expand-btn">Saiba Mais</button>
+                <div class="expanded-content">
+                    <div class="impact">
+                        <h4>🔬 Era dos Microprocessadores</h4>
+                        <p>Tornou possível a criação de computadores pessoais e dispositivos eletrônicos compactos.</p>
+                    </div>
+                    <p><strong>Especificações:</strong> 4 bits, 740 kHz, 2.300 transistores. Pequeno mas revolucionário!</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content" onclick="toggleExpand(this)">
+                <div class="icon">🏠</div>
+                <div class="year">1981</div>
+                <div class="title">IBM PC</div>
+                <div class="inventor">IBM</div>
+                <div class="description">O computador pessoal que estabeleceu o padrão para PCs domésticos.</div>
+                <button class="expand-btn">Saiba Mais</button>
+                <div class="expanded-content">
+                    <div class="impact">
+                        <h4>🏡 Computação Doméstica</h4>
+                        <p>Democratizou o acesso aos computadores, trazendo-os para casas e pequenos negócios.</p>
+                    </div>
+                    <p><strong>Legado:</strong> Estabeleceu a arquitetura x86 que ainda é usada hoje em dia na maioria dos computadores.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content" onclick="toggleExpand(this)">
+                <div class="icon">🌐</div>
+                <div class="year">1989</div>
+                <div class="title">World Wide Web</div>
+                <div class="inventor">Tim Berners-Lee</div>
+                <div class="description">Criação da Web, conectando computadores ao redor do mundo.</div>
+                <button class="expand-btn">Saiba Mais</button>
+                <div class="expanded-content">
+                    <div class="impact">
+                        <h4>🌍 Revolução Global</h4>
+                        <p>Transformou completamente como compartilhamos informação e nos comunicamos globalmente.</p>
+                    </div>
+                    <p><strong>Visão:</strong> Berners-Lee imaginou um sistema universal de informação que conectaria toda a humanidade.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content" onclick="toggleExpand(this)">
+                <div class="icon">📱</div>
+                <div class="year">2007</div>
+                <div class="title">iPhone</div>
+                <div class="inventor">Apple (Steve Jobs)</div>
+                <div class="description">O smartphone que redefiniu a computação móvel e a interação humano-computador.</div>
+                <button class="expand-btn">Saiba Mais</button>
+                <div class="expanded-content">
+                    <div class="impact">
+                        <h4>📲 Era Mobile</h4>
+                        <p>Colocou um computador poderoso no bolso de bilhões de pessoas, mudando como vivemos e trabalhamos.</p>
+                    </div>
+                    <p><strong>Inovação:</strong> Interface touchscreen intuitiva, internet móvel e ecossistema de aplicativos revolucionaram a tecnologia.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content" onclick="toggleExpand(this)">
+                <div class="icon">☁️</div>
+                <div class="year">2008</div>
+                <div class="title">Computação em Nuvem</div>
+                <div class="inventor">Amazon Web Services</div>
+                <div class="description">Popularização da computação em nuvem, permitindo acesso remoto a recursos computacionais.</div>
+                <button class="expand-btn">Saiba Mais</button>
+                <div class="expanded-content">
+                    <div class="impact">
+                        <h4>☁️ Revolução do Armazenamento</h4>
+                        <p>Democratizou o acesso a supercomputadores e permitiu que pequenas empresas competissem globalmente.</p>
+                    </div>
+                    <p><strong>Impacto:</strong> Eliminou a necessidade de grandes investimentos em infraestrutura, tornando a tecnologia mais acessível.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content" onclick="toggleExpand(this)">
+                <div class="icon">🤖</div>
+                <div class="year">2011</div>
+                <div class="title">Watson da IBM</div>
+                <div class="inventor">IBM</div>
+                <div class="description">Sistema de IA que venceu campeões humanos no programa de TV Jeopardy!</div>
+                <button class="expand-btn">Saiba Mais</button>
+                <div class="expanded-content">
+                    <div class="impact">
+                        <h4>🧠 IA Mainstream</h4>
+                        <p>Demonstrou publicamente o potencial da inteligência artificial para processar linguagem natural.</p>
+                    </div>
+                    <p><strong>Tecnologia:</strong> Combinava processamento de linguagem natural, recuperação de informação e representação do conhecimento.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content" onclick="toggleExpand(this)">
+                <div class="icon">🚁</div>
+                <div class="year">2013</div>
+                <div class="title">Drones Comerciais</div>
+                <div class="inventor">DJI Phantom</div>
+                <div class="description">Popularização dos drones para uso civil, fotografia aérea e entregas.</div>
+                <button class="expand-btn">Saiba Mais</button>
+                <div class="expanded-content">
+                    <div class="impact">
+                        <h4>🛸 Computação Voadora</h4>
+                        <p>Abriu novos mercados em fotografia, agricultura de precisão, inspeções e logística.</p>
+                    </div>
+                    <p><strong>Evolução:</strong> De brinquedos caros para ferramentas profissionais essenciais em diversas indústrias.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content" onclick="toggleExpand(this)">
+                <div class="icon">🏠</div>
+                <div class="year">2014</div>
+                <div class="title">Internet das Coisas (IoT)</div>
+                <div class="inventor">Nest Thermostat e Echo</div>
+                <div class="description">Objetos cotidianos ganham conectividade e inteligência, criando casas inteligentes.</div>
+                <button class="expand-btn">Saiba Mais</button>
+                <div class="expanded-content">
+                    <div class="impact">
+                        <h4>🌐 Mundo Conectado</h4>
+                        <p>Transformou objetos comuns em dispositivos inteligentes, coletando dados e automatizando tarefas.</p>
+                    </div>
+                    <p><strong>Aplicações:</strong> Termostatos inteligentes, assistentes virtuais, sensores de segurança e eletrodomésticos conectados.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content" onclick="toggleExpand(this)">
+                <div class="icon">🥽</div>
+                <div class="year">2016</div>
+                <div class="title">Realidade Virtual Mainstream</div>
+                <div class="inventor">Oculus Rift, HTC Vive</div>
+                <div class="description">VR torna-se acessível ao consumidor, criando experiências imersivas.</div>
+                <button class="expand-btn">Saiba Mais</button>
+                <div class="expanded-content">
+                    <div class="impact">
+                        <h4>🌟 Realidades Alternativas</h4>
+                        <p>Revolucionou jogos, educação, treinamento profissional e terapias médicas.</p>
+                    </div>
+                    <p><strong>Evolução:</strong> De conceito futurista para ferramenta prática em educação, medicina e entretenimento.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content" onclick="toggleExpand(this)">
+                <div class="icon">🧬</div>
+                <div class="year">2017</div>
+                <div class="title">Computação Quântica</div>
+                <div class="inventor">IBM Q e Google</div>
+                <div class="description">Primeiros computadores quânticos acessíveis via nuvem para pesquisadores.</div>
+                <button class="expand-btn">Saiba Mais</button>
+                <div class="expanded-content">
+                    <div class="impact">
+                        <h4>⚛️ Próxima Fronteira</h4>
+                        <p>Promete resolver problemas impossíveis para computadores clássicos, como simulações moleculares.</p>
+                    </div>
+                    <p><strong>Potencial:</strong> Criptografia, descoberta de medicamentos, otimização e inteligência artificial avançada.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content" onclick="toggleExpand(this)">
+                <div class="icon">🚗</div>
+                <div class="year">2018</div>
+                <div class="title">Carros Autônomos</div>
+                <div class="inventor">Waymo, Tesla</div>
+                <div class="description">Veículos com piloto automático começam a circular em vias públicas.</div>
+                <button class="expand-btn">Saiba Mais</button>
+                <div class="expanded-content">
+                    <div class="impact">
+                        <h4>🛣️ Mobilidade do Futuro</h4>
+                        <p>Promete reduzir acidentes, otimizar trânsito e revolucionar o transporte urbano.</p>
+                    </div>
+                    <p><strong>Tecnologia:</strong> Combina sensores, IA, GPS e processamento em tempo real para navegação autônoma.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content" onclick="toggleExpand(this)">
+                <div class="icon">🎨</div>
+                <div class="year">2020</div>
+                <div class="title">IA Generativa</div>
+                <div class="inventor">OpenAI GPT-3</div>
+                <div class="description">Inteligência artificial capaz de gerar textos, imagens e código de forma criativa.</div>
+                <button class="expand-btn">Saiba Mais</button>
+                <div class="expanded-content">
+                    <div class="impact">
+                        <h4>✨ Criatividade Artificial</h4>
+                        <p>Democratizou a criação de conteúdo e abriu novas possibilidades em arte, escrita e programação.</p>
+                    </div>
+                    <p><strong>Aplicações:</strong> Assistentes de escrita, geração de imagens, programação assistida e criação de conteúdo.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content" onclick="toggleExpand(this)">
+                <div class="icon">🌌</div>
+                <div class="year">2022</div>
+                <div class="title">Metaverso</div>
+                <div class="inventor">Meta, Microsoft</div>
+                <div class="description">Mundos virtuais persistentes onde pessoas trabalham, socializam e se divertem.</div>
+                <button class="expand-btn">Saiba Mais</button>
+                <div class="expanded-content">
+                    <div class="impact">
+                        <h4>🌐 Realidade Digital</h4>
+                        <p>Propõe uma nova forma de interação social e profissional em ambientes virtuais imersivos.</p>
+                    </div>
+                    <p><strong>Visão:</strong> Combina VR, AR, blockchain e IA para criar experiências digitais persistentes e compartilhadas.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content" onclick="toggleExpand(this)">
+                <div class="icon">🤖</div>
+                <div class="year">2023</div>
+                <div class="title">ChatGPT e IA Conversacional</div>
+                <div class="inventor">OpenAI</div>
+                <div class="description">IA conversacional avançada torna-se mainstream, mudando como interagimos com computadores.</div>
+                <button class="expand-btn">Saiba Mais</button>
+                <div class="expanded-content">
+                    <div class="impact">
+                        <h4>💬 Nova Interface</h4>
+                        <p>Revolucionou a interação humano-computador, tornando a tecnologia mais acessível através da linguagem natural.</p>
+                    </div>
+                    <p><strong>Impacto:</strong> Transformou educação, trabalho e criatividade, democratizando o acesso a conhecimento e ferramentas avançadas.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleExpand(element) {
+            const expandedContent = element.querySelector('.expanded-content');
+            const button = element.querySelector('.expand-btn');
+            
+            if (expandedContent.classList.contains('active')) {
+                expandedContent.classList.remove('active');
+                button.textContent = 'Saiba Mais';
+            } else {
+                // Fechar outros cartões abertos
+                document.querySelectorAll('.expanded-content.active').forEach(content => {
+                    content.classList.remove('active');
+                    content.parentElement.querySelector('.expand-btn').textContent = 'Saiba Mais';
+                });
+                
+                expandedContent.classList.add('active');
+                button.textContent = 'Fechar';
+            }
+        }
+
+        // Animação de entrada suave
+        window.addEventListener('load', () => {
+            const items = document.querySelectorAll('.timeline-item');
+            items.forEach((item, index) => {
+                setTimeout(() => {
+                    item.style.animationDelay = `${index * 0.1}s`;
+                }, index * 100);
+            });
+        });
+
+        // Efeito de paralaxe suave no scroll
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const parallax = document.querySelector('.timeline-line');
+            const speed = scrolled * 0.1;
+            parallax.style.transform = `translateX(-50%) translateY(${speed}px)`;
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'987c966d5238e0f7',t:'MTc1OTMyODI4OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
