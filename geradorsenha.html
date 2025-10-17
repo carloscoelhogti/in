@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerador de Senhas Seguras</title>
+    <title>Gerador de Senhas Seguras do Coelho</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body {
@@ -231,7 +231,7 @@
         // Compartilhar no WhatsApp
         whatsappBtn.addEventListener('click', function() {
             const password = passwordOutput.value;
-            const message = `🔐 *Nova Senha Segura Gerada*\n\nSenha: \`${password}\`\n\n⚠️ *Importante:* Guarde esta senha em local seguro e não a compartilhe com terceiros!\n\n_Gerado pelo Gerador de Senhas Seguras_`;
+            const message = `🔐 *Nova Senha Segura Gerada*\n\nSenha: \`${password}\`\n\n⚠️ *Importante:* Guarde esta senha em local seguro e não a compartilhe com terceiros!\n\n_Gerado pelo Gerador de Senhas Seguras do Coelho_`;
             const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
             window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
         });
