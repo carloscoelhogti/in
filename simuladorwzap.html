@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador WhatsApp - Dois Celulares</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            box-sizing: border-box;
+        }
+        .phone-shadow {
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        .message-animation {
+            animation: messageSlide 0.3s ease-out;
+        }
+        @keyframes messageSlide {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-100 to-green-100 min-h-screen p-4">
+    <div class="max-w-7xl mx-auto">
+        <h1 class="text-3xl font-bold text-center mb-8 text-gray-800">Simulador WhatsApp</h1>
+        
+        <div class="flex flex-col lg:flex-row gap-8 justify-center items-start">
+            <!-- Celular Esquerdo (Remetente) -->
+            <div class="flex flex-col items-center">
+                <h2 class="text-xl font-semibold mb-4 text-gray-700">João</h2>
+                <div class="bg-black rounded-3xl p-2 phone-shadow">
+                    <div class="bg-white rounded-2xl w-80 h-[600px] overflow-hidden">
+                        <!-- Status Bar -->
+                        <div class="bg-green-600 text-white px-4 py-2 text-sm flex justify-between items-center">
+                            <span>9:41</span>
+                            <div class="flex gap-1">
+                                <div class="w-4 h-2 bg-white rounded-sm"></div>
+                                <div class="w-1 h-2 bg-white rounded-sm"></div>
+                                <div class="w-6 h-2 bg-white rounded-sm"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- WhatsApp Header -->
+                        <div class="bg-green-600 text-white px-4 py-3 flex items-center gap-3">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                            </svg>
+                            <div class="flex items-center gap-3 flex-1">
+                                <div class="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
+                                    <span class="text-sm text-gray-600">M</span>
+                                </div>
+                                <div>
+                                    <div class="font-medium">Maria</div>
+                                    <div class="text-xs opacity-90">online</div>
+                                </div>
+                            </div>
+                            <div class="relative">
+                                <button id="menuButtonLeft" class="text-white hover:text-gray-200 transition-colors">
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M12,16A2,2 0 0,1 14,18A2,2 0 0,1 12,20A2,2 0 0,1 10,18A2,2 0 0,1 12,16M12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12A2,2 0 0,1 12,10M12,4A2,2 0 0,1 14,6A2,2 0 0,1 12,8A2,2 0 0,1 10,6A2,2 0 0,1 12,4Z"/>
+                                    </svg>
+                                </button>
+                                <div id="menuDropdownLeft" class="absolute right-0 top-8 bg-white rounded-lg shadow-lg py-2 w-48 hidden z-10">
+                                    <button id="exportButtonLeft" class="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors">
+                                        📤 Exportar conversa
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Chat Area -->
+                        <div id="chatLeft" class="bg-gray-100 h-[460px] overflow-y-auto p-4 space-y-3">
+                            <div class="flex justify-start">
+                                <div class="bg-white rounded-lg px-3 py-2 max-w-xs shadow-sm">
+                                    <p class="text-sm">Oi! Como você está?</p>
+                                    <span class="text-xs text-gray-500">10:30</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Input Area -->
+                        <div class="bg-gray-200 p-3 flex items-center gap-2">
+                            <svg class="w-6 h-6 text-gray-500" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            <button 
+                                id="photoButtonLeft"
+                                class="text-gray-500 hover:text-gray-700 transition-colors"
+                                title="Enviar foto"
+                            >
+                                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
+                                </svg>
+                            </button>
+                            <button 
+                                id="audioButtonLeft"
+                                class="text-gray-500 hover:text-gray-700 transition-colors"
+                                title="Enviar áudio"
+                            >
+                                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12,2A3,3 0 0,1 15,5V11A3,3 0 0,1 12,14A3,3 0 0,1 9,11V5A3,3 0 0,1 12,2M19,11C19,14.53 16.39,17.44 13,17.93V21H11V17.93C7.61,17.44 5,14.53 5,11H7A5,5 0 0,0 12,16A5,5 0 0,0 17,11H19Z"/>
+                                </svg>
+                            </button>
+                            <button 
+                                id="locationButtonLeft"
+                                class="text-gray-500 hover:text-gray-700 transition-colors"
+                                title="Enviar localização"
+                            >
+                                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12,11.5A2.5,2.5 0 0,1 9.5,9A2.5,2.5 0 0,1 12,6.5A2.5,2.5 0 0,1 14.5,9A2.5,2.5 0 0,1 12,11.5M12,2A7,7 0 0,0 5,9C5,14.25 12,22 12,22C12,22 19,14.25 19,9A7,7 0 0,0 12,2Z"/>
+                                </svg>
+                            </button>
+                            <input 
+                                id="messageInputLeft" 
+                                type="text" 
+                                placeholder="Digite uma mensagem"
+                                class="flex-1 bg-white rounded-full px-4 py-2 text-sm focus:outline-none"
+                            >
+                            <button 
+                                id="sendButtonLeft"
+                                class="bg-green-600 text-white rounded-full p-2 hover:bg-green-700 transition-colors"
+                            >
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Celular Direito (Destinatário) -->
+            <div class="flex flex-col items-center">
+                <h2 class="text-xl font-semibold mb-4 text-gray-700">Maria</h2>
+                <div class="bg-black rounded-3xl p-2 phone-shadow">
+                    <div class="bg-white rounded-2xl w-80 h-[600px] overflow-hidden">
+                        <!-- Status Bar -->
+                        <div class="bg-green-600 text-white px-4 py-2 text-sm flex justify-between items-center">
+                            <span>9:41</span>
+                            <div class="flex gap-1">
+                                <div class="w-4 h-2 bg-white rounded-sm"></div>
+                                <div class="w-1 h-2 bg-white rounded-sm"></div>
+                                <div class="w-6 h-2 bg-white rounded-sm"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- WhatsApp Header -->
+                        <div class="bg-green-600 text-white px-4 py-3 flex items-center gap-3">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                            </svg>
+                            <div class="flex items-center gap-3 flex-1">
+                                <div class="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
+                                    <span class="text-sm text-gray-600">J</span>
+                                </div>
+                                <div>
+                                    <div class="font-medium">João</div>
+                                    <div class="text-xs opacity-90">online</div>
+                                </div>
+                            </div>
+                            <div class="relative">
+                                <button id="menuButtonRight" class="text-white hover:text-gray-200 transition-colors">
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M12,16A2,2 0 0,1 14,18A2,2 0 0,1 12,20A2,2 0 0,1 10,18A2,2 0 0,1 12,16M12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12A2,2 0 0,1 12,10M12,4A2,2 0 0,1 14,6A2,2 0 0,1 12,8A2,2 0 0,1 10,6A2,2 0 0,1 12,4Z"/>
+                                    </svg>
+                                </button>
+                                <div id="menuDropdownRight" class="absolute right-0 top-8 bg-white rounded-lg shadow-lg py-2 w-48 hidden z-10">
+                                    <button id="exportButtonRight" class="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors">
+                                        📤 Exportar conversa
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Chat Area -->
+                        <div id="chatRight" class="bg-gray-100 h-[460px] overflow-y-auto p-4 space-y-3">
+                            <div class="flex justify-end">
+                                <div class="bg-green-500 text-white rounded-lg px-3 py-2 max-w-xs shadow-sm">
+                                    <p class="text-sm">Oi! Como você está?</p>
+                                    <span class="text-xs opacity-75">10:30</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Input Area -->
+                        <div class="bg-gray-200 p-3 flex items-center gap-2">
+                            <svg class="w-6 h-6 text-gray-500" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            <button 
+                                id="photoButtonRight"
+                                class="text-gray-500 hover:text-gray-700 transition-colors"
+                                title="Enviar foto"
+                            >
+                                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
+                                </svg>
+                            </button>
+                            <button 
+                                id="audioButtonRight"
+                                class="text-gray-500 hover:text-gray-700 transition-colors"
+                                title="Enviar áudio"
+                            >
+                                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12,2A3,3 0 0,1 15,5V11A3,3 0 0,1 12,14A3,3 0 0,1 9,11V5A3,3 0 0,1 12,2M19,11C19,14.53 16.39,17.44 13,17.93V21H11V17.93C7.61,17.44 5,14.53 5,11H7A5,5 0 0,0 12,16A5,5 0 0,0 17,11H19Z"/>
+                                </svg>
+                            </button>
+                            <button 
+                                id="locationButtonRight"
+                                class="text-gray-500 hover:text-gray-700 transition-colors"
+                                title="Enviar localização"
+                            >
+                                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12,11.5A2.5,2.5 0 0,1 9.5,9A2.5,2.5 0 0,1 12,6.5A2.5,2.5 0 0,1 14.5,9A2.5,2.5 0 0,1 12,11.5M12,2A7,7 0 0,0 5,9C5,14.25 12,22 12,22C12,22 19,14.25 19,9A7,7 0 0,0 12,2Z"/>
+                                </svg>
+                            </button>
+                            <input 
+                                id="messageInputRight" 
+                                type="text" 
+                                placeholder="Digite uma mensagem"
+                                class="flex-1 bg-white rounded-full px-4 py-2 text-sm focus:outline-none"
+                            >
+                            <button 
+                                id="sendButtonRight"
+                                class="bg-green-600 text-white rounded-full p-2 hover:bg-green-700 transition-colors"
+                            >
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="text-center mt-8 text-gray-600">
+            <p class="text-sm">Digite uma mensagem, clique no ícone de foto para carregar imagens, no microfone para gravar áudio ou no ícone de localização para compartilhar onde você está!</p>
+        </div>
+    </div>
+
+    <!-- Modal de Gravação de Áudio -->
+    <div id="audioModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+            <h3 class="text-lg font-semibold mb-4">Gravar Áudio</h3>
+            
+            <div class="text-center mb-6">
+                <div id="recordingIndicator" class="hidden">
+                    <div class="w-16 h-16 bg-red-500 rounded-full mx-auto mb-4 flex items-center justify-center animate-pulse">
+                        <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12,2A3,3 0 0,1 15,5V11A3,3 0 0,1 12,14A3,3 0 0,1 9,11V5A3,3 0 0,1 12,2Z"/>
+                        </svg>
+                    </div>
+                    <p class="text-red-500 font-medium">Gravando...</p>
+                    <p id="recordingTime" class="text-gray-500 text-sm">00:00</p>
+                </div>
+                
+                <div id="recordingControls" class="space-y-4">
+                    <div class="w-16 h-16 bg-gray-200 rounded-full mx-auto flex items-center justify-center">
+                        <svg class="w-8 h-8 text-gray-500" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12,2A3,3 0 0,1 15,5V11A3,3 0 0,1 12,14A3,3 0 0,1 9,11V5A3,3 0 0,1 12,2M19,11C19,14.53 16.39,17.44 13,17.93V21H11V17.93C7.61,17.44 5,14.53 5,11H7A5,5 0 0,0 12,16A5,5 0 0,0 17,11H19Z"/>
+                        </svg>
+                    </div>
+                    <p class="text-gray-600">Toque para começar a gravar</p>
+                </div>
+            </div>
+            
+            <div class="flex gap-3">
+                <button id="cancelAudio" class="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                    Cancelar
+                </button>
+                <button id="startRecording" class="flex-1 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors">
+                    Gravar
+                </button>
+                <button id="stopRecording" class="flex-1 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors hidden">
+                    Parar e Enviar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Seleção de Fotos -->
+    <div id="photoModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+            <h3 class="text-lg font-semibold mb-4">Escolher Foto</h3>
+            
+            <!-- Opções de foto -->
+            <div class="space-y-3 mb-4">
+                <!-- Botão para tirar foto da câmera -->
+                <button id="cameraButton" class="w-full p-4 border-2 border-dashed border-blue-300 rounded-lg text-center hover:border-blue-500 hover:bg-blue-50 transition-colors">
+                    <svg class="w-8 h-8 mx-auto mb-2 text-blue-500" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12,15A3,3 0 0,1 9,12A3,3 0 0,1 12,9A3,3 0 0,1 15,12A3,3 0 0,1 12,15M12,7A5,5 0 0,0 7,12A5,5 0 0,0 12,17A5,5 0 0,0 17,12A5,5 0 0,0 12,7M12,2L14.39,5.42C13.65,5.15 12.84,5 12,5C11.16,5 10.35,5.15 9.61,5.42L12,2M3.34,7L7.5,6.65C6.9,7.16 6.36,7.78 5.94,8.5C5.5,9.24 5.25,10 5.11,10.79L3.34,7M3.36,17L5.12,13.23C5.26,14 5.53,14.78 5.95,15.5C6.37,16.24 6.91,16.86 7.5,17.37L3.36,17M20.65,7L18.88,10.79C18.74,10 18.47,9.23 18.05,8.5C17.63,7.78 17.1,7.15 16.5,6.64L20.65,7M20.64,17L16.5,17.36C17.09,16.85 17.62,16.22 18.04,15.5C18.46,14.77 18.73,14 18.87,13.21L20.64,17Z"/>
+                    </svg>
+                    <span class="text-sm text-blue-600 font-medium">Tirar foto da câmera</span>
+                </button>
+                
+                <!-- Botão para carregar do computador -->
+                <label for="fileInput" class="block w-full p-4 border-2 border-dashed border-gray-300 rounded-lg text-center cursor-pointer hover:border-green-500 hover:bg-green-50 transition-colors">
+                    <svg class="w-8 h-8 mx-auto mb-2 text-gray-400" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
+                    </svg>
+                    <span class="text-sm text-gray-600">Carregar foto do computador</span>
+                    <input type="file" id="fileInput" accept="image/*" class="hidden">
+                </label>
+            </div>
+            
+
+            <div class="flex gap-3">
+                <button id="cancelPhoto" class="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                    Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal da Câmera -->
+    <div id="cameraModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+            <h3 class="text-lg font-semibold mb-4">Tirar Foto</h3>
+            
+            <div class="text-center mb-4">
+                <video id="cameraVideo" class="w-full h-48 bg-gray-200 rounded-lg object-cover hidden" autoplay playsinline></video>
+                <canvas id="cameraCanvas" class="w-full h-48 bg-gray-200 rounded-lg hidden"></canvas>
+                <div id="cameraPlaceholder" class="w-full h-48 bg-gray-200 rounded-lg flex items-center justify-center">
+                    <svg class="w-12 h-12 text-gray-400" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12,15A3,3 0 0,1 9,12A3,3 0 0,1 12,9A3,3 0 0,1 15,12A3,3 0 0,1 12,15M12,7A5,5 0 0,0 7,12A5,5 0 0,0 12,17A5,5 0 0,0 17,12A5,5 0 0,0 12,7M12,2L14.39,5.42C13.65,5.15 12.84,5 12,5C11.16,5 10.35,5.15 9.61,5.42L12,2M3.34,7L7.5,6.65C6.9,7.16 6.36,7.78 5.94,8.5C5.5,9.24 5.25,10 5.11,10.79L3.34,7M3.36,17L5.12,13.23C5.26,14 5.53,14.78 5.95,15.5C6.37,16.24 6.91,16.86 7.5,17.37L3.36,17M20.65,7L18.88,10.79C18.74,10 18.47,9.23 18.05,8.5C17.63,7.78 17.1,7.15 16.5,6.64L20.65,7M20.64,17L16.5,17.36C17.09,16.85 17.62,16.22 18.04,15.5C18.46,14.77 18.73,14 18.87,13.21L20.64,17Z"/>
+                    </svg>
+                </div>
+            </div>
+            
+            <div class="flex gap-3">
+                <button id="cancelCamera" class="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                    Cancelar
+                </button>
+                <button id="startCamera" class="flex-1 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+                    Iniciar Câmera
+                </button>
+                <button id="capturePhoto" class="flex-1 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors hidden">
+                    Capturar
+                </button>
+                <button id="retakePhoto" class="flex-1 px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-colors hidden">
+                    Tirar Novamente
+                </button>
+                <button id="sendPhoto" class="flex-1 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors hidden">
+                    Enviar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Localização -->
+    <div id="locationModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+            <h3 class="text-lg font-semibold mb-4">Compartilhar Localização</h3>
+            
+            <div class="text-center mb-6">
+                <div id="locationLoading" class="hidden">
+                    <div class="w-16 h-16 bg-blue-100 rounded-full mx-auto mb-4 flex items-center justify-center animate-pulse">
+                        <svg class="w-8 h-8 text-blue-500" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12,8A4,4 0 0,1 16,12A4,4 0 0,1 12,16A4,4 0 0,1 8,12A4,4 0 0,1 12,8M3.05,13H1V11H3.05C3.5,6.83 6.83,3.5 11,3.05V1H13V3.05C17.17,3.5 20.5,6.83 20.95,11H23V13H20.95C20.5,17.17 17.17,20.5 13,20.95V23H11V20.95C6.83,20.5 3.5,17.17 3.05,13M12,5A7,7 0 0,0 5,12A7,7 0 0,0 12,19A7,7 0 0,0 19,12A7,7 0 0,0 12,5Z"/>
+                        </svg>
+                    </div>
+                    <p class="text-blue-500 font-medium">Obtendo localização...</p>
+                </div>
+                
+                <div id="locationControls" class="space-y-4">
+                    <div class="w-16 h-16 bg-red-100 rounded-full mx-auto flex items-center justify-center">
+                        <svg class="w-8 h-8 text-red-500" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12,11.5A2.5,2.5 0 0,1 9.5,9A2.5,2.5 0 0,1 12,6.5A2.5,2.5 0 0,1 14.5,9A2.5,2.5 0 0,1 12,11.5M12,2A7,7 0 0,0 5,9C5,14.25 12,22 12,22C12,22 19,14.25 19,9A7,7 0 0,0 12,2Z"/>
+                        </svg>
+                    </div>
+                    <p class="text-gray-600">Compartilhar sua localização atual</p>
+                </div>
+                
+                <div id="locationResult" class="hidden space-y-3">
+                    <div class="w-16 h-16 bg-green-100 rounded-full mx-auto flex items-center justify-center">
+                        <svg class="w-8 h-8 text-green-500" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12,11.5A2.5,2.5 0 0,1 9.5,9A2.5,2.5 0 0,1 12,6.5A2.5,2.5 0 0,1 14.5,9A2.5,2.5 0 0,1 12,11.5M12,2A7,7 0 0,0 5,9C5,14.25 12,22 12,22C12,22 19,14.25 19,9A7,7 0 0,0 12,2Z"/>
+                        </svg>
+                    </div>
+                    <p class="text-green-600 font-medium">Localização encontrada!</p>
+                    <div class="text-sm text-gray-600 bg-gray-50 p-3 rounded-lg">
+                        <p id="locationAddress">Carregando endereço...</p>
+                        <p id="locationCoords" class="text-xs text-gray-500 mt-1"></p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex gap-3">
+                <button id="cancelLocation" class="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                    Cancelar
+                </button>
+                <button id="getLocation" class="flex-1 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors">
+                    Obter Localização
+                </button>
+                <button id="sendLocation" class="flex-1 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors hidden">
+                    Enviar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSender = null;
+        
+        function getCurrentTime() {
+            const now = new Date();
+            return now.getHours().toString().padStart(2, '0') + ':' + 
+                   now.getMinutes().toString().padStart(2, '0');
+        }
+
+        function getPhotoContent(photoType) {
+            const photos = {
+                paisagem: {
+                    svg: `<svg class="w-full h-32 text-blue-500" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M14,6L10.25,11L8.25,8.5L5.5,12H18.5L14,6Z M19,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3Z"/>
+                    </svg>`,
+                    caption: 'Que vista incrível! 🏔️'
+                },
+                comida: {
+                    svg: `<svg class="w-full h-32 text-orange-500" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M8.1,13.34L3.91,9.16C2.35,7.59 2.35,5.06 3.91,3.5L10.93,10.5L8.1,13.34M14.88,11.53C16.32,12.97 16.32,15.24 14.88,16.69C13.44,18.13 11.17,18.13 9.72,16.69L10.5,15.91L11.28,15.13L14.11,12.3L14.88,11.53M21.04,2.96L18.21,5.79C16.9,7.1 14.95,7.1 13.64,5.79L12.87,5C11.56,3.71 11.56,1.76 12.87,0.45L15.7,3.28C16.66,4.24 18.16,4.24 19.12,3.28L21.95,0.45C23.26,1.76 23.26,3.71 21.95,5L21.04,2.96Z"/>
+                    </svg>`,
+                    caption: 'Almoço delicioso! 🍽️'
+                },
+                selfie: {
+                    svg: `<svg class="w-full h-32 text-purple-500" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M7.07,18.28C7.5,17.38 10.12,16.5 12,16.5C13.88,16.5 16.5,17.38 16.93,18.28C15.57,19.36 13.86,20 12,20C10.14,20 8.43,19.36 7.07,18.28M18.36,16.83C16.93,15.09 13.46,14.5 12,14.5C10.54,14.5 7.07,15.09 5.64,16.83C4.62,15.5 4,13.82 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,13.82 19.38,15.5 18.36,16.83M12,6C10.06,6 8.5,7.56 8.5,9.5C8.5,11.44 10.06,13 12,13C13.94,13 15.5,11.44 15.5,9.5C15.5,7.56 13.94,6 12,6M12,11A1.5,1.5 0 0,1 10.5,9.5A1.5,1.5 0 0,1 12,8A1.5,1.5 0 0,1 13.5,9.5A1.5,1.5 0 0,1 12,11Z"/>
+                    </svg>`,
+                    caption: 'Selfie do dia! 📸'
+                },
+                animal: {
+                    svg: `<svg class="w-full h-32 text-green-500" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M4.5,12.5C4.5,13.88 5.62,15 7,15C8.38,15 9.5,13.88 9.5,12.5C9.5,11.12 8.38,10 7,10C5.62,10 4.5,11.12 4.5,12.5M14.5,12.5C14.5,13.88 15.62,15 17,15C18.38,15 19.5,13.88 19.5,12.5C19.5,11.12 18.38,10 17,10C15.62,10 14.5,11.12 14.5,12.5M12,14C13.25,14 14.29,14.94 14.5,16.13C14.5,16.13 14.85,19 12,19C9.15,19 9.5,16.13 9.5,16.13C9.71,14.94 10.75,14 12,14M12,5.5L10.5,7V9.5C10.5,10.61 11.39,11.5 12.5,11.5H13.5C14.61,11.5 15.5,10.61 15.5,9.5V7L14,5.5H12Z"/>
+                    </svg>`,
+                    caption: 'Meu pet fofo! 🐕'
+                },
+                trabalho: {
+                    svg: `<svg class="w-full h-32 text-gray-600" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M10,2H14A2,2 0 0,1 16,4V6H20A2,2 0 0,1 22,8V19A2,2 0 0,1 20,21H4C2.89,21 2,20.1 2,19V8C2,6.89 2.89,6 4,6H8V4C8,2.89 8.89,2 10,2M14,6V4H10V6H14Z"/>
+                    </svg>`,
+                    caption: 'Dia produtivo no escritório! 💼'
+                },
+                familia: {
+                    svg: `<svg class="w-full h-32 text-red-500" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M16,4C16.88,4 17.67,4.25 18.31,4.69C17.5,5.26 17,6.09 17,7A2,2 0 0,0 19,9C19.26,9 19.5,8.94 19.72,8.84C19.9,9.21 20,9.6 20,10A4,4 0 0,1 16,14C14.38,14 13,12.62 13,11C13,9.38 14.38,8 16,8M16,17C18.67,17 21.56,18.75 22,21H10C10.44,18.75 13.33,17 16,17M9,12C10.66,12 12,10.66 12,9C12,7.34 10.66,6 9,6C7.34,6 6,7.34 6,9C6,10.66 7.34,12 9,12M9,13C6.67,13 2,14.17 2,16.5V19H16V16.5C16,14.17 11.33,13 9,13Z"/>
+                    </svg>`,
+                    caption: 'Família reunida! ❤️'
+                }
+            };
+            return photos[photoType];
+        }
+
+        function addMessage(chatContainer, message, isSent, isReceived = false) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `flex ${isSent ? 'justify-end' : 'justify-start'} message-animation`;
+            
+            const bubbleClass = isSent ? 'bg-green-500 text-white' : 'bg-white';
+            const timeClass = isSent ? 'opacity-75' : 'text-gray-500';
+            
+            messageDiv.innerHTML = `
+                <div class="${bubbleClass} rounded-lg px-3 py-2 max-w-xs shadow-sm">
+                    <p class="text-sm">${message}</p>
+                    <span class="text-xs ${timeClass}">${getCurrentTime()}</span>
+                </div>
+            `;
+            
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function addPhotoMessage(chatContainer, photoData, isSent) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `flex ${isSent ? 'justify-end' : 'justify-start'} message-animation`;
+            
+            const bubbleClass = isSent ? 'bg-green-500 text-white' : 'bg-white';
+            const timeClass = isSent ? 'opacity-75' : 'text-gray-500';
+            
+            const imageContent = photoData.isRealImage ? 
+                `<img src="${photoData.src}" alt="Foto enviada" class="w-full h-32 object-cover rounded-lg">` :
+                `<div class="bg-gray-100 rounded-lg overflow-hidden">${photoData.svg}</div>`;
+            
+            messageDiv.innerHTML = `
+                <div class="${bubbleClass} rounded-lg p-2 max-w-xs shadow-sm">
+                    ${imageContent}
+                    <p class="text-sm mt-2">${photoData.caption}</p>
+                    <span class="text-xs ${timeClass}">${getCurrentTime()}</span>
+                </div>
+            `;
+            
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function addAudioMessage(chatContainer, duration, isSent, audioUrl = null) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `flex ${isSent ? 'justify-end' : 'justify-start'} message-animation`;
+            
+            const bubbleClass = isSent ? 'bg-green-500 text-white' : 'bg-white';
+            const timeClass = isSent ? 'opacity-75' : 'text-gray-500';
+            const iconColor = isSent ? 'text-white' : 'text-gray-600';
+            
+            const audioId = 'audio_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            
+            messageDiv.innerHTML = `
+                <div class="${bubbleClass} rounded-lg px-3 py-2 max-w-xs shadow-sm">
+                    <div class="flex items-center gap-2">
+                        <button class="play-audio-btn w-5 h-5 ${iconColor} hover:opacity-70 transition-opacity" data-audio-id="${audioId}">
+                            <svg class="w-5 h-5 play-icon" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M8,5.14V19.14L19,12.14L8,5.14Z"/>
+                            </svg>
+                            <svg class="w-5 h-5 pause-icon hidden" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M14,19H18V5H14M6,19H10V5H6V19Z"/>
+                            </svg>
+                        </button>
+                        <div class="flex-1">
+                            <div class="w-20 h-1 bg-gray-300 rounded-full">
+                                <div class="w-0 h-1 bg-current rounded-full progress-bar" data-audio-id="${audioId}"></div>
+                            </div>
+                        </div>
+                        <span class="text-xs ${iconColor}">${duration}</span>
+                    </div>
+                    <span class="text-xs ${timeClass}">${getCurrentTime()}</span>
+                    ${audioUrl ? `<audio class="hidden" data-audio-id="${audioId}" preload="metadata"><source src="${audioUrl}" type="audio/wav"></audio>` : ''}
+                </div>
+            `;
+            
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+            
+            // Adicionar event listener para o botão de play se houver áudio
+            if (audioUrl) {
+                const playBtn = messageDiv.querySelector('.play-audio-btn');
+                const audio = messageDiv.querySelector('audio');
+                const playIcon = messageDiv.querySelector('.play-icon');
+                const pauseIcon = messageDiv.querySelector('.pause-icon');
+                const progressBar = messageDiv.querySelector('.progress-bar');
+                
+                playBtn.addEventListener('click', () => {
+                    if (audio.paused) {
+                        // Pausar todos os outros áudios
+                        document.querySelectorAll('audio').forEach(a => {
+                            if (a !== audio) {
+                                a.pause();
+                                a.currentTime = 0;
+                            }
+                        });
+                        
+                        // Resetar todos os ícones
+                        document.querySelectorAll('.play-icon').forEach(icon => icon.classList.remove('hidden'));
+                        document.querySelectorAll('.pause-icon').forEach(icon => icon.classList.add('hidden'));
+                        
+                        audio.play();
+                        playIcon.classList.add('hidden');
+                        pauseIcon.classList.remove('hidden');
+                    } else {
+                        audio.pause();
+                        playIcon.classList.remove('hidden');
+                        pauseIcon.classList.add('hidden');
+                    }
+                });
+                
+                audio.addEventListener('timeupdate', () => {
+                    const progress = (audio.currentTime / audio.duration) * 100;
+                    progressBar.style.width = progress + '%';
+                });
+                
+                audio.addEventListener('ended', () => {
+                    playIcon.classList.remove('hidden');
+                    pauseIcon.classList.add('hidden');
+                    progressBar.style.width = '0%';
+                });
+            }
+        }
+
+        function addLocationMessage(chatContainer, locationData, isSent) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `flex ${isSent ? 'justify-end' : 'justify-start'} message-animation`;
+            
+            const bubbleClass = isSent ? 'bg-green-500 text-white' : 'bg-white';
+            const timeClass = isSent ? 'opacity-75' : 'text-gray-500';
+            const iconColor = isSent ? 'text-white' : 'text-red-500';
+            
+            messageDiv.innerHTML = `
+                <div class="${bubbleClass} rounded-lg p-3 max-w-xs shadow-sm">
+                    <div class="flex items-start gap-3">
+                        <div class="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0">
+                            <svg class="w-5 h-5 text-red-500" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12,11.5A2.5,2.5 0 0,1 9.5,9A2.5,2.5 0 0,1 12,6.5A2.5,2.5 0 0,1 14.5,9A2.5,2.5 0 0,1 12,11.5M12,2A7,7 0 0,0 5,9C5,14.25 12,22 12,22C12,22 19,14.25 19,9A7,7 0 0,0 12,2Z"/>
+                            </svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm font-medium ${isSent ? 'text-white' : 'text-gray-800'}">📍 Localização</p>
+                            <p class="text-xs ${isSent ? 'text-white opacity-90' : 'text-gray-600'} mt-1 break-words">${locationData.address}</p>
+                            <button class="text-xs ${isSent ? 'text-white underline opacity-90' : 'text-blue-600 underline'} mt-1 hover:opacity-70" onclick="window.open('https://www.google.com/maps?q=${locationData.lat},${locationData.lng}', '_blank', 'noopener,noreferrer')">
+                                Ver no mapa
+                            </button>
+                        </div>
+                    </div>
+                    <span class="text-xs ${timeClass} block mt-2">${getCurrentTime()}</span>
+                </div>
+            `;
+            
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function sendMessage(fromInput, fromChat, toChat, isSentMessage) {
+            const message = fromInput.value.trim();
+            if (message === '') return;
+            
+            // Adiciona mensagem no chat do remetente
+            addMessage(fromChat, message, isSentMessage);
+            
+            // Simula delay de envio e adiciona no chat do destinatário
+            setTimeout(() => {
+                addMessage(toChat, message, !isSentMessage);
+            }, 500);
+            
+            fromInput.value = '';
+        }
+
+        function sendPhoto(photoType, fromChat, toChat, isSentMessage) {
+            const photoData = getPhotoContent(photoType);
+            photoData.isRealImage = false; // Marca como foto de exemplo
+            
+            // Adiciona foto no chat do remetente
+            addPhotoMessage(fromChat, photoData, isSentMessage);
+            
+            // Simula delay de envio e adiciona no chat do destinatário
+            setTimeout(() => {
+                addPhotoMessage(toChat, photoData, !isSentMessage);
+            }, 800);
+        }
+
+        // Event listeners para o celular esquerdo (João)
+        const messageInputLeft = document.getElementById('messageInputLeft');
+        const sendButtonLeft = document.getElementById('sendButtonLeft');
+        const photoButtonLeft = document.getElementById('photoButtonLeft');
+        const chatLeft = document.getElementById('chatLeft');
+        const chatRight = document.getElementById('chatRight');
+
+        sendButtonLeft.addEventListener('click', () => {
+            sendMessage(messageInputLeft, chatLeft, chatRight, true);
+        });
+
+        messageInputLeft.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage(messageInputLeft, chatLeft, chatRight, true);
+            }
+        });
+
+        photoButtonLeft.addEventListener('click', () => {
+            currentSender = 'left';
+            document.getElementById('photoModal').classList.remove('hidden');
+            document.getElementById('photoModal').classList.add('flex');
+        });
+
+        const audioButtonLeft = document.getElementById('audioButtonLeft');
+        audioButtonLeft.addEventListener('click', () => {
+            currentSender = 'left';
+            document.getElementById('audioModal').classList.remove('hidden');
+            document.getElementById('audioModal').classList.add('flex');
+        });
+
+        // Event listeners para o celular direito (Maria)
+        const messageInputRight = document.getElementById('messageInputRight');
+        const sendButtonRight = document.getElementById('sendButtonRight');
+        const photoButtonRight = document.getElementById('photoButtonRight');
+
+        sendButtonRight.addEventListener('click', () => {
+            sendMessage(messageInputRight, chatRight, chatLeft, true);
+        });
+
+        messageInputRight.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage(messageInputRight, chatRight, chatLeft, true);
+            }
+        });
+
+        photoButtonRight.addEventListener('click', () => {
+            currentSender = 'right';
+            document.getElementById('photoModal').classList.remove('hidden');
+            document.getElementById('photoModal').classList.add('flex');
+        });
+
+        const audioButtonRight = document.getElementById('audioButtonRight');
+        audioButtonRight.addEventListener('click', () => {
+            currentSender = 'right';
+            document.getElementById('audioModal').classList.remove('hidden');
+            document.getElementById('audioModal').classList.add('flex');
+        });
+
+        const locationButtonLeft = document.getElementById('locationButtonLeft');
+        locationButtonLeft.addEventListener('click', () => {
+            currentSender = 'left';
+            document.getElementById('locationModal').classList.remove('hidden');
+            document.getElementById('locationModal').classList.add('flex');
+        });
+
+        const locationButtonRight = document.getElementById('locationButtonRight');
+        locationButtonRight.addEventListener('click', () => {
+            currentSender = 'right';
+            document.getElementById('locationModal').classList.remove('hidden');
+            document.getElementById('locationModal').classList.add('flex');
+        });
+
+        // Event listeners para o modal de fotos
+        document.getElementById('cancelPhoto').addEventListener('click', () => {
+            document.getElementById('photoModal').classList.add('hidden');
+            document.getElementById('photoModal').classList.remove('flex');
+        });
+
+        // Event listener para upload de arquivo
+        document.getElementById('fileInput').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    const photoData = {
+                        isRealImage: true,
+                        src: event.target.result,
+                        caption: 'Foto enviada! 📷'
+                    };
+                    
+                    if (currentSender === 'left') {
+                        sendPhotoFromFile(photoData, chatLeft, chatRight, true);
+                    } else if (currentSender === 'right') {
+                        sendPhotoFromFile(photoData, chatRight, chatLeft, true);
+                    }
+                    
+                    document.getElementById('photoModal').classList.add('hidden');
+                    document.getElementById('photoModal').classList.remove('flex');
+                    e.target.value = ''; // Limpa o input
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Event listener para botão da câmera
+        document.getElementById('cameraButton').addEventListener('click', () => {
+            document.getElementById('photoModal').classList.add('hidden');
+            document.getElementById('photoModal').classList.remove('flex');
+            document.getElementById('cameraModal').classList.remove('hidden');
+            document.getElementById('cameraModal').classList.add('flex');
+        });
+
+        function sendPhotoFromFile(photoData, fromChat, toChat, isSentMessage) {
+            // Adiciona foto no chat do remetente
+            addPhotoMessage(fromChat, photoData, isSentMessage);
+            
+            // Simula delay de envio e adiciona no chat do destinatário
+            setTimeout(() => {
+                addPhotoMessage(toChat, photoData, !isSentMessage);
+            }, 800);
+        }
+
+
+
+        // Fechar modal clicando fora
+        document.getElementById('photoModal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('photoModal')) {
+                document.getElementById('photoModal').classList.add('hidden');
+                document.getElementById('photoModal').classList.remove('flex');
+            }
+        });
+
+        // Variáveis para gravação de áudio
+        let isRecording = false;
+        let recordingStartTime = null;
+        let recordingInterval = null;
+        let mediaRecorder = null;
+        let audioChunks = [];
+
+        // Event listeners para o modal de áudio
+        document.getElementById('cancelAudio').addEventListener('click', () => {
+            if (isRecording && mediaRecorder) {
+                mediaRecorder.stop();
+                isRecording = false;
+                
+                // Parar contador
+                if (recordingInterval) {
+                    clearInterval(recordingInterval);
+                    recordingInterval = null;
+                }
+                
+                // Resetar interface
+                document.getElementById('recordingIndicator').classList.add('hidden');
+                document.getElementById('recordingControls').classList.remove('hidden');
+                document.getElementById('stopRecording').classList.add('hidden');
+                document.getElementById('startRecording').classList.remove('hidden');
+                document.getElementById('recordingTime').textContent = '00:00';
+            }
+            
+            document.getElementById('audioModal').classList.add('hidden');
+            document.getElementById('audioModal').classList.remove('flex');
+        });
+
+        document.getElementById('startRecording').addEventListener('click', () => {
+            startRecordingProcess();
+        });
+
+        document.getElementById('stopRecording').addEventListener('click', async () => {
+            const duration = await stopRecordingProcess();
+            sendAudioMessage(duration);
+            document.getElementById('audioModal').classList.add('hidden');
+            document.getElementById('audioModal').classList.remove('flex');
+        });
+
+        async function startRecordingProcess() {
+            try {
+                // Solicitar acesso ao microfone
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                
+                // Configurar MediaRecorder
+                mediaRecorder = new MediaRecorder(stream);
+                audioChunks = [];
+                
+                mediaRecorder.ondataavailable = (event) => {
+                    if (event.data.size > 0) {
+                        audioChunks.push(event.data);
+                    }
+                };
+                
+                mediaRecorder.onstop = () => {
+                    // Parar todas as faixas de áudio para liberar o microfone
+                    stream.getTracks().forEach(track => track.stop());
+                };
+                
+                // Iniciar gravação
+                mediaRecorder.start();
+                isRecording = true;
+                recordingStartTime = Date.now();
+                
+                // Mostrar indicador de gravação
+                document.getElementById('recordingControls').classList.add('hidden');
+                document.getElementById('recordingIndicator').classList.remove('hidden');
+                document.getElementById('startRecording').classList.add('hidden');
+                document.getElementById('stopRecording').classList.remove('hidden');
+                
+                // Iniciar contador de tempo
+                recordingInterval = setInterval(() => {
+                    const elapsed = Math.floor((Date.now() - recordingStartTime) / 1000);
+                    const minutes = Math.floor(elapsed / 60).toString().padStart(2, '0');
+                    const seconds = (elapsed % 60).toString().padStart(2, '0');
+                    document.getElementById('recordingTime').textContent = `${minutes}:${seconds}`;
+                }, 1000);
+                
+            } catch (error) {
+                console.error('Erro ao acessar o microfone:', error);
+                alert('Não foi possível acessar o microfone. Verifique as permissões do navegador.');
+            }
+        }
+
+        function stopRecordingProcess() {
+            if (!isRecording || !mediaRecorder) return '0:00';
+            
+            return new Promise((resolve) => {
+                mediaRecorder.onstop = () => {
+                    // Criar blob do áudio gravado
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                    const audioUrl = URL.createObjectURL(audioBlob);
+                    
+                    // Armazenar o áudio para uso posterior
+                    window.lastRecordedAudio = {
+                        blob: audioBlob,
+                        url: audioUrl,
+                        duration: Math.floor((Date.now() - recordingStartTime) / 1000)
+                    };
+                    
+                    const duration = window.lastRecordedAudio.duration;
+                    const minutes = Math.floor(duration / 60);
+                    const seconds = duration % 60;
+                    const formattedDuration = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                    
+                    resolve(formattedDuration);
+                };
+                
+                // Parar gravação
+                mediaRecorder.stop();
+                isRecording = false;
+                
+                // Parar contador
+                if (recordingInterval) {
+                    clearInterval(recordingInterval);
+                    recordingInterval = null;
+                }
+                
+                // Resetar interface
+                document.getElementById('recordingIndicator').classList.add('hidden');
+                document.getElementById('recordingControls').classList.remove('hidden');
+                document.getElementById('stopRecording').classList.add('hidden');
+                document.getElementById('startRecording').classList.remove('hidden');
+                document.getElementById('recordingTime').textContent = '00:00';
+            });
+        }
+
+        function sendAudioMessage(duration) {
+            const audioUrl = window.lastRecordedAudio ? window.lastRecordedAudio.url : null;
+            
+            if (currentSender === 'left') {
+                addAudioMessage(chatLeft, duration, true, audioUrl);
+                setTimeout(() => {
+                    addAudioMessage(chatRight, duration, false, audioUrl);
+                }, 800);
+            } else if (currentSender === 'right') {
+                addAudioMessage(chatRight, duration, true, audioUrl);
+                setTimeout(() => {
+                    addAudioMessage(chatLeft, duration, false, audioUrl);
+                }, 800);
+            }
+        }
+
+        // Fechar modal de áudio clicando fora
+        document.getElementById('audioModal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('audioModal')) {
+                if (isRecording && mediaRecorder) {
+                    mediaRecorder.stop();
+                    isRecording = false;
+                    
+                    // Parar contador
+                    if (recordingInterval) {
+                        clearInterval(recordingInterval);
+                        recordingInterval = null;
+                    }
+                    
+                    // Resetar interface
+                    document.getElementById('recordingIndicator').classList.add('hidden');
+                    document.getElementById('recordingControls').classList.remove('hidden');
+                    document.getElementById('stopRecording').classList.add('hidden');
+                    document.getElementById('startRecording').classList.remove('hidden');
+                    document.getElementById('recordingTime').textContent = '00:00';
+                }
+                
+                document.getElementById('audioModal').classList.add('hidden');
+                document.getElementById('audioModal').classList.remove('flex');
+            }
+        });
+
+        // Função para exportar conversa
+        function exportConversation() {
+            const leftMessages = Array.from(document.getElementById('chatLeft').children);
+            const rightMessages = Array.from(document.getElementById('chatRight').children);
+            
+            let conversation = 'Conversa WhatsApp - João e Maria\n';
+            conversation += '=====================================\n\n';
+            
+            // Combinar mensagens de ambos os chats e ordenar por ordem de aparição
+            const allMessages = [];
+            
+            leftMessages.forEach((msg, index) => {
+                const isFromJoao = msg.querySelector('.bg-green-500');
+                let text = '[Foto]';
+                if (msg.querySelector('p')) {
+                    text = msg.querySelector('p').textContent;
+                } else if (msg.querySelector('svg[viewBox="0 0 24 24"] path[d*="8,5.14V19.14L19,12.14L8,5.14Z"]')) {
+                    const duration = msg.querySelector('.flex.items-center.gap-2 span').textContent;
+                    text = `[Áudio ${duration}]`;
+                }
+                const time = msg.querySelector('.text-xs').textContent;
+                
+                allMessages.push({
+                    sender: isFromJoao ? 'João' : 'Maria',
+                    text: text,
+                    time: time,
+                    order: index * 2
+                });
+            });
+            
+            rightMessages.forEach((msg, index) => {
+                const isFromMaria = msg.querySelector('.bg-green-500');
+                let text = '[Foto]';
+                if (msg.querySelector('p')) {
+                    text = msg.querySelector('p').textContent;
+                } else if (msg.querySelector('svg[viewBox="0 0 24 24"] path[d*="8,5.14V19.14L19,12.14L8,5.14Z"]')) {
+                    const duration = msg.querySelector('.flex.items-center.gap-2 span').textContent;
+                    text = `[Áudio ${duration}]`;
+                }
+                const time = msg.querySelector('.text-xs').textContent;
+                
+                allMessages.push({
+                    sender: isFromMaria ? 'Maria' : 'João',
+                    text: text,
+                    time: time,
+                    order: index * 2 + 1
+                });
+            });
+            
+            // Ordenar por ordem de aparição
+            allMessages.sort((a, b) => a.order - b.order);
+            
+            // Remover duplicatas (mensagens que aparecem em ambos os chats)
+            const uniqueMessages = [];
+            const seen = new Set();
+            
+            allMessages.forEach(msg => {
+                const key = `${msg.sender}-${msg.text}-${msg.time}`;
+                if (!seen.has(key)) {
+                    seen.add(key);
+                    uniqueMessages.push(msg);
+                }
+            });
+            
+            // Construir o texto da conversa
+            uniqueMessages.forEach(msg => {
+                conversation += `[${msg.time}] ${msg.sender}: ${msg.text}\n`;
+            });
+            
+            // Criar e baixar o arquivo
+            const blob = new Blob([conversation], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `conversa-whatsapp-${new Date().toISOString().split('T')[0]}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // Event listeners para os menus
+        document.getElementById('menuButtonLeft').addEventListener('click', (e) => {
+            e.stopPropagation();
+            const dropdown = document.getElementById('menuDropdownLeft');
+            dropdown.classList.toggle('hidden');
+            // Fechar o outro menu se estiver aberto
+            document.getElementById('menuDropdownRight').classList.add('hidden');
+        });
+
+        document.getElementById('menuButtonRight').addEventListener('click', (e) => {
+            e.stopPropagation();
+            const dropdown = document.getElementById('menuDropdownRight');
+            dropdown.classList.toggle('hidden');
+            // Fechar o outro menu se estiver aberto
+            document.getElementById('menuDropdownLeft').classList.add('hidden');
+        });
+
+        document.getElementById('exportButtonLeft').addEventListener('click', () => {
+            exportConversation();
+            document.getElementById('menuDropdownLeft').classList.add('hidden');
+        });
+
+        document.getElementById('exportButtonRight').addEventListener('click', () => {
+            exportConversation();
+            document.getElementById('menuDropdownRight').classList.add('hidden');
+        });
+
+        // Fechar menus ao clicar fora
+        document.addEventListener('click', () => {
+            document.getElementById('menuDropdownLeft').classList.add('hidden');
+            document.getElementById('menuDropdownRight').classList.add('hidden');
+        });
+
+        // Variáveis para câmera
+        let cameraStream = null;
+        let capturedImageData = null;
+
+        // Event listeners para modal da câmera
+        document.getElementById('cancelCamera').addEventListener('click', () => {
+            stopCamera();
+            document.getElementById('cameraModal').classList.add('hidden');
+            document.getElementById('cameraModal').classList.remove('flex');
+        });
+
+        document.getElementById('startCamera').addEventListener('click', async () => {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { 
+                        width: { ideal: 640 },
+                        height: { ideal: 480 },
+                        facingMode: 'user'
+                    } 
+                });
+                
+                cameraStream = stream;
+                const video = document.getElementById('cameraVideo');
+                video.srcObject = stream;
+                
+                // Mostrar vídeo e esconder placeholder
+                document.getElementById('cameraPlaceholder').classList.add('hidden');
+                video.classList.remove('hidden');
+                
+                // Trocar botões
+                document.getElementById('startCamera').classList.add('hidden');
+                document.getElementById('capturePhoto').classList.remove('hidden');
+                
+            } catch (error) {
+                console.error('Erro ao acessar a câmera:', error);
+                alert('Não foi possível acessar a câmera. Verifique as permissões do navegador.');
+            }
+        });
+
+        document.getElementById('capturePhoto').addEventListener('click', () => {
+            const video = document.getElementById('cameraVideo');
+            const canvas = document.getElementById('cameraCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Definir tamanho do canvas igual ao vídeo
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            
+            // Desenhar frame atual do vídeo no canvas
+            ctx.drawImage(video, 0, 0);
+            
+            // Capturar imagem como data URL
+            capturedImageData = canvas.toDataURL('image/jpeg', 0.8);
+            
+            // Mostrar canvas com a foto capturada
+            video.classList.add('hidden');
+            canvas.classList.remove('hidden');
+            
+            // Parar stream da câmera
+            stopCamera();
+            
+            // Trocar botões
+            document.getElementById('capturePhoto').classList.add('hidden');
+            document.getElementById('retakePhoto').classList.remove('hidden');
+            document.getElementById('sendPhoto').classList.remove('hidden');
+        });
+
+        document.getElementById('retakePhoto').addEventListener('click', () => {
+            // Esconder canvas e mostrar placeholder
+            document.getElementById('cameraCanvas').classList.add('hidden');
+            document.getElementById('cameraPlaceholder').classList.remove('hidden');
+            
+            // Resetar botões
+            document.getElementById('retakePhoto').classList.add('hidden');
+            document.getElementById('sendPhoto').classList.add('hidden');
+            document.getElementById('startCamera').classList.remove('hidden');
+            
+            capturedImageData = null;
+        });
+
+        document.getElementById('sendPhoto').addEventListener('click', () => {
+            if (capturedImageData) {
+                const photoData = {
+                    isRealImage: true,
+                    src: capturedImageData,
+                    caption: 'Foto da câmera! 📸'
+                };
+                
+                if (currentSender === 'left') {
+                    sendPhotoFromFile(photoData, chatLeft, chatRight, true);
+                } else if (currentSender === 'right') {
+                    sendPhotoFromFile(photoData, chatRight, chatLeft, true);
+                }
+                
+                // Fechar modal e resetar
+                document.getElementById('cameraModal').classList.add('hidden');
+                document.getElementById('cameraModal').classList.remove('flex');
+                resetCameraModal();
+            }
+        });
+
+        function stopCamera() {
+            if (cameraStream) {
+                cameraStream.getTracks().forEach(track => track.stop());
+                cameraStream = null;
+            }
+        }
+
+        function resetCameraModal() {
+            // Esconder todos os elementos
+            document.getElementById('cameraVideo').classList.add('hidden');
+            document.getElementById('cameraCanvas').classList.add('hidden');
+            document.getElementById('cameraPlaceholder').classList.remove('hidden');
+            
+            // Resetar botões
+            document.getElementById('startCamera').classList.remove('hidden');
+            document.getElementById('capturePhoto').classList.add('hidden');
+            document.getElementById('retakePhoto').classList.add('hidden');
+            document.getElementById('sendPhoto').classList.add('hidden');
+            
+            capturedImageData = null;
+        }
+
+        // Fechar modal da câmera clicando fora
+        document.getElementById('cameraModal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('cameraModal')) {
+                stopCamera();
+                document.getElementById('cameraModal').classList.add('hidden');
+                document.getElementById('cameraModal').classList.remove('flex');
+                resetCameraModal();
+            }
+        });
+
+        // Variáveis para localização
+        let currentLocationData = null;
+
+        // Event listeners para modal de localização
+        document.getElementById('cancelLocation').addEventListener('click', () => {
+            document.getElementById('locationModal').classList.add('hidden');
+            document.getElementById('locationModal').classList.remove('flex');
+            resetLocationModal();
+        });
+
+        document.getElementById('getLocation').addEventListener('click', async () => {
+            if (!navigator.geolocation) {
+                alert('Geolocalização não é suportada neste navegador.');
+                return;
+            }
+
+            // Mostrar loading
+            document.getElementById('locationControls').classList.add('hidden');
+            document.getElementById('locationLoading').classList.remove('hidden');
+            document.getElementById('getLocation').classList.add('hidden');
+
+            try {
+                const position = await getCurrentPosition();
+                const { latitude, longitude } = position.coords;
+                
+                // Simular busca de endereço (em um app real, usaria uma API de geocoding)
+                const locationData = {
+                    lat: latitude,
+                    lng: longitude,
+                    address: await getAddressFromCoords(latitude, longitude)
+                };
+
+                currentLocationData = locationData;
+
+                // Mostrar resultado
+                document.getElementById('locationLoading').classList.add('hidden');
+                document.getElementById('locationResult').classList.remove('hidden');
+                document.getElementById('locationAddress').textContent = locationData.address;
+                document.getElementById('locationCoords').textContent = `${latitude.toFixed(6)}, ${longitude.toFixed(6)}`;
+                document.getElementById('sendLocation').classList.remove('hidden');
+
+            } catch (error) {
+                console.error('Erro ao obter localização:', error);
+                alert('Não foi possível obter sua localização. Verifique as permissões do navegador.');
+                resetLocationModal();
+            }
+        });
+
+        document.getElementById('sendLocation').addEventListener('click', () => {
+            if (currentLocationData) {
+                sendLocationMessage(currentLocationData);
+                document.getElementById('locationModal').classList.add('hidden');
+                document.getElementById('locationModal').classList.remove('flex');
+                resetLocationModal();
+            }
+        });
+
+        function getCurrentPosition() {
+            return new Promise((resolve, reject) => {
+                navigator.geolocation.getCurrentPosition(resolve, reject, {
+                    enableHighAccuracy: true,
+                    timeout: 10000,
+                    maximumAge: 60000
+                });
+            });
+        }
+
+        async function getAddressFromCoords(lat, lng) {
+            // Em um app real, você usaria uma API como Google Maps Geocoding
+            // Aqui vamos simular com endereços de exemplo baseados nas coordenadas
+            const addresses = [
+                'Rua das Flores, 123 - Centro, São Paulo - SP',
+                'Avenida Paulista, 1000 - Bela Vista, São Paulo - SP',
+                'Rua Augusta, 456 - Consolação, São Paulo - SP',
+                'Praça da Sé, s/n - Sé, São Paulo - SP',
+                'Rua Oscar Freire, 789 - Jardins, São Paulo - SP'
+            ];
+            
+            // Simular delay de API
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            // Retornar endereço baseado nas coordenadas (simulado)
+            const index = Math.floor(Math.abs(lat + lng) * 1000) % addresses.length;
+            return addresses[index];
+        }
+
+        function sendLocationMessage(locationData) {
+            if (currentSender === 'left') {
+                addLocationMessage(chatLeft, locationData, true);
+                setTimeout(() => {
+                    addLocationMessage(chatRight, locationData, false);
+                }, 800);
+            } else if (currentSender === 'right') {
+                addLocationMessage(chatRight, locationData, true);
+                setTimeout(() => {
+                    addLocationMessage(chatLeft, locationData, false);
+                }, 800);
+            }
+        }
+
+        function resetLocationModal() {
+            document.getElementById('locationControls').classList.remove('hidden');
+            document.getElementById('locationLoading').classList.add('hidden');
+            document.getElementById('locationResult').classList.add('hidden');
+            document.getElementById('getLocation').classList.remove('hidden');
+            document.getElementById('sendLocation').classList.add('hidden');
+            currentLocationData = null;
+        }
+
+        // Fechar modal de localização clicando fora
+        document.getElementById('locationModal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('locationModal')) {
+                document.getElementById('locationModal').classList.add('hidden');
+                document.getElementById('locationModal').classList.remove('flex');
+                resetLocationModal();
+            }
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'992ac88dc252e2ce',t:'MTc2MTE1NDg2NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
