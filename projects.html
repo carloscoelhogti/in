@@ -1,92 +1,219 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog do 🐇 · Projects · </title>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
-
-    
-
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog do 🐇 · Projects</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
       tailwind.config = {
         theme: {
           extend: {
-            fontFamily:{
-                'sans': ['Poppins','Sans']
+            fontFamily: {
+                'sans': ['Poppins', 'sans-serif']
             },
             colors: {
-              clifford: '#da373d',
               bg_fundo: '#e5e7eb',
-              contorner: '#eec40e'
-
+              contorner: '#eec40e',
+              contorner_hover: '#d4ad0c'
             }
           }
         }
       }
     </script>
-    
-</head>
-<body>
-    <header>
-        <p></p>
-    </header>
-    <main class="container">
-        <h1 class="text-3xl font-bold text-center text-contorner drop-shadow-lg">Projetos Criados</h1>
-        <div class="col-md-8 p-4">
+  <style>
+      body {
+        box-sizing: border-box;
+      }
+      
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      
+      .page-wrapper {
+        min-height: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+      
+      main {
+        flex: 1;
+      }
+    </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="bg-gradient-to-br from-gray-50 to-gray-100">
+  <div class="page-wrapper">
+   <main class="flex items-center justify-center px-4 py-8 sm:py-12 md:py-16">
+    <div class="w-full max-w-2xl">
+     <h1 id="page-title" class="text-3xl sm:text-4xl md:text-5xl font-bold text-center text-contorner drop-shadow-lg mb-8 sm:mb-12">Projetos Criados</h1>
+     <div class="bg-white rounded-2xl shadow-xl p-6 sm:p-8 md:p-10 mx-auto max-h-[70vh] overflow-y-auto">
+      <ul class="space-y-3">
+       <li class="group"><a href="./exe05.html" class="flex items-center p-3 rounded-lg bg-gradient-to-r from-contorner to-yellow-400 text-gray-900 font-medium transition-all duration-300 hover:shadow-lg hover:scale-105"> <span class="text-xl mr-3">📊</span> <span class="text-sm sm:text-base">Analisador de Números</span> </a></li>
+       <li class="group"><a href="./exe03.html" class="flex items-center p-3 rounded-lg bg-gradient-to-r from-contorner to-yellow-400 text-gray-900 font-medium transition-all duration-300 hover:shadow-lg hover:scale-105"> <span class="text-xl mr-3">🔢</span> <span class="text-sm sm:text-base">Contador</span> </a></li>
+       <li class="group"><a href="./contato.html" class="flex items-center p-3 rounded-lg bg-gradient-to-r from-contorner to-yellow-400 text-gray-900 font-medium transition-all duration-300 hover:shadow-lg hover:scale-105"> <span class="text-xl mr-3">📧</span> <span class="text-sm sm:text-base">Contato</span> </a></li>
+       <li class="group"><a href="./countdown.html" class="flex items-center p-3 rounded-lg bg-gradient-to-r from-contorner to-yellow-400 text-gray-900 font-medium transition-all duration-300 hover:shadow-lg hover:scale-105"> <span class="text-xl mr-3">⏱️</span> <span class="text-sm sm:text-base">Countdown</span> </a></li>
+       <li class="group"><a href="./exe01.html" class="flex items-center p-3 rounded-lg bg-gradient-to-r from-contorner to-yellow-400 text-gray-900 font-medium transition-all duration-300 hover:shadow-lg hover:scale-105"> <span class="text-xl mr-3">🕐</span> <span class="text-sm sm:text-base">Hora do Dia</span> </a></li>
+       <li class="group"><a href="./imc.html" class="flex items-center p-3 rounded-lg bg-gradient-to-r from-contorner to-yellow-400 text-gray-900 font-medium transition-all duration-300 hover:shadow-lg hover:scale-105"> <span class="text-xl mr-3">⚖️</span> <span class="text-sm sm:text-base">IMC</span> </a></li>
+       <li class="group"><a href="./Login Form/loginform.html" class="flex items-center p-3 rounded-lg bg-gradient-to-r from-contorner to-yellow-400 text-gray-900 font-medium transition-all duration-300 hover:shadow-lg hover:scale-105"> <span class="text-xl mr-3">🔐</span> <span class="text-sm sm:text-base">Login Form</span> </a></li>
+       <li class="group"><a href="./exe02.html" class="flex items-center p-3 rounded-lg bg-gradient-to-r from-contorner to-yellow-400 text-gray-900 font-medium transition-all duration-300 hover:shadow-lg hover:scale-105"> <span class="text-xl mr-3">🎂</span> <span class="text-sm sm:text-base">Verificador de Idade</span> </a></li>
+       <li class="group"><a href="./exe04.html" class="flex items-center p-3 rounded-lg bg-gradient-to-r from-contorner to-yellow-400 text-gray-900 font-medium transition-all duration-300 hover:shadow-lg hover:scale-105"> <span class="text-xl mr-3">✖️</span> <span class="text-sm sm:text-base">Tabuada</span> </a></li>
+       <li class="group"><a href="./Portfolio/portfolio.html" class="flex items-center p-3 rounded-lg bg-gradient-to-r from-contorner to-yellow-400 text-gray-900 font-medium transition-all duration-300 hover:shadow-lg hover:scale-105"> <span class="text-xl mr-3">💼</span> <span class="text-sm sm:text-base">Portfolio</span> </a></li>
+       <li class="group"><a href="./Pricing Table/princing.html" class="flex items-center p-3 rounded-lg bg-gradient-to-r from-contorner to-yellow-400 text-gray-900 font-medium transition-all duration-300 hover:shadow-lg hover:scale-105"> <span class="text-xl mr-3">💰</span> <span class="text-sm sm:text-base">Pricing Table</span> </a></li>
+       <li class="group"><a href="./receitas.html" class="flex items-center p-3 rounded-lg bg-gradient-to-r from-contorner to-yellow-400 text-gray-900 font-medium transition-all duration-300 hover:shadow-lg hover:scale-105"> <span class="text-xl mr-3">🍳</span> <span class="text-sm sm:text-base">Receitas</span> </a></li>
+       <li class="group"><a href="./Rocketcard/rocketcard.html" class="flex items-center p-3 rounded-lg bg-gradient-to-r from-contorner to-yellow-400 text-gray-900 font-medium transition-all duration-300 hover:shadow-lg hover:scale-105"> <span class="text-xl mr-3">🚀</span> <span class="text-sm sm:text-base">Rocket Card</span> </a></li>
+       <li class="group"><a href="./RocketCoffee/rocketcofee.html" class="flex items-center p-3 rounded-lg bg-gradient-to-r from-contorner to-yellow-400 text-gray-900 font-medium transition-all duration-300 hover:shadow-lg hover:scale-105"> <span class="text-xl mr-3">☕</span> <span class="text-sm sm:text-base">Rocket Coffee</span> </a></li>
+       <li class="group"><a href="./RocketBlog/rocketblog.html" class="flex items-center p-3 rounded-lg bg-gradient-to-r from-contorner to-yellow-400 text-gray-900 font-medium transition-all duration-300 hover:shadow-lg hover:scale-105"> <span class="text-xl mr-3">📝</span> <span class="text-sm sm:text-base">Rocket Blog</span> </a></li>
+       <li class="group"><a href="./Rocketflix/rocketflix.html" class="flex items-center p-3 rounded-lg bg-gradient-to-r from-contorner to-yellow-400 text-gray-900 font-medium transition-all duration-300 hover:shadow-lg hover:scale-105"> <span class="text-xl mr-3">🎬</span> <span class="text-sm sm:text-base">Rocket Flix</span> </a></li>
+       <li class="group"><a href="./rocketnews.html" class="flex items-center p-3 rounded-lg bg-gradient-to-r from-contorner to-yellow-400 text-gray-900 font-medium transition-all duration-300 hover:shadow-lg hover:scale-105"> <span class="text-xl mr-3">📰</span> <span class="text-sm sm:text-base">Rocket News</span> </a></li>
+       <li class="group"><a href="./RocketNFT/rocketnft.html" class="flex items-center p-3 rounded-lg bg-gradient-to-r from-contorner to-yellow-400 text-gray-900 font-medium transition-all duration-300 hover:shadow-lg hover:scale-105"> <span class="text-xl mr-3">🖼️</span> <span class="text-sm sm:text-base">Rocket NFT</span> </a></li>
+       <li class="group"><a href="./RocketShoes/rocketshoes.html" class="flex items-center p-3 rounded-lg bg-gradient-to-r from-contorner to-yellow-400 text-gray-900 font-medium transition-all duration-300 hover:shadow-lg hover:scale-105"> <span class="text-xl mr-3">👟</span> <span class="text-sm sm:text-base">Rocket Shoes</span> </a></li>
+       <li class="group"><a href="./Sidebar/sidebar.html" class="flex items-center p-3 rounded-lg bg-gradient-to-r from-contorner to-yellow-400 text-gray-900 font-medium transition-all duration-300 hover:shadow-lg hover:scale-105"> <span class="text-xl mr-3">📑</span> <span class="text-sm sm:text-base">Sidebar</span> </a></li>
+       <li class="group"><a href="./socialtree.html" class="flex items-center p-3 rounded-lg bg-gradient-to-r from-contorner to-yellow-400 text-gray-900 font-medium transition-all duration-300 hover:shadow-lg hover:scale-105"> <span class="text-xl mr-3">🌳</span> <span class="text-sm sm:text-base">Social Tree</span> </a></li>
+       <li class="group"><a href="./geradorqrcodezapmobile.html" class="flex items-center p-3 rounded-lg bg-gradient-to-r from-contorner to-yellow-400 text-gray-900 font-medium transition-all duration-300 hover:shadow-lg hover:scale-105"> <span class="text-xl mr-3">📱</span> <span class="text-sm sm:text-base">QR Code Mobile</span> </a></li>
+       <li class="group"><a href="./geradorqrcodezapweb.html" class="flex items-center p-3 rounded-lg bg-gradient-to-r from-contorner to-yellow-400 text-gray-900 font-medium transition-all duration-300 hover:shadow-lg hover:scale-105"> <span class="text-xl mr-3">💻</span> <span class="text-sm sm:text-base">QR Code Web</span> </a></li>
+       <li class="group"><a href="./fazerpedidos.html" class="flex items-center p-3 rounded-lg bg-gradient-to-r from-contorner to-yellow-400 text-gray-900 font-medium transition-all duration-300 hover:shadow-lg hover:scale-105"> <span class="text-xl mr-3">🛒</span> <span class="text-sm sm:text-base">Fazer Pedidos</span> </a></li>
+       <li class="group"><a href="./listachurrasco.html" class="flex items-center p-3 rounded-lg bg-gradient-to-r from-contorner to-yellow-400 text-gray-900 font-medium transition-all duration-300 hover:shadow-lg hover:scale-105"> <span class="text-xl mr-3">🥩</span> <span class="text-sm sm:text-base">Lista de Churrasco</span> </a></li>
+       <li class="group"><a href="./listadecompras.html" class="flex items-center p-3 rounded-lg bg-gradient-to-r from-contorner to-yellow-400 text-gray-900 font-medium transition-all duration-300 hover:shadow-lg hover:scale-105"> <span class="text-xl mr-3">📋</span> <span class="text-sm sm:text-base">Lista de Compras</span> </a></li>
+       <li class="group"><a href="./geradorsenha.html" class="flex items-center p-3 rounded-lg bg-gradient-to-r from-contorner to-yellow-400 text-gray-900 font-medium transition-all duration-300 hover:shadow-lg hover:scale-105"> <span class="text-xl mr-3">🔑</span> <span class="text-sm sm:text-base">Gerador de Senhas</span> </a></li>
+       <li class="group"><a href="./cronologia.html" class="flex items-center p-3 rounded-lg bg-gradient-to-r from-contorner to-yellow-400 text-gray-900 font-medium transition-all duration-300 hover:shadow-lg hover:scale-105"> <span class="text-xl mr-3">📅</span> <span class="text-sm sm:text-base">Cronologia</span> </a></li>
+       <li class="group"><a href="./contagemregressivatempo.html" class="flex items-center p-3 rounded-lg bg-gradient-to-r from-contorner to-yellow-400 text-gray-900 font-medium transition-all duration-300 hover:shadow-lg hover:scale-105"> <span class="text-xl mr-3">⏳</span> <span class="text-sm sm:text-base">Contagem Regressiva Tempo</span> </a></li>
+       <li class="group"><a href="./contagemregressivadata.html" class="flex items-center p-3 rounded-lg bg-gradient-to-r from-contorner to-yellow-400 text-gray-900 font-medium transition-all duration-300 hover:shadow-lg hover:scale-105"> <span class="text-xl mr-3">📆</span> <span class="text-sm sm:text-base">Contagem Regressiva Data</span> </a></li>
+       <li class="group"><a href="./geradorvoucher.html" class="flex items-center p-3 rounded-lg bg-gradient-to-r from-contorner to-yellow-400 text-gray-900 font-medium transition-all duration-300 hover:shadow-lg hover:scale-105"> <span class="text-xl mr-3">🎟️</span> <span class="text-sm sm:text-base">Gerador de Voucher</span> </a></li>
+       <li class="group"><a href="./controleestoque.html" class="flex items-center p-3 rounded-lg bg-gradient-to-r from-contorner to-yellow-400 text-gray-900 font-medium transition-all duration-300 hover:shadow-lg hover:scale-105"> <span class="text-xl mr-3">📦</span> <span class="text-sm sm:text-base">Controle de Estoque</span> </a></li>
+       <li class="group"><a href="./simuladorwzap.html" class="flex items-center p-3 rounded-lg bg-gradient-to-r from-contorner to-yellow-400 text-gray-900 font-medium transition-all duration-300 hover:shadow-lg hover:scale-105"> <span class="text-xl mr-3">💬</span> <span class="text-sm sm:text-base">Simulador Wzap</span> </a></li>
+      </ul>
+     </div>
+    </div>
+   </main>
+   <footer class="py-6 sm:py-8 bg-white border-t border-gray-200">
+    <div class="text-center px-4">
+     <p id="footer-text" class="text-gray-800 font-semibold mb-2 text-sm sm:text-base">Criado por 🐇 © 2022</p><a id="footer-link" href="https://carloscoelhogti.github.io/in" target="_blank" rel="noopener noreferrer" class="inline-block text-contorner font-bold hover:text-contorner_hover transition-colors duration-300 text-sm sm:text-base"> Home </a>
+    </div>
+   </footer>
+  </div>
+  <script>
+      const defaultConfig = {
+        page_title: "Projetos Criados",
+        footer_text: "Criado por 🐇 © 2022",
+        footer_link_text: "Home",
+        primary_color: "#eec40e",
+        background_color: "#ffffff",
+        text_color: "#1f2937",
+        font_family: "Poppins",
+        font_size: 16
+      };
+      
+      let config = { ...defaultConfig };
+      
+      async function onConfigChange(newConfig) {
+        config = { ...config, ...newConfig };
         
-        <ul class="pl-4 list-disc w-fit">
-            <li class="hover:text-2xl ease-in-out duration-300"><a href="./exe05.html">Analisador de Números</a></li>
-            <li class="hover:text-2xl ease-in-out duration-300"><a href="./exe03.html">Contador</a></li>
-            <li class="hover:text-2xl ease-in-out duration-300"><a href="./contato.html">Contato</a></li>
-            <li class="hover:text-2xl ease-in-out duration-300"><a href="./countdown.html">Countdown</a></li>
-            <li class="hover:text-2xl ease-in-out duration-300"><a href="./exe01.html">Hora do Dia</a></li>
-            <li class="hover:text-2xl ease-in-out duration-300"><a href="./imc.html">IMC</a></li>
-            <li class="hover:text-2xl ease-in-out duration-300"><a href="./Login Form/loginform.html">Login Form</a></li>
-            <li class="hover:text-2xl ease-in-out duration-300"><a href="./exe02.html">Verificador de Idade</a></li>
-            <li class="hover:text-2xl ease-in-out duration-300"><a href="./exe04.html">Tabuada</a></li>            
-            <li class="hover:text-2xl ease-in-out duration-300"><a href="./Portfolio/portfolio.html">Portfolio</a></li>
-            <li class="hover:text-2xl ease-in-out duration-300"><a href="./Pricing Table/princing.html">Princing Table</a></li>
-            <li class="hover:text-2xl ease-in-out duration-300"><a href="./receitas.html">Receitas</a></li>
-            <li class="hover:text-2xl ease-in-out duration-300"><a href="./Rocketcard/rocketcard.html">Rocket Card</a></li>
-            <li class="hover:text-2xl ease-in-out duration-300"><a href="./RocketCoffee/rocketcofee.html">Rocket Coffee</a></li>
-            <li class="hover:text-2xl ease-in-out duration-300"><a href="./RocketBlog/rocketblog.html">Rocket Blog</a></li>
-            <li class="hover:text-2xl ease-in-out duration-300"><a href="./Rocketflix/rocketflix.html">Rocket Flix</a></li>
-            <li class="hover:text-2xl ease-in-out duration-300"><a href="./rocketnews.html">Rocket News</a></li>
-            <li class="hover:text-2xl ease-in-out duration-300"><a href="./RocketNFT/rocketnft.html">Rocket NFT</a></li>
-            <li class="hover:text-2xl ease-in-out duration-300"><a href="./RocketShoes/rocketshoes.html">Rocket Shoes</a></li>
-            <li class="hover:text-2xl ease-in-out duration-300"><a href="./Sidebar/sidebar.html">Sidebar</a></li>
-            <li class="hover:text-2xl ease-in-out duration-300"><a href="./socialtree.html">Social Tree</a></li>
-            <li class="hover:text-2xl ease-in-out duration-300"><a href="./geradorqrcodezapmobile.html">QR Code Mobile</a></li>
-            <li class="hover:text-2xl ease-in-out duration-300"><a href="./geradorqrcodezapweb.html">QR Code Web</a></li>
-            <li class="hover:text-2xl ease-in-out duration-300"><a href="./fazerpedidos.html">Fazer Pedidos</a></li>
-            <li class="hover:text-2xl ease-in-out duration-300"><a href="./listachurrasco.html">Lista de Churrasco</a></li>
-            <li class="hover:text-2xl ease-in-out duration-300"><a href="./listadecompras.html">Lista de Compras</a></li>
-            <li class="hover:text-2xl ease-in-out duration-300"><a href="./geradorsenha.html">Gerador de Senhas</a></li>
-            <li class="hover:text-2xl ease-in-out duration-300"><a href="./cronologia.html">Cronologia</a></li>
-            <li class="hover:text-2xl ease-in-out duration-300"><a href="./contagemregressivatempo.html">Contagem Regressiva Tempo</a></li>
-            <li class="hover:text-2xl ease-in-out duration-300"><a href="./contagemregressivadata.html">Contagem Regressiva Data</a></li>
-            <li class="hover:text-2xl ease-in-out duration-300"><a href="./geradorvoucher.html">Gerador de Voucher</a></li>
-            <li class="hover:text-2xl ease-in-out duration-300"><a href="./controleestoque.html">Controle de Estoque</a></li>
-            <li class="hover:text-2xl ease-in-out duration-300"><a href="./simuladorwzap.html">Simulador Wzap</a></li>
-            
-        </ul>
-        </div>
-
-    </main>
-    <footer class="blog-footer">
+        const customFont = config.font_family || defaultConfig.font_family;
+        const baseSize = config.font_size || defaultConfig.font_size;
+        const baseFontStack = 'sans-serif';
         
-        <div class="text-center flex flex-col">
-            <span class="text-gray-800 font-bold hover:text-yellow-500 cursor-pointer text-center">Criado por 🐇 &copy 2022</span>
-            <span class="text-contorner font-bold hover:text-yellow-500 cursor-pointer"><a href="https://carloscoelhogti.github.io/in" class="visited:text-yellow-500">Home</a></span>
-          </div>
-      </footer>
-</body>
-
+        // Atualizar textos editáveis
+        const titleElement = document.getElementById('page-title');
+        if (titleElement) {
+          titleElement.textContent = config.page_title || defaultConfig.page_title;
+          titleElement.style.fontFamily = `${customFont}, ${baseFontStack}`;
+          titleElement.style.fontSize = `${baseSize * 2}px`;
+          titleElement.style.color = config.primary_color || defaultConfig.primary_color;
+        }
+        
+        const footerTextElement = document.getElementById('footer-text');
+        if (footerTextElement) {
+          footerTextElement.textContent = config.footer_text || defaultConfig.footer_text;
+          footerTextElement.style.fontFamily = `${customFont}, ${baseFontStack}`;
+          footerTextElement.style.fontSize = `${baseSize * 0.9}px`;
+          footerTextElement.style.color = config.text_color || defaultConfig.text_color;
+        }
+        
+        const footerLinkElement = document.getElementById('footer-link');
+        if (footerLinkElement) {
+          footerLinkElement.textContent = config.footer_link_text || defaultConfig.footer_link_text;
+          footerLinkElement.style.fontFamily = `${customFont}, ${baseFontStack}`;
+          footerLinkElement.style.fontSize = `${baseSize * 0.9}px`;
+          footerLinkElement.style.color = config.primary_color || defaultConfig.primary_color;
+        }
+        
+        // Atualizar cores dos links de projeto
+        const projectLinks = document.querySelectorAll('ul a');
+        projectLinks.forEach(link => {
+          link.style.background = `linear-gradient(to right, ${config.primary_color || defaultConfig.primary_color}, #fbbf24)`;
+          link.style.fontFamily = `${customFont}, ${baseFontStack}`;
+          link.style.fontSize = `${baseSize}px`;
+        });
+        
+        // Atualizar cor de fundo do card
+        const card = document.querySelector('.bg-white.rounded-2xl');
+        if (card) {
+          card.style.backgroundColor = config.background_color || defaultConfig.background_color;
+        }
+      }
+      
+      if (window.elementSdk) {
+        window.elementSdk.init({
+          defaultConfig,
+          onConfigChange,
+          mapToCapabilities: (config) => ({
+            recolorables: [
+              {
+                get: () => config.primary_color || defaultConfig.primary_color,
+                set: (value) => {
+                  config.primary_color = value;
+                  window.elementSdk.setConfig({ primary_color: value });
+                }
+              },
+              {
+                get: () => config.background_color || defaultConfig.background_color,
+                set: (value) => {
+                  config.background_color = value;
+                  window.elementSdk.setConfig({ background_color: value });
+                }
+              },
+              {
+                get: () => config.text_color || defaultConfig.text_color,
+                set: (value) => {
+                  config.text_color = value;
+                  window.elementSdk.setConfig({ text_color: value });
+                }
+              }
+            ],
+            borderables: [],
+            fontEditable: {
+              get: () => config.font_family || defaultConfig.font_family,
+              set: (value) => {
+                config.font_family = value;
+                window.elementSdk.setConfig({ font_family: value });
+              }
+            },
+            fontSizeable: {
+              get: () => config.font_size || defaultConfig.font_size,
+              set: (value) => {
+                config.font_size = value;
+                window.elementSdk.setConfig({ font_size: value });
+              }
+            }
+          }),
+          mapToEditPanelValues: (config) => new Map([
+            ["page_title", config.page_title || defaultConfig.page_title],
+            ["footer_text", config.footer_text || defaultConfig.footer_text],
+            ["footer_link_text", config.footer_link_text || defaultConfig.footer_link_text]
+          ])
+        });
+      }
+      
+      // Inicializar com configuração padrão
+      onConfigChange(defaultConfig);
+    </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99c7f32ee78ff390',t:'MTc2MjgwMjg3NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
-
