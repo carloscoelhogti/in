@@ -1,0 +1,1073 @@
+<!doctype html>
+<html lang="pt-BR">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema de Controle de Tanque de Combustível</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+        body {
+            box-sizing: border-box;
+        }
+        
+        .fuel-animation {
+            transition: height 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .gauge-needle {
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-origin: 50% 100%;
+        }
+        
+        .ripple {
+            animation: ripple 2s infinite;
+        }
+        
+        @keyframes ripple {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(1.4); opacity: 0; }
+        }
+        
+        .fuel-wave {
+            animation: wave 3s ease-in-out infinite;
+        }
+        
+        @keyframes wave {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-3px); }
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .card-shadow {
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+    </style>
+  
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="/_sdk/element_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="min-h-full gradient-bg font-sans">
+  <div class="min-h-full py-8 px-4">
+   <div class="max-w-7xl mx-auto"><!-- Header -->
+    <div class="text-center mb-8">
+     <h1 class="text-4xl font-bold text-white mb-2">🛢️ Sistema de Controle de Tanque</h1>
+     <p class="text-blue-100 text-lg">Gerencie seu estoque de combustível com precisão</p>
+    </div>
+    <div class="grid lg:grid-cols-3 gap-4 lg:gap-8"><!-- Tanque Visual -->
+     <div class="lg:col-span-1 order-1 lg:order-1">
+      <div class="bg-white rounded-2xl p-4 lg:p-6 card-shadow">
+       <h2 class="text-xl lg:text-2xl font-bold text-gray-800 mb-4 lg:mb-6 text-center">Tanque Principal</h2><!-- Medidor Circular -->
+       <div class="flex justify-center mb-4 lg:mb-6">
+        <div class="relative w-24 h-24 sm:w-28 sm:h-28 lg:w-32 lg:h-32">
+         <svg class="w-full h-full transform -rotate-90" viewbox="0 0 120 120"><!-- Fundo do medidor --> <circle cx="60" cy="60" r="50" stroke="#e5e7eb" stroke-width="8" fill="none" /> <!-- Progresso do medidor --> <circle id="fuelGauge" cx="60" cy="60" r="50" stroke="#10b981" stroke-width="8" fill="none" stroke-linecap="round" stroke-dasharray="314" stroke-dashoffset="314" style="transition: stroke-dashoffset 0.8s ease-in-out" />
+         </svg>
+         <div class="absolute inset-0 flex items-center justify-center">
+          <div class="text-center">
+           <div id="fuelPercentage" class="text-lg sm:text-xl lg:text-2xl font-bold text-gray-800">
+            0%
+           </div>
+           <div class="text-xs text-gray-500">
+            Capacidade
+           </div>
+          </div>
+         </div>
+        </div>
+       </div><!-- Tanque Visual -->
+       <div class="relative mx-auto w-32 h-48 sm:w-40 sm:h-56 lg:w-48 lg:h-64 mb-4 lg:mb-6"><!-- Corpo do tanque -->
+        <svg class="w-full h-full" viewbox="0 0 200 280"><!-- Tanque principal --> <rect x="40" y="40" width="120" height="200" rx="15" ry="15" fill="#f3f4f6" stroke="#6b7280" stroke-width="3" /> <!-- Combustível --> <defs>
+          <lineargradient id="fuelGradient" x1="0%" y1="100%" x2="0%" y2="0%">
+           <stop offset="0%" style="stop-color:#fbbf24;stop-opacity:1" />
+           <stop offset="50%" style="stop-color:#f59e0b;stop-opacity:1" />
+           <stop offset="100%" style="stop-color:#d97706;stop-opacity:1" />
+          </lineargradient>
+         </defs> <rect id="fuelLevel" x="45" y="235" width="110" height="0" rx="10" ry="10" fill="url(#fuelGradient)" class="fuel-animation fuel-wave" /> <!-- Marcações de nível --> <g stroke="#6b7280" stroke-width="1">
+          <line x1="35" y1="60" x2="45" y2="60" />
+          <text x="30" y="65" font-size="10" fill="#6b7280" text-anchor="end">
+           1000L
+          </text>
+          <line x1="35" y1="110" x2="45" y2="110" />
+          <text x="30" y="115" font-size="10" fill="#6b7280" text-anchor="end">
+           750L
+          </text>
+          <line x1="35" y1="160" x2="45" y2="160" />
+          <text x="30" y="165" font-size="10" fill="#6b7280" text-anchor="end">
+           500L
+          </text>
+          <line x1="35" y1="210" x2="45" y2="210" />
+          <text x="30" y="215" font-size="10" fill="#6b7280" text-anchor="end">
+           250L
+          </text>
+         </g> <!-- Tampa do tanque --> <rect x="85" y="25" width="30" height="20" rx="5" ry="5" fill="#6b7280" stroke="#374151" stroke-width="2" /> <circle cx="100" cy="35" r="3" fill="#374151" />
+        </svg>
+       </div><!-- Informações do tanque -->
+       <div class="bg-gray-50 rounded-lg p-3 lg:p-4">
+        <div class="grid grid-cols-2 gap-2 lg:gap-4 text-center">
+         <div>
+          <div id="currentLevel" class="text-xl lg:text-2xl font-bold text-blue-600">
+           0
+          </div>
+          <div class="text-xs lg:text-sm text-gray-500">
+           Litros Atuais
+          </div>
+         </div>
+         <div>
+          <div class="text-xl lg:text-2xl font-bold text-gray-600">
+           1000
+          </div>
+          <div class="text-xs lg:text-sm text-gray-500">
+           Capacidade Máx.
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div><!-- Controles -->
+     <div class="lg:col-span-2 space-y-4 lg:space-y-6 order-2 lg:order-2"><!-- Formulário de Entrada -->
+      <div class="bg-white rounded-2xl p-4 lg:p-6 card-shadow">
+       <h3 class="text-lg lg:text-xl font-bold text-gray-800 mb-3 lg:mb-4 flex items-center">⛽ Registrar Entrada de Combustível</h3>
+       <form id="entryForm" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4">
+        <div class="sm:col-span-2 lg:col-span-1"><label class="block text-xs lg:text-sm font-medium text-gray-700 mb-1 lg:mb-2">Quantidade (Litros)</label> <input type="number" id="entryAmount" min="1" max="1000" class="w-full px-3 lg:px-4 py-2 lg:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm lg:text-base" placeholder="Ex: 500" required>
+        </div>
+        <div><label class="block text-xs lg:text-sm font-medium text-gray-700 mb-1 lg:mb-2">Data</label> <input type="date" id="entryDate" class="w-full px-3 lg:px-4 py-2 lg:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm lg:text-base" required>
+        </div>
+        <div><label class="block text-xs lg:text-sm font-medium text-gray-700 mb-1 lg:mb-2">Horário</label> <input type="time" id="entryTime" class="w-full px-3 lg:px-4 py-2 lg:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm lg:text-base" required>
+        </div>
+        <div class="flex items-end sm:col-span-2 lg:col-span-1"><button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 lg:py-3 px-4 lg:px-6 rounded-lg transition-colors duration-200 text-sm lg:text-base"> ➕ Adicionar </button>
+        </div>
+       </form>
+      </div><!-- Formulário de Saída -->
+      <div class="bg-white rounded-2xl p-4 lg:p-6 card-shadow">
+       <h3 class="text-lg lg:text-xl font-bold text-gray-800 mb-3 lg:mb-4 flex items-center">🚗 Registrar Saída de Combustível</h3>
+       <form id="exitForm" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4">
+        <div class="sm:col-span-2 lg:col-span-1"><label class="block text-xs lg:text-sm font-medium text-gray-700 mb-1 lg:mb-2">Quantidade (Litros)</label> <input type="number" id="exitAmount" min="1" class="w-full px-3 lg:px-4 py-2 lg:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-sm lg:text-base" placeholder="Ex: 50" required>
+        </div>
+        <div><label class="block text-xs lg:text-sm font-medium text-gray-700 mb-1 lg:mb-2">Data</label> <input type="date" id="exitDate" class="w-full px-3 lg:px-4 py-2 lg:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-sm lg:text-base" required>
+        </div>
+        <div><label class="block text-xs lg:text-sm font-medium text-gray-700 mb-1 lg:mb-2">Horário</label> <input type="time" id="exitTime" class="w-full px-3 lg:px-4 py-2 lg:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-sm lg:text-base" required>
+        </div>
+        <div class="flex items-end sm:col-span-2 lg:col-span-1"><button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-2 lg:py-3 px-4 lg:px-6 rounded-lg transition-colors duration-200 text-sm lg:text-base"> ➖ Retirar </button>
+        </div>
+       </form>
+      </div><!-- Histórico -->
+      <div class="bg-white rounded-2xl p-4 lg:p-6 card-shadow">
+       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-3">
+        <h3 class="text-lg lg:text-xl font-bold text-gray-800 flex items-center">📊 Histórico de Movimentações</h3>
+        <div class="flex gap-2 flex-wrap w-full sm:w-auto"><button id="exportCSV" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-3 lg:px-4 rounded-lg transition-colors duration-200 flex items-center gap-1 lg:gap-2 text-xs lg:text-sm flex-1 sm:flex-none justify-center"> 📄 <span class="hidden sm:inline">Exportar </span>CSV </button> <button id="exportJSON" class="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-3 lg:px-4 rounded-lg transition-colors duration-200 flex items-center gap-1 lg:gap-2 text-xs lg:text-sm flex-1 sm:flex-none justify-center"> 📋 <span class="hidden sm:inline">Exportar </span>JSON </button> <button id="showHistory" class="bg-orange-600 hover:bg-orange-700 text-white font-semibold py-2 px-3 lg:px-4 rounded-lg transition-colors duration-200 flex items-center gap-1 lg:gap-2 text-xs lg:text-sm flex-1 sm:flex-none justify-center"> 📜 <span class="hidden sm:inline">Ver </span>Histórico </button> <button id="showReport" class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-3 lg:px-4 rounded-lg transition-colors duration-200 flex items-center gap-1 lg:gap-2 text-xs lg:text-sm flex-1 sm:flex-none justify-center"> 📱 <span class="hidden sm:inline">Relatório </span>Visual </button>
+        </div>
+       </div>
+       <div class="overflow-x-auto">
+        <table class="w-full">
+         <thead>
+          <tr class="border-b border-gray-200">
+           <th class="text-left py-2 lg:py-3 px-2 lg:px-4 font-semibold text-gray-700 text-xs lg:text-sm">Data</th>
+           <th class="text-left py-2 lg:py-3 px-2 lg:px-4 font-semibold text-gray-700 text-xs lg:text-sm hidden sm:table-cell">Horário</th>
+           <th class="text-left py-2 lg:py-3 px-2 lg:px-4 font-semibold text-gray-700 text-xs lg:text-sm">Tipo</th>
+           <th class="text-right py-2 lg:py-3 px-2 lg:px-4 font-semibold text-gray-700 text-xs lg:text-sm">Qtd.</th>
+           <th class="text-right py-2 lg:py-3 px-2 lg:px-4 font-semibold text-gray-700 text-xs lg:text-sm">Saldo</th>
+          </tr>
+         </thead>
+         <tbody id="historyTable">
+          <tr>
+           <td colspan="5" class="text-center py-8 text-gray-500">Nenhuma movimentação registrada ainda</td>
+          </tr>
+         </tbody>
+        </table>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div><!-- Modal do Histórico Completo -->
+  <div id="historyModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-2 lg:p-4">
+   <div class="bg-white rounded-2xl max-w-6xl w-full max-h-[95vh] lg:max-h-[90vh] overflow-y-auto"><!-- Header do Modal -->
+    <div class="sticky top-0 bg-white border-b border-gray-200 px-4 lg:px-6 py-3 lg:py-4 rounded-t-2xl">
+     <div class="flex justify-between items-center mb-3">
+      <h2 class="text-lg lg:text-2xl font-bold text-gray-800">📜 Histórico Completo de Movimentações</h2><button id="closeHistory" class="text-gray-500 hover:text-gray-700 text-xl lg:text-2xl">✕</button>
+     </div><!-- Área de Upload -->
+     <div class="bg-blue-50 border-2 border-blue-200 rounded-lg p-3 lg:p-4">
+      <div class="flex flex-col sm:flex-row gap-3 items-start sm:items-center">
+       <div class="flex-1"><label class="block text-sm font-semibold text-blue-800 mb-2"> 📂 Importar Arquivo CSV ou JSON </label> <input type="file" id="fileInput" accept=".csv,.json" class="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700 file:cursor-pointer cursor-pointer">
+       </div><button id="clearHistory" class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200 text-sm whitespace-nowrap"> 🗑️ Limpar Histórico </button>
+      </div>
+      <p class="text-xs text-blue-700 mt-2">💡 Carregue um arquivo CSV ou JSON exportado anteriormente para visualizar o histórico completo</p>
+     </div>
+    </div><!-- Conteúdo do Histórico -->
+    <div id="historyContent" class="p-4 lg:p-6"><!-- Estatísticas Resumidas -->
+     <div id="historyStats" class="grid grid-cols-2 sm:grid-cols-4 gap-3 lg:gap-4 mb-4 lg:mb-6"><!-- Será preenchido dinamicamente -->
+     </div><!-- Filtros -->
+     <div class="bg-gray-50 rounded-lg p-3 lg:p-4 mb-4 lg:mb-6">
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+       <div><label class="block text-xs lg:text-sm font-medium text-gray-700 mb-1">Filtrar por Tipo</label> <select id="filterType" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"> <option value="all">Todos</option> <option value="entrada">Apenas Entradas</option> <option value="saída">Apenas Saídas</option> </select>
+       </div>
+       <div><label class="block text-xs lg:text-sm font-medium text-gray-700 mb-1">Data Inicial</label> <input type="date" id="filterDateStart" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm">
+       </div>
+       <div><label class="block text-xs lg:text-sm font-medium text-gray-700 mb-1">Data Final</label> <input type="date" id="filterDateEnd" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm">
+       </div>
+      </div>
+      <div class="flex gap-2 mt-3"><button id="applyFilters" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg text-sm"> 🔍 Aplicar Filtros </button> <button id="clearFilters" class="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg text-sm"> ✖️ Limpar Filtros </button>
+      </div>
+     </div><!-- Tabela de Histórico -->
+     <div class="overflow-x-auto">
+      <table class="w-full border-collapse">
+       <thead>
+        <tr class="bg-gray-100 border-b-2 border-gray-300">
+         <th class="text-left py-3 px-3 lg:px-4 font-semibold text-gray-700 text-xs lg:text-sm">#</th>
+         <th class="text-left py-3 px-3 lg:px-4 font-semibold text-gray-700 text-xs lg:text-sm">Data</th>
+         <th class="text-left py-3 px-3 lg:px-4 font-semibold text-gray-700 text-xs lg:text-sm">Horário</th>
+         <th class="text-left py-3 px-3 lg:px-4 font-semibold text-gray-700 text-xs lg:text-sm">Tipo</th>
+         <th class="text-right py-3 px-3 lg:px-4 font-semibold text-gray-700 text-xs lg:text-sm">Quantidade</th>
+         <th class="text-right py-3 px-3 lg:px-4 font-semibold text-gray-700 text-xs lg:text-sm">Saldo</th>
+        </tr>
+       </thead>
+       <tbody id="fullHistoryTable">
+        <tr>
+         <td colspan="6" class="text-center py-8 text-gray-500">📂 Nenhum histórico carregado. Importe um arquivo CSV ou JSON acima.</td>
+        </tr>
+       </tbody>
+      </table>
+     </div>
+    </div><!-- Footer -->
+    <div class="sticky bottom-0 bg-gray-50 border-t border-gray-200 px-4 lg:px-6 py-3 lg:py-4 rounded-b-2xl flex justify-end"><button id="closeHistoryBtn" class="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200 text-sm lg:text-base"> Fechar </button>
+    </div>
+   </div>
+  </div><!-- Modal do Relatório Visual -->
+  <div id="reportModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-2 lg:p-4">
+   <div class="bg-white rounded-2xl max-w-4xl w-full max-h-[95vh] lg:max-h-[90vh] overflow-y-auto"><!-- Header do Modal -->
+    <div class="sticky top-0 bg-white border-b border-gray-200 px-4 lg:px-6 py-3 lg:py-4 rounded-t-2xl flex justify-between items-center">
+     <h2 class="text-lg lg:text-2xl font-bold text-gray-800">📊 Relatório Visual do Tanque</h2><button id="closeReport" class="text-gray-500 hover:text-gray-700 text-xl lg:text-2xl">✕</button>
+    </div><!-- Conteúdo do Relatório -->
+    <div id="reportContent" class="p-4 lg:p-6"><!-- Será preenchido dinamicamente -->
+    </div><!-- Footer com botões -->
+    <div class="sticky bottom-0 bg-gray-50 border-t border-gray-200 px-4 lg:px-6 py-3 lg:py-4 rounded-b-2xl flex flex-col sm:flex-row gap-2 lg:gap-3 justify-end"><button id="shareWhatsApp" class="bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-4 lg:px-6 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 text-sm lg:text-base"> 📱 <span class="hidden xs:inline">Compartilhar no </span>WhatsApp </button> <button id="closeReportBtn" class="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-3 px-4 lg:px-6 rounded-lg transition-colors duration-200 text-sm lg:text-base"> Fechar </button>
+    </div>
+   </div>
+  </div><!-- Notificações -->
+  <div id="notification" class="fixed top-4 right-4 z-50 hidden">
+   <div class="bg-white rounded-lg shadow-lg p-4 max-w-sm">
+    <div class="flex items-center">
+     <div id="notificationIcon" class="mr-3"></div>
+     <div>
+      <div id="notificationTitle" class="font-semibold"></div>
+      <div id="notificationMessage" class="text-sm text-gray-600"></div>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script>
+        let currentFuel = 0;
+        const maxCapacity = 1000;
+        let history = [];
+
+        // Definir data e horário atual como padrão
+        const now = new Date();
+        document.getElementById('entryDate').valueAsDate = now;
+        document.getElementById('exitDate').valueAsDate = now;
+        
+        const currentTime = now.toTimeString().slice(0, 5);
+        document.getElementById('entryTime').value = currentTime;
+        document.getElementById('exitTime').value = currentTime;
+
+        function updateTankVisual() {
+            const percentage = (currentFuel / maxCapacity) * 100;
+            const fuelLevel = document.getElementById('fuelLevel');
+            const fuelGauge = document.getElementById('fuelGauge');
+            const fuelPercentage = document.getElementById('fuelPercentage');
+            const currentLevelDisplay = document.getElementById('currentLevel');
+
+            // Atualizar altura do combustível (200px é a altura total do tanque)
+            const fuelHeight = (currentFuel / maxCapacity) * 190;
+            fuelLevel.setAttribute('height', fuelHeight);
+            fuelLevel.setAttribute('y', 235 - fuelHeight);
+
+            // Atualizar medidor circular
+            const circumference = 314;
+            const offset = circumference - (percentage / 100) * circumference;
+            fuelGauge.style.strokeDashoffset = offset;
+
+            // Atualizar cor baseada no nível
+            if (percentage > 75) {
+                fuelGauge.setAttribute('stroke', '#10b981'); // Verde
+            } else if (percentage > 25) {
+                fuelGauge.setAttribute('stroke', '#f59e0b'); // Amarelo
+            } else {
+                fuelGauge.setAttribute('stroke', '#ef4444'); // Vermelho
+            }
+
+            // Atualizar textos
+            fuelPercentage.textContent = Math.round(percentage) + '%';
+            currentLevelDisplay.textContent = currentFuel;
+        }
+
+        function showNotification(title, message, type = 'success') {
+            const notification = document.getElementById('notification');
+            const icon = document.getElementById('notificationIcon');
+            const titleEl = document.getElementById('notificationTitle');
+            const messageEl = document.getElementById('notificationMessage');
+
+            const icons = {
+                success: '✅',
+                error: '❌',
+                warning: '⚠️'
+            };
+
+            icon.textContent = icons[type];
+            titleEl.textContent = title;
+            messageEl.textContent = message;
+
+            notification.classList.remove('hidden');
+            setTimeout(() => {
+                notification.classList.add('hidden');
+            }, 3000);
+        }
+
+        function addToHistory(type, amount, date, time) {
+            const newBalance = currentFuel;
+            history.unshift({
+                date: date,
+                time: time,
+                type: type,
+                amount: amount,
+                balance: newBalance
+            });
+
+            updateHistoryTable();
+        }
+
+        function updateHistoryTable() {
+            const tbody = document.getElementById('historyTable');
+            
+            if (history.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="text-center py-8 text-gray-500">
+                            Nenhuma movimentação registrada ainda
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = history.map(record => `
+                <tr class="border-b border-gray-100 hover:bg-gray-50">
+                    <td class="py-2 lg:py-3 px-2 lg:px-4 text-xs lg:text-sm">${new Date(record.date).toLocaleDateString('pt-BR')}</td>
+                    <td class="py-2 lg:py-3 px-2 lg:px-4 font-mono text-xs lg:text-sm hidden sm:table-cell">${record.time}</td>
+                    <td class="py-2 lg:py-3 px-2 lg:px-4">
+                        <span class="inline-flex items-center px-1.5 lg:px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                            record.type === 'entrada' 
+                                ? 'bg-green-100 text-green-800' 
+                                : 'bg-red-100 text-red-800'
+                        }">
+                            <span class="sm:hidden">${record.type === 'entrada' ? '⛽' : '🚗'}</span>
+                            <span class="hidden sm:inline">${record.type === 'entrada' ? '⛽ Entrada' : '🚗 Saída'}</span>
+                        </span>
+                        <div class="text-xs text-gray-500 mt-1 sm:hidden">${record.time}</div>
+                    </td>
+                    <td class="py-2 lg:py-3 px-2 lg:px-4 text-right font-semibold text-xs lg:text-sm ${
+                        record.type === 'entrada' ? 'text-green-600' : 'text-red-600'
+                    }">
+                        ${record.type === 'entrada' ? '+' : '-'}${record.amount}L
+                    </td>
+                    <td class="py-2 lg:py-3 px-2 lg:px-4 text-right font-semibold text-gray-800 text-xs lg:text-sm">
+                        ${record.balance}L
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Formulário de entrada
+        document.getElementById('entryForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const amount = parseInt(document.getElementById('entryAmount').value);
+            const date = document.getElementById('entryDate').value;
+            const time = document.getElementById('entryTime').value;
+
+            if (currentFuel + amount > maxCapacity) {
+                showNotification(
+                    'Capacidade Excedida!', 
+                    `O tanque comporta apenas ${maxCapacity - currentFuel}L adicionais.`,
+                    'error'
+                );
+                return;
+            }
+
+            currentFuel += amount;
+            updateTankVisual();
+            addToHistory('entrada', amount, date, time);
+            
+            showNotification(
+                'Combustível Adicionado!', 
+                `${amount}L adicionados às ${time}. Nível atual: ${currentFuel}L`
+            );
+
+            // Limpar formulário
+            document.getElementById('entryAmount').value = '';
+        });
+
+        // Formulário de saída
+        document.getElementById('exitForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const amount = parseInt(document.getElementById('exitAmount').value);
+            const date = document.getElementById('exitDate').value;
+            const time = document.getElementById('exitTime').value;
+
+            if (amount > currentFuel) {
+                showNotification(
+                    'Combustível Insuficiente!', 
+                    `Disponível apenas ${currentFuel}L no tanque.`,
+                    'error'
+                );
+                return;
+            }
+
+            currentFuel -= amount;
+            updateTankVisual();
+            addToHistory('saída', amount, date, time);
+            
+            showNotification(
+                'Combustível Retirado!', 
+                `${amount}L retirados às ${time}. Nível atual: ${currentFuel}L`
+            );
+
+            // Limpar formulário
+            document.getElementById('exitAmount').value = '';
+        });
+
+        // Funções de exportação
+        function exportToCSV() {
+            if (history.length === 0) {
+                showNotification(
+                    'Nenhum Dado!', 
+                    'Não há movimentações para exportar.',
+                    'warning'
+                );
+                return;
+            }
+
+            const headers = ['Data', 'Horário', 'Tipo', 'Quantidade (L)', 'Saldo (L)'];
+            const csvContent = [
+                headers.join(','),
+                ...history.map(record => [
+                    new Date(record.date).toLocaleDateString('pt-BR'),
+                    record.time,
+                    record.type === 'entrada' ? 'Entrada' : 'Saída',
+                    record.amount,
+                    record.balance
+                ].join(','))
+            ].join('\n');
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', `historico_combustivel_${new Date().toISOString().split('T')[0]}.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            showNotification(
+                'Exportação Concluída!', 
+                'Arquivo CSV baixado com sucesso.'
+            );
+        }
+
+        function exportToJSON() {
+            if (history.length === 0) {
+                showNotification(
+                    'Nenhum Dado!', 
+                    'Não há movimentações para exportar.',
+                    'warning'
+                );
+                return;
+            }
+
+            const exportData = {
+                tanque: {
+                    capacidade_maxima: maxCapacity,
+                    nivel_atual: currentFuel,
+                    percentual: Math.round((currentFuel / maxCapacity) * 100)
+                },
+                movimentacoes: history.map(record => ({
+                    data: record.date,
+                    horario: record.time,
+                    tipo: record.type,
+                    quantidade_litros: record.amount,
+                    saldo_litros: record.balance,
+                    timestamp: new Date(record.date + 'T' + record.time).toISOString()
+                })),
+                exportado_em: new Date().toISOString(),
+                total_movimentacoes: history.length
+            };
+
+            const jsonContent = JSON.stringify(exportData, null, 2);
+            const blob = new Blob([jsonContent], { type: 'application/json;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', `historico_combustivel_${new Date().toISOString().split('T')[0]}.json`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            showNotification(
+                'Exportação Concluída!', 
+                'Arquivo JSON baixado com sucesso.'
+            );
+        }
+
+        // Funções do relatório visual
+        function generateVisualReport() {
+            const now = new Date();
+            const reportDate = now.toLocaleDateString('pt-BR');
+            const reportTime = now.toLocaleTimeString('pt-BR');
+            const percentage = Math.round((currentFuel / maxCapacity) * 100);
+            
+            // Calcular estatísticas
+            const totalEntradas = history.filter(h => h.type === 'entrada').reduce((sum, h) => sum + h.amount, 0);
+            const totalSaidas = history.filter(h => h.type === 'saída').reduce((sum, h) => sum + h.amount, 0);
+            const ultimasMovimentacoes = history.slice(0, 5);
+            
+            // Status do tanque
+            let statusColor = 'text-green-600';
+            let statusText = 'Normal';
+            let statusIcon = '✅';
+            
+            if (percentage < 25) {
+                statusColor = 'text-red-600';
+                statusText = 'Crítico';
+                statusIcon = '🚨';
+            } else if (percentage < 50) {
+                statusColor = 'text-yellow-600';
+                statusText = 'Atenção';
+                statusIcon = '⚠️';
+            }
+
+            return `
+                <!-- Cabeçalho do Relatório -->
+                <div class="text-center mb-6 lg:mb-8 bg-gradient-to-r from-blue-600 to-purple-600 text-white p-4 lg:p-6 rounded-xl">
+                    <h1 class="text-xl lg:text-3xl font-bold mb-2">🛢️ Relatório do Tanque de Combustível</h1>
+                    <p class="text-blue-100 text-sm lg:text-base">Gerado em ${reportDate} às ${reportTime}</p>
+                </div>
+
+                <!-- Status Atual -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 lg:gap-6 mb-6 lg:mb-8">
+                    <div class="bg-white border-2 border-gray-200 rounded-xl p-4 lg:p-6 text-center">
+                        <div class="text-3xl lg:text-4xl mb-2">⛽</div>
+                        <div class="text-xl lg:text-2xl font-bold text-blue-600">${currentFuel}L</div>
+                        <div class="text-gray-600 text-sm lg:text-base">Nível Atual</div>
+                    </div>
+                    <div class="bg-white border-2 border-gray-200 rounded-xl p-4 lg:p-6 text-center">
+                        <div class="text-3xl lg:text-4xl mb-2">📊</div>
+                        <div class="text-xl lg:text-2xl font-bold text-purple-600">${percentage}%</div>
+                        <div class="text-gray-600 text-sm lg:text-base">Capacidade</div>
+                    </div>
+                    <div class="bg-white border-2 border-gray-200 rounded-xl p-4 lg:p-6 text-center">
+                        <div class="text-3xl lg:text-4xl mb-2">${statusIcon}</div>
+                        <div class="text-xl lg:text-2xl font-bold ${statusColor}">${statusText}</div>
+                        <div class="text-gray-600 text-sm lg:text-base">Status</div>
+                    </div>
+                </div>
+
+                <!-- Medidor Visual -->
+                <div class="bg-white border-2 border-gray-200 rounded-xl p-4 lg:p-6 mb-6 lg:mb-8">
+                    <h3 class="text-lg lg:text-xl font-bold text-gray-800 mb-3 lg:mb-4 text-center">Medidor do Tanque</h3>
+                    <div class="flex justify-center mb-3 lg:mb-4">
+                        <div class="relative w-32 h-32 lg:w-40 lg:h-40">
+                            <svg class="w-full h-full transform -rotate-90" viewBox="0 0 120 120">
+                                <circle cx="60" cy="60" r="50" stroke="#e5e7eb" stroke-width="10" fill="none"/>
+                                <circle cx="60" cy="60" r="50" stroke="${percentage > 75 ? '#10b981' : percentage > 25 ? '#f59e0b' : '#ef4444'}" 
+                                        stroke-width="10" fill="none" stroke-linecap="round" 
+                                        stroke-dasharray="314" stroke-dashoffset="${314 - (percentage / 100) * 314}"/>
+                            </svg>
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <div class="text-center">
+                                    <div class="text-2xl lg:text-3xl font-bold text-gray-800">${percentage}%</div>
+                                    <div class="text-xs lg:text-sm text-gray-500">Capacidade</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center text-gray-600 text-sm lg:text-base">
+                        <p><strong>${currentFuel}L</strong> de <strong>${maxCapacity}L</strong> disponíveis</p>
+                    </div>
+                </div>
+
+                <!-- Estatísticas -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6 mb-6 lg:mb-8">
+                    <div class="bg-green-50 border-2 border-green-200 rounded-xl p-4 lg:p-6">
+                        <h4 class="text-base lg:text-lg font-bold text-green-800 mb-2 lg:mb-3 flex items-center">
+                            ⛽ Total de Entradas
+                        </h4>
+                        <div class="text-2xl lg:text-3xl font-bold text-green-600">${totalEntradas}L</div>
+                        <div class="text-green-700 text-xs lg:text-sm">${history.filter(h => h.type === 'entrada').length} movimentações</div>
+                    </div>
+                    <div class="bg-red-50 border-2 border-red-200 rounded-xl p-4 lg:p-6">
+                        <h4 class="text-base lg:text-lg font-bold text-red-800 mb-2 lg:mb-3 flex items-center">
+                            🚗 Total de Saídas
+                        </h4>
+                        <div class="text-2xl lg:text-3xl font-bold text-red-600">${totalSaidas}L</div>
+                        <div class="text-red-700 text-xs lg:text-sm">${history.filter(h => h.type === 'saída').length} movimentações</div>
+                    </div>
+                </div>
+
+                <!-- Últimas Movimentações -->
+                ${ultimasMovimentacoes.length > 0 ? `
+                <div class="bg-white border-2 border-gray-200 rounded-xl p-4 lg:p-6">
+                    <h4 class="text-base lg:text-lg font-bold text-gray-800 mb-3 lg:mb-4">📋 Últimas Movimentações</h4>
+                    <div class="space-y-2 lg:space-y-3">
+                        ${ultimasMovimentacoes.map(record => `
+                            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center p-3 bg-gray-50 rounded-lg gap-2 sm:gap-3">
+                                <div class="flex items-center gap-2 lg:gap-3">
+                                    <span class="text-xl lg:text-2xl">${record.type === 'entrada' ? '⛽' : '🚗'}</span>
+                                    <div>
+                                        <div class="font-semibold text-sm lg:text-base">${record.type === 'entrada' ? 'Entrada' : 'Saída'}</div>
+                                        <div class="text-xs lg:text-sm text-gray-600">${new Date(record.date).toLocaleDateString('pt-BR')} às ${record.time}</div>
+                                    </div>
+                                </div>
+                                <div class="text-left sm:text-right ml-8 sm:ml-0">
+                                    <div class="font-bold text-sm lg:text-base ${record.type === 'entrada' ? 'text-green-600' : 'text-red-600'}">
+                                        ${record.type === 'entrada' ? '+' : '-'}${record.amount}L
+                                    </div>
+                                    <div class="text-xs lg:text-sm text-gray-600">Saldo: ${record.balance}L</div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                ` : `
+                <div class="bg-gray-50 border-2 border-gray-200 rounded-xl p-6 lg:p-8 text-center">
+                    <div class="text-3xl lg:text-4xl mb-3 lg:mb-4">📝</div>
+                    <h4 class="text-base lg:text-lg font-bold text-gray-600 mb-2">Nenhuma Movimentação</h4>
+                    <p class="text-gray-500 text-sm lg:text-base">Ainda não há registros de entrada ou saída de combustível.</p>
+                </div>
+                `}
+
+                <!-- Rodapé -->
+                <div class="mt-8 text-center text-gray-500 text-sm">
+                    <p>Sistema de Controle de Tanque de Combustível</p>
+                    <p>Relatório gerado automaticamente em ${reportDate} às ${reportTime}</p>
+                </div>
+            `;
+        }
+
+        function showVisualReport() {
+            const modal = document.getElementById('reportModal');
+            const content = document.getElementById('reportContent');
+            
+            content.innerHTML = generateVisualReport();
+            modal.classList.remove('hidden');
+        }
+
+        function closeVisualReport() {
+            const modal = document.getElementById('reportModal');
+            modal.classList.add('hidden');
+        }
+
+        function shareOnWhatsApp() {
+            if (history.length === 0) {
+                showNotification(
+                    'Nenhum Dado!', 
+                    'Registre algumas movimentações antes de compartilhar.',
+                    'warning'
+                );
+                return;
+            }
+
+            const percentage = Math.round((currentFuel / maxCapacity) * 100);
+            const totalEntradas = history.filter(h => h.type === 'entrada').reduce((sum, h) => sum + h.amount, 0);
+            const totalSaidas = history.filter(h => h.type === 'saída').reduce((sum, h) => sum + h.amount, 0);
+            const now = new Date();
+            
+            let statusEmoji = '✅';
+            let statusText = 'Normal';
+            
+            if (percentage < 25) {
+                statusEmoji = '🚨';
+                statusText = 'Crítico';
+            } else if (percentage < 50) {
+                statusEmoji = '⚠️';
+                statusText = 'Atenção';
+            }
+
+            const message = `🛢️ *RELATÓRIO DO TANQUE DE COMBUSTÍVEL*
+
+📊 *STATUS ATUAL*
+• Nível: ${currentFuel}L (${percentage}%)
+• Status: ${statusEmoji} ${statusText}
+• Capacidade: ${maxCapacity}L
+
+📈 *MOVIMENTAÇÕES*
+• ⛽ Total Entradas: ${totalEntradas}L
+• 🚗 Total Saídas: ${totalSaidas}L
+• 📋 Registros: ${history.length} movimentações
+
+${history.length > 0 ? `🕐 *ÚLTIMA MOVIMENTAÇÃO*
+• ${history[0].type === 'entrada' ? '⛽ Entrada' : '🚗 Saída'}: ${history[0].amount}L
+• Data: ${new Date(history[0].date).toLocaleDateString('pt-BR')} às ${history[0].time}
+• Saldo: ${history[0].balance}L` : ''}
+
+📅 Relatório gerado em ${now.toLocaleDateString('pt-BR')} às ${now.toLocaleTimeString('pt-BR')}
+
+_Sistema de Controle de Tanque_`;
+
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappUrl = `https://wa.me/?text=${encodedMessage}`;
+            
+            window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+            
+            showNotification(
+                'WhatsApp Aberto!', 
+                'Mensagem preparada para compartilhamento.'
+            );
+        }
+
+        // Variáveis para o histórico completo
+        let fullHistoryData = [];
+        let filteredHistoryData = [];
+
+        // Funções do histórico completo
+        function showFullHistory() {
+            const modal = document.getElementById('historyModal');
+            
+            // Se houver dados no histórico atual, carregá-los automaticamente
+            if (history.length > 0) {
+                fullHistoryData = [...history];
+                filteredHistoryData = [...history];
+                updateFullHistoryDisplay();
+            }
+            
+            modal.classList.remove('hidden');
+        }
+
+        function closeFullHistory() {
+            const modal = document.getElementById('historyModal');
+            modal.classList.add('hidden');
+        }
+
+        function updateHistoryStats() {
+            const statsContainer = document.getElementById('historyStats');
+            
+            if (filteredHistoryData.length === 0) {
+                statsContainer.innerHTML = '';
+                return;
+            }
+
+            const totalEntradas = filteredHistoryData.filter(h => h.type === 'entrada').reduce((sum, h) => sum + h.amount, 0);
+            const totalSaidas = filteredHistoryData.filter(h => h.type === 'saída').reduce((sum, h) => sum + h.amount, 0);
+            const countEntradas = filteredHistoryData.filter(h => h.type === 'entrada').length;
+            const countSaidas = filteredHistoryData.filter(h => h.type === 'saída').length;
+
+            statsContainer.innerHTML = `
+                <div class="bg-green-50 border-2 border-green-200 rounded-lg p-3 lg:p-4 text-center">
+                    <div class="text-xl lg:text-2xl font-bold text-green-600">${totalEntradas}L</div>
+                    <div class="text-xs lg:text-sm text-green-700">Total Entradas</div>
+                    <div class="text-xs text-green-600 mt-1">${countEntradas} movimentações</div>
+                </div>
+                <div class="bg-red-50 border-2 border-red-200 rounded-lg p-3 lg:p-4 text-center">
+                    <div class="text-xl lg:text-2xl font-bold text-red-600">${totalSaidas}L</div>
+                    <div class="text-xs lg:text-sm text-red-700">Total Saídas</div>
+                    <div class="text-xs text-red-600 mt-1">${countSaidas} movimentações</div>
+                </div>
+                <div class="bg-blue-50 border-2 border-blue-200 rounded-lg p-3 lg:p-4 text-center">
+                    <div class="text-xl lg:text-2xl font-bold text-blue-600">${totalEntradas - totalSaidas}L</div>
+                    <div class="text-xs lg:text-sm text-blue-700">Saldo Líquido</div>
+                    <div class="text-xs text-blue-600 mt-1">${totalEntradas > totalSaidas ? 'Positivo' : 'Negativo'}</div>
+                </div>
+                <div class="bg-purple-50 border-2 border-purple-200 rounded-lg p-3 lg:p-4 text-center">
+                    <div class="text-xl lg:text-2xl font-bold text-purple-600">${filteredHistoryData.length}</div>
+                    <div class="text-xs lg:text-sm text-purple-700">Total Registros</div>
+                    <div class="text-xs text-purple-600 mt-1">Movimentações</div>
+                </div>
+            `;
+        }
+
+        function updateFullHistoryDisplay() {
+            const tbody = document.getElementById('fullHistoryTable');
+            
+            if (filteredHistoryData.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="text-center py-8 text-gray-500">
+                            ${fullHistoryData.length === 0 
+                                ? '📂 Nenhum histórico carregado. Importe um arquivo CSV ou JSON acima.' 
+                                : '🔍 Nenhum registro encontrado com os filtros aplicados.'}
+                        </td>
+                    </tr>
+                `;
+                updateHistoryStats();
+                return;
+            }
+
+            tbody.innerHTML = filteredHistoryData.map((record, index) => `
+                <tr class="border-b border-gray-100 hover:bg-gray-50">
+                    <td class="py-2 lg:py-3 px-3 lg:px-4 text-xs lg:text-sm text-gray-600">${filteredHistoryData.length - index}</td>
+                    <td class="py-2 lg:py-3 px-3 lg:px-4 text-xs lg:text-sm">${new Date(record.date).toLocaleDateString('pt-BR')}</td>
+                    <td class="py-2 lg:py-3 px-3 lg:px-4 font-mono text-xs lg:text-sm">${record.time}</td>
+                    <td class="py-2 lg:py-3 px-3 lg:px-4">
+                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
+                            record.type === 'entrada' 
+                                ? 'bg-green-100 text-green-800' 
+                                : 'bg-red-100 text-red-800'
+                        }">
+                            ${record.type === 'entrada' ? '⛽ Entrada' : '🚗 Saída'}
+                        </span>
+                    </td>
+                    <td class="py-2 lg:py-3 px-3 lg:px-4 text-right font-semibold text-xs lg:text-sm ${
+                        record.type === 'entrada' ? 'text-green-600' : 'text-red-600'
+                    }">
+                        ${record.type === 'entrada' ? '+' : '-'}${record.amount}L
+                    </td>
+                    <td class="py-2 lg:py-3 px-3 lg:px-4 text-right font-semibold text-gray-800 text-xs lg:text-sm">
+                        ${record.balance}L
+                    </td>
+                </tr>
+            `).join('');
+
+            updateHistoryStats();
+        }
+
+        function parseCSV(csvText) {
+            const lines = csvText.trim().split('\n');
+            const data = [];
+            
+            // Pular o cabeçalho
+            for (let i = 1; i < lines.length; i++) {
+                const line = lines[i].trim();
+                if (!line) continue;
+                
+                const parts = line.split(',');
+                if (parts.length >= 5) {
+                    // Converter data de DD/MM/YYYY para YYYY-MM-DD
+                    const dateParts = parts[0].split('/');
+                    let dateISO;
+                    
+                    if (dateParts.length === 3) {
+                        // Criar data sem conversão de timezone
+                        const year = dateParts[2];
+                        const month = dateParts[1].padStart(2, '0');
+                        const day = dateParts[0].padStart(2, '0');
+                        dateISO = `${year}-${month}-${day}`;
+                    } else {
+                        dateISO = parts[0];
+                    }
+                    
+                    data.push({
+                        date: dateISO,
+                        time: parts[1],
+                        type: parts[2].toLowerCase().includes('entrada') ? 'entrada' : 'saída',
+                        amount: parseInt(parts[3]),
+                        balance: parseInt(parts[4])
+                    });
+                }
+            }
+            
+            return data;
+        }
+
+        function parseJSON(jsonText) {
+            const jsonData = JSON.parse(jsonText);
+            const data = [];
+            
+            // Verificar se é o formato de exportação do sistema
+            if (jsonData.movimentacoes && Array.isArray(jsonData.movimentacoes)) {
+                jsonData.movimentacoes.forEach(record => {
+                    data.push({
+                        date: record.data,
+                        time: record.horario,
+                        type: record.tipo,
+                        amount: record.quantidade_litros,
+                        balance: record.saldo_litros
+                    });
+                });
+            }
+            
+            return data;
+        }
+
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                try {
+                    const content = e.target.result;
+                    let data = [];
+
+                    if (file.name.endsWith('.csv')) {
+                        data = parseCSV(content);
+                    } else if (file.name.endsWith('.json')) {
+                        data = parseJSON(content);
+                    }
+
+                    if (data.length > 0) {
+                        fullHistoryData = data;
+                        filteredHistoryData = [...data];
+                        updateFullHistoryDisplay();
+                        
+                        showNotification(
+                            'Arquivo Carregado!',
+                            `${data.length} registros importados com sucesso.`,
+                            'success'
+                        );
+                    } else {
+                        showNotification(
+                            'Erro ao Importar!',
+                            'Não foi possível ler os dados do arquivo.',
+                            'error'
+                        );
+                    }
+                } catch (error) {
+                    showNotification(
+                        'Erro ao Processar!',
+                        'Formato de arquivo inválido.',
+                        'error'
+                    );
+                }
+            };
+
+            reader.readAsText(file);
+        }
+
+        function applyHistoryFilters() {
+            const filterType = document.getElementById('filterType').value;
+            const filterDateStart = document.getElementById('filterDateStart').value;
+            const filterDateEnd = document.getElementById('filterDateEnd').value;
+
+            filteredHistoryData = fullHistoryData.filter(record => {
+                // Filtro de tipo
+                if (filterType !== 'all' && record.type !== filterType) {
+                    return false;
+                }
+
+                // Filtro de data inicial
+                if (filterDateStart && record.date < filterDateStart) {
+                    return false;
+                }
+
+                // Filtro de data final
+                if (filterDateEnd && record.date > filterDateEnd) {
+                    return false;
+                }
+
+                return true;
+            });
+
+            updateFullHistoryDisplay();
+            
+            showNotification(
+                'Filtros Aplicados!',
+                `${filteredHistoryData.length} registros encontrados.`,
+                'success'
+            );
+        }
+
+        function clearHistoryFilters() {
+            document.getElementById('filterType').value = 'all';
+            document.getElementById('filterDateStart').value = '';
+            document.getElementById('filterDateEnd').value = '';
+            
+            filteredHistoryData = [...fullHistoryData];
+            updateFullHistoryDisplay();
+            
+            showNotification(
+                'Filtros Limpos!',
+                'Exibindo todos os registros.',
+                'success'
+            );
+        }
+
+        function clearFullHistory() {
+            if (fullHistoryData.length === 0) {
+                showNotification(
+                    'Nenhum Dado!',
+                    'Não há histórico para limpar.',
+                    'warning'
+                );
+                return;
+            }
+
+            // Criar confirmação inline
+            const clearBtn = document.getElementById('clearHistory');
+            const originalText = clearBtn.innerHTML;
+            
+            clearBtn.innerHTML = '⚠️ Confirmar?';
+            clearBtn.classList.remove('bg-red-600', 'hover:bg-red-700');
+            clearBtn.classList.add('bg-yellow-600', 'hover:bg-yellow-700');
+            
+            const confirmClear = function() {
+                fullHistoryData = [];
+                filteredHistoryData = [];
+                document.getElementById('fileInput').value = '';
+                updateFullHistoryDisplay();
+                
+                showNotification(
+                    'Histórico Limpo!',
+                    'Todos os dados foram removidos.',
+                    'success'
+                );
+                
+                // Restaurar botão
+                clearBtn.innerHTML = originalText;
+                clearBtn.classList.remove('bg-yellow-600', 'hover:bg-yellow-700');
+                clearBtn.classList.add('bg-red-600', 'hover:bg-red-700');
+                clearBtn.removeEventListener('click', confirmClear);
+                clearBtn.addEventListener('click', clearFullHistory);
+            };
+            
+            const cancelClear = function() {
+                clearBtn.innerHTML = originalText;
+                clearBtn.classList.remove('bg-yellow-600', 'hover:bg-yellow-700');
+                clearBtn.classList.add('bg-red-600', 'hover:bg-red-700');
+                clearBtn.removeEventListener('click', confirmClear);
+                clearBtn.addEventListener('click', clearFullHistory);
+            };
+            
+            clearBtn.removeEventListener('click', clearFullHistory);
+            clearBtn.addEventListener('click', confirmClear);
+            
+            setTimeout(cancelClear, 3000);
+        }
+
+        // Event listeners para exportação e relatório
+        document.getElementById('exportCSV').addEventListener('click', exportToCSV);
+        document.getElementById('exportJSON').addEventListener('click', exportToJSON);
+        document.getElementById('showHistory').addEventListener('click', showFullHistory);
+        document.getElementById('showReport').addEventListener('click', showVisualReport);
+        document.getElementById('closeReport').addEventListener('click', closeVisualReport);
+        document.getElementById('closeReportBtn').addEventListener('click', closeVisualReport);
+        document.getElementById('shareWhatsApp').addEventListener('click', shareOnWhatsApp);
+
+        // Event listeners para o histórico completo
+        document.getElementById('closeHistory').addEventListener('click', closeFullHistory);
+        document.getElementById('closeHistoryBtn').addEventListener('click', closeFullHistory);
+        document.getElementById('fileInput').addEventListener('change', handleFileUpload);
+        document.getElementById('applyFilters').addEventListener('click', applyHistoryFilters);
+        document.getElementById('clearFilters').addEventListener('click', clearHistoryFilters);
+        document.getElementById('clearHistory').addEventListener('click', clearFullHistory);
+
+        // Fechar modais clicando fora
+        document.getElementById('reportModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeVisualReport();
+            }
+        });
+
+        document.getElementById('historyModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeFullHistory();
+            }
+        });
+
+        // Inicializar visualização
+        updateTankVisual();
+    </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99cf8ed5d5ace2b7',t:'MTc2Mjg4MjY1MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
