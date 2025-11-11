@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="pt-BR">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gerador de QR Code Wi-Fi</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+  </style>
+  
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="min-h-full flex items-center justify-center p-4">
+  <div class="w-full max-w-md">
+   <div id="container" class="rounded-2xl shadow-2xl p-8">
+    <div class="text-center mb-8">
+     <div class="mb-3"><span class="text-5xl">📶</span>
+     </div>
+     <h1 id="pageTitle" class="font-bold mb-2"></h1>
+     <p id="subtitle" class="opacity-80"></p>
+    </div>
+    <form id="wifiForm" class="space-y-6">
+     <div><label for="networkName" id="networkLabel" class="block font-medium mb-2"></label> <input type="text" id="networkName" required class="w-full px-4 py-3 rounded-lg border-2 focus:outline-none focus:ring-2 transition-all" placeholder="MinhaRede">
+     </div>
+     <div><label for="password" id="passwordLabel" class="block font-medium mb-2"></label> <input type="text" id="password" required class="w-full px-4 py-3 rounded-lg border-2 focus:outline-none focus:ring-2 transition-all" placeholder="Senha123">
+     </div><button type="submit" id="generateBtn" class="w-full py-4 rounded-lg font-semibold text-white transition-all transform hover:scale-105 active:scale-95 shadow-lg"></button>
+    </form>
+    <div id="qrResult" class="mt-8 hidden">
+     <div class="rounded-xl p-6 text-center">
+      <div id="qrcode" class="flex justify-center mb-6 bg-white p-4 rounded-lg inline-block"></div>
+      <div class="space-y-3"><button id="whatsappBtn" class="w-full py-3 rounded-lg font-semibold text-white transition-all transform hover:scale-105 active:scale-95 flex items-center justify-center gap-2"> <span class="text-xl">💬</span> <span id="whatsappText"></span> </button> <button id="emailBtn" class="w-full py-3 rounded-lg font-semibold text-white transition-all transform hover:scale-105 active:scale-95 flex items-center justify-center gap-2"> <span class="text-xl">📧</span> <span id="emailText"></span> </button>
+      </div>
+     </div>
+    </div>
+    <div title="Carlos Coelho" class="text-center gap-4 mt-8">
+     <footer id="footerText" class="hover:text-yellow-400 transition-colors">
+      Criado por 🐇 © 2025
+     </footer>
+    </div>
+    <div class="text-center gap-4 p-4"><a href="https://www.linkedin.com/in/carloscoelhogti/" title="Carlos Coelho" target="_blank" rel="noopener noreferrer"> <h2 id="footerRights" class="hover:underline">Direitos Reservados</h2></a>
+     <h3 id="footerVersion">Versão 1.11/2025</h3>
+    </div>
+   </div>
+  </div>
+  <script>
+    const defaultConfig = {
+      background_color: "#6366f1",
+      surface_color: "#ffffff",
+      text_color: "#1f2937",
+      primary_action_color: "#8b5cf6",
+      secondary_action_color: "#10b981",
+      font_family: "system-ui",
+      font_size: 16,
+      page_title: "Gerador de QR Code Wi-Fi",
+      subtitle: "Compartilhe sua rede facilmente",
+      network_label: "Nome da Rede",
+      password_label: "Senha",
+      generate_button: "Gerar QR Code",
+      whatsapp_button: "Compartilhar no WhatsApp",
+      email_button: "Compartilhar por E-mail"
+    };
+
+    let currentQRData = null;
+    let currentNetworkName = null;
+
+    async function onConfigChange(config) {
+      const customFont = config.font_family || defaultConfig.font_family;
+      const baseFontStack = 'system-ui, -apple-system, sans-serif';
+      const baseSize = config.font_size || defaultConfig.font_size;
+      
+      const backgroundColor = config.background_color || defaultConfig.background_color;
+      const surfaceColor = config.surface_color || defaultConfig.surface_color;
+      const textColor = config.text_color || defaultConfig.text_color;
+      const primaryColor = config.primary_action_color || defaultConfig.primary_action_color;
+      const secondaryColor = config.secondary_action_color || defaultConfig.secondary_action_color;
+
+      document.body.style.background = backgroundColor;
+      document.body.style.fontFamily = `${customFont}, ${baseFontStack}`;
+
+      const container = document.getElementById('container');
+      container.style.background = surfaceColor;
+      container.style.color = textColor;
+
+      const pageTitle = document.getElementById('pageTitle');
+      pageTitle.textContent = config.page_title || defaultConfig.page_title;
+      pageTitle.style.fontSize = `${baseSize * 1.75}px`;
+      pageTitle.style.color = textColor;
+
+      const subtitle = document.getElementById('subtitle');
+      subtitle.textContent = config.subtitle || defaultConfig.subtitle;
+      subtitle.style.fontSize = `${baseSize}px`;
+      subtitle.style.color = textColor;
+
+      const networkLabel = document.getElementById('networkLabel');
+      networkLabel.textContent = config.network_label || defaultConfig.network_label;
+      networkLabel.style.fontSize = `${baseSize * 0.9}px`;
+      networkLabel.style.color = textColor;
+
+      const passwordLabel = document.getElementById('passwordLabel');
+      passwordLabel.textContent = config.password_label || defaultConfig.password_label;
+      passwordLabel.style.fontSize = `${baseSize * 0.9}px`;
+      passwordLabel.style.color = textColor;
+
+      const inputs = document.querySelectorAll('input');
+      inputs.forEach(input => {
+        input.style.fontSize = `${baseSize}px`;
+        input.style.borderColor = textColor + '40';
+        input.style.color = textColor;
+      });
+
+      const generateBtn = document.getElementById('generateBtn');
+      generateBtn.textContent = config.generate_button || defaultConfig.generate_button;
+      generateBtn.style.background = primaryColor;
+      generateBtn.style.fontSize = `${baseSize}px`;
+
+      const whatsappBtn = document.getElementById('whatsappBtn');
+      whatsappBtn.style.background = secondaryColor;
+      whatsappBtn.style.fontSize = `${baseSize * 0.9}px`;
+
+      const whatsappText = document.getElementById('whatsappText');
+      whatsappText.textContent = config.whatsapp_button || defaultConfig.whatsapp_button;
+
+      const emailBtn = document.getElementById('emailBtn');
+      emailBtn.style.background = primaryColor;
+      emailBtn.style.fontSize = `${baseSize * 0.9}px`;
+
+      const emailText = document.getElementById('emailText');
+      emailText.textContent = config.email_button || defaultConfig.email_button;
+
+      const qrResult = document.getElementById('qrResult');
+      qrResult.style.background = backgroundColor + '20';
+
+      const footerText = document.getElementById('footerText');
+      footerText.style.color = textColor;
+      footerText.style.fontSize = `${baseSize * 0.9}px`;
+
+      const footerRights = document.getElementById('footerRights');
+      footerRights.style.color = textColor;
+      footerRights.style.fontSize = `${baseSize}px`;
+
+      const footerVersion = document.getElementById('footerVersion');
+      footerVersion.style.color = textColor;
+      footerVersion.style.fontSize = `${baseSize * 0.85}px`;
+    }
+
+    function generateWiFiString(ssid, password) {
+      return `WIFI:T:WPA;S:${ssid};P:${password};;`;
+    }
+
+    function generateQRCode(wifiString) {
+      const qrcodeDiv = document.getElementById('qrcode');
+      qrcodeDiv.innerHTML = '';
+      
+      new QRCode(qrcodeDiv, {
+        text: wifiString,
+        width: 200,
+        height: 200,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H
+      });
+    }
+
+    async function qrCodeToDataURL() {
+      const canvas = document.querySelector('#qrcode canvas');
+      if (canvas) {
+        return canvas.toDataURL('image/png');
+      }
+      return null;
+    }
+
+    document.getElementById('wifiForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const networkName = document.getElementById('networkName').value;
+      const password = document.getElementById('password').value;
+      
+      
+      currentNetworkName = networkName;
+      currentQRData = generateWiFiString(networkName, password);
+      generateQRCode(currentQRData);
+      
+      document.getElementById('qrResult').classList.remove('hidden');
+      document.getElementById('qrResult').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    });
+
+    document.getElementById('whatsappBtn').addEventListener('click', async () => {
+      const dataURL = await qrCodeToDataURL();
+      if (dataURL) {
+        const link = document.createElement('a');
+        link.download = `qrcode-wifi-${currentNetworkName}.png`;
+        link.href = dataURL;
+        link.click();
+        
+        setTimeout(() => {
+          const message = encodeURIComponent(`Conecte-se à rede Wi-Fi "${currentNetworkName}" usando este QR Code!\n\nNome da Rede: ${currentNetworkName}\n\nO QR Code foi baixado para o seu dispositivo.`);
+          window.open(`https://wa.me/?text=${message}`, '_blank', 'noopener,noreferrer');
+        }, 500);
+      }
+    });
+
+    document.getElementById('emailBtn').addEventListener('click', async () => {
+      const dataURL = await qrCodeToDataURL();
+      if (dataURL) {
+        const link = document.createElement('a');
+        link.download = `qrcode-wifi-${currentNetworkName}.png`;
+        link.href = dataURL;
+        link.click();
+        
+        setTimeout(() => {
+          const subject = encodeURIComponent(`QR Code Wi-Fi - ${currentNetworkName}`);
+          const body = encodeURIComponent(`Olá!\n\nUse o QR Code anexo para se conectar à rede Wi-Fi.\n\nNome da Rede: ${currentNetworkName}\n\nBasta escanear o código com a câmera do seu celular!\n\n(O QR Code foi baixado para o seu dispositivo)`);
+          window.open(`mailto:?subject=${subject}&body=${body}`, '_blank', 'noopener,noreferrer');
+        }, 500);
+      }
+    });
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities: (config) => ({
+          recolorables: [
+            {
+              get: () => config.background_color || defaultConfig.background_color,
+              set: (value) => {
+                config.background_color = value;
+                window.elementSdk.setConfig({ background_color: value });
+              }
+            },
+            {
+              get: () => config.surface_color || defaultConfig.surface_color,
+              set: (value) => {
+                config.surface_color = value;
+                window.elementSdk.setConfig({ surface_color: value });
+              }
+            },
+            {
+              get: () => config.text_color || defaultConfig.text_color,
+              set: (value) => {
+                config.text_color = value;
+                window.elementSdk.setConfig({ text_color: value });
+              }
+            },
+            {
+              get: () => config.primary_action_color || defaultConfig.primary_action_color,
+              set: (value) => {
+                config.primary_action_color = value;
+                window.elementSdk.setConfig({ primary_action_color: value });
+              }
+            },
+            {
+              get: () => config.secondary_action_color || defaultConfig.secondary_action_color,
+              set: (value) => {
+                config.secondary_action_color = value;
+                window.elementSdk.setConfig({ secondary_action_color: value });
+              }
+            }
+          ],
+          borderables: [],
+          fontEditable: {
+            get: () => config.font_family || defaultConfig.font_family,
+            set: (value) => {
+              config.font_family = value;
+              window.elementSdk.setConfig({ font_family: value });
+            }
+          },
+          fontSizeable: {
+            get: () => config.font_size || defaultConfig.font_size,
+            set: (value) => {
+              config.font_size = value;
+              window.elementSdk.setConfig({ font_size: value });
+            }
+          }
+        }),
+        mapToEditPanelValues: (config) => new Map([
+          ["page_title", config.page_title || defaultConfig.page_title],
+          ["subtitle", config.subtitle || defaultConfig.subtitle],
+          ["network_label", config.network_label || defaultConfig.network_label],
+          ["password_label", config.password_label || defaultConfig.password_label],
+          ["generate_button", config.generate_button || defaultConfig.generate_button],
+          ["whatsapp_button", config.whatsapp_button || defaultConfig.whatsapp_button],
+          ["email_button", config.email_button || defaultConfig.email_button]
+        ])
+      });
+    }
+
+    onConfigChange(defaultConfig);
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99ce564db6f36d58',t:'MTc2Mjg2OTg0OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
