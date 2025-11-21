@@ -1,0 +1,632 @@
+<!doctype html>
+<html lang="pt-BR">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboar em Tempo Real do Coelho 🐇</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100%;
+      padding: 1rem;
+    }
+
+    html {
+      height: 100%;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+      color: white;
+    }
+
+    h1 {
+      font-size: 1.75rem;
+      margin: 0 0 0.5rem 0;
+      font-weight: 700;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    @media (min-width: 768px) {
+      h1 {
+        font-size: 2.5rem;
+      }
+    }
+
+    .subtitle {
+      font-size: 0.95rem;
+      opacity: 0.95;
+      margin: 0;
+    }
+
+    @media (min-width: 768px) {
+      .subtitle {
+        font-size: 1.1rem;
+      }
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 1rem;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    @media (min-width: 768px) {
+      .card {
+        border-radius: 16px;
+        padding: 1.5rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      }
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.75rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid #f0f0f0;
+    }
+
+    @media (min-width: 768px) {
+      .card-header {
+        margin-bottom: 1rem;
+        padding-bottom: 0.75rem;
+      }
+    }
+
+    .card-icon {
+      font-size: 1.5rem;
+      margin-right: 0.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .card-icon {
+        font-size: 1.8rem;
+        margin-right: 0.75rem;
+      }
+    }
+
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #333;
+      margin: 0;
+    }
+
+    @media (min-width: 768px) {
+      .card-title {
+        font-size: 1.25rem;
+      }
+    }
+
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 0.4rem 0;
+      border-bottom: 1px solid #f5f5f5;
+      gap: 0.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .info-row {
+        padding: 0.5rem 0;
+      }
+    }
+
+    .info-row:last-child {
+      border-bottom: none;
+    }
+
+    .info-label {
+      font-weight: 500;
+      color: #666;
+      font-size: 0.8rem;
+      flex-shrink: 0;
+    }
+
+    @media (min-width: 768px) {
+      .info-label {
+        font-size: 0.9rem;
+      }
+    }
+
+    .info-value {
+      font-weight: 600;
+      color: #333;
+      text-align: right;
+      font-size: 0.8rem;
+      word-break: break-word;
+      flex: 1;
+    }
+
+    @media (min-width: 768px) {
+      .info-value {
+        font-size: 0.9rem;
+      }
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      background: #667eea;
+      color: white;
+    }
+
+    .refresh-btn {
+      background: white;
+      color: #667eea;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 12px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+      display: block;
+      margin: 0 auto 1.5rem auto;
+      width: 100%;
+      max-width: 280px;
+    }
+
+    @media (min-width: 768px) {
+      .refresh-btn {
+        padding: 0.75rem 2rem;
+        font-size: 1rem;
+        margin: 0 auto 2rem auto;
+        width: auto;
+        max-width: none;
+      }
+    }
+
+    .refresh-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+      background: #f8f9ff;
+    }
+
+    .refresh-btn:active {
+      transform: translateY(0);
+    }
+
+    /* Footer Styles */
+    .footer-container {
+      text-align: center;
+      padding: 0.75rem 0.5rem;
+      color: white;
+    }
+
+    @media (min-width: 768px) {
+      .footer-container {
+        padding: 1rem;
+      }
+    }
+
+    .footer-container footer {
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 0.875rem;
+      margin-bottom: 0.5rem;
+      cursor: default;
+      transition: color 0.3s ease;
+    }
+
+    @media (min-width: 768px) {
+      .footer-container footer {
+        font-size: 1rem;
+      }
+    }
+
+    .footer-container footer:hover {
+      color: #fbbf24;
+    }
+
+    .footer-links {
+      text-align: center;
+      margin-top: 0.5rem;
+    }
+
+    .footer-links a {
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .footer-links h4 {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.8);
+      margin: 0.5rem 0;
+      transition: color 0.3s ease;
+    }
+
+    @media (min-width: 768px) {
+      .footer-links h4 {
+        font-size: 0.875rem;
+      }
+    }
+
+    .footer-links a:hover h4 {
+      color: #fbbf24;
+    }
+
+    .footer-links h5 {
+      font-size: 0.7rem;
+      color: rgba(255, 255, 255, 0.7);
+      margin: 0.5rem 0 0 0;
+      font-weight: 400;
+    }
+
+    @media (min-width: 768px) {
+      .footer-links h5 {
+        font-size: 0.75rem;
+      }
+    }
+
+    .container {
+      padding-bottom: 1rem;
+    }
+  </style>
+  
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body>
+  <main class="container">
+   <header>
+    <h1 id="main-title">Informações do Navegador</h1>
+    <p class="subtitle" id="subtitle">Dashboard em tempo real do seu sistema</p>
+   </header>
+   <div class="grid">
+    <section class="card">
+     <div class="card-header"><span class="card-icon">🌐</span>
+      <h2 class="card-title">Navegador</h2>
+     </div>
+     <div id="browser-info"></div>
+    </section>
+    <section class="card">
+     <div class="card-header"><span class="card-icon">💻</span>
+      <h2 class="card-title">Sistema Operacional</h2>
+     </div>
+     <div id="os-info"></div>
+    </section>
+    <section class="card">
+     <div class="card-header"><span class="card-icon">📱</span>
+      <h2 class="card-title">Dispositivo</h2>
+     </div>
+     <div id="device-info"></div>
+    </section>
+    <section class="card">
+     <div class="card-header"><span class="card-icon">🖥️</span>
+      <h2 class="card-title">Tela</h2>
+     </div>
+     <div id="screen-info"></div>
+    </section>
+    <section class="card">
+     <div class="card-header"><span class="card-icon">🌍</span>
+      <h2 class="card-title">Rede</h2>
+     </div>
+     <div id="network-info"></div>
+    </section>
+    <section class="card">
+     <div class="card-header"><span class="card-icon">⚙️</span>
+      <h2 class="card-title">Recursos</h2>
+     </div>
+     <div id="resources-info"></div>
+    </section>
+   </div><button class="refresh-btn" onclick="updateAllInfo()">🔄 Atualizar Informações</button> <!-- Footer -->
+   <div title="Carlos Coelho" class="footer-container">
+    <footer>
+     Criado por 🐇 © 2025
+    </footer>
+   </div>
+   <div class="footer-links"><a href="https://www.linkedin.com/in/carloscoelhogti/" title="Carlos Coelho" target="_blank" rel="noopener noreferrer"> <h4>Direitos Reservados</h4></a>
+    <h5>Versão 1.11/2025</h5>
+   </div>
+  </main>
+  <script>
+    const defaultConfig = {
+      main_title: "Informações do Navegador",
+      subtitle: "Dashboard em tempo real do seu sistema",
+      background_color: "#667eea",
+      card_color: "#ffffff",
+      text_color: "#333333",
+      accent_color: "#667eea",
+      font_family: "system-ui"
+    };
+
+    function createInfoRow(label, value) {
+      return `
+        <div class="info-row">
+          <span class="info-label">${label}</span>
+          <span class="info-value">${value}</span>
+        </div>
+      `;
+    }
+
+    function getBrowserInfo() {
+      const ua = navigator.userAgent;
+      let browserName = 'Desconhecido';
+      let browserVersion = 'N/A';
+
+      if (ua.indexOf('Firefox') > -1) {
+        browserName = 'Firefox';
+        browserVersion = ua.match(/Firefox\/(\d+\.\d+)/)?.[1] || 'N/A';
+      } else if (ua.indexOf('Opera') > -1 || ua.indexOf('OPR') > -1) {
+        browserName = 'Opera';
+        browserVersion = ua.match(/(?:Opera|OPR)\/(\d+\.\d+)/)?.[1] || 'N/A';
+      } else if (ua.indexOf('Edg') > -1) {
+        browserName = 'Edge';
+        browserVersion = ua.match(/Edg\/(\d+\.\d+)/)?.[1] || 'N/A';
+      } else if (ua.indexOf('Chrome') > -1) {
+        browserName = 'Chrome';
+        browserVersion = ua.match(/Chrome\/(\d+\.\d+)/)?.[1] || 'N/A';
+      } else if (ua.indexOf('Safari') > -1) {
+        browserName = 'Safari';
+        browserVersion = ua.match(/Version\/(\d+\.\d+)/)?.[1] || 'N/A';
+      }
+
+      return {
+        name: browserName,
+        version: browserVersion,
+        language: navigator.language,
+        cookiesEnabled: navigator.cookieEnabled ? 'Sim' : 'Não',
+        onlineStatus: navigator.onLine ? '<span class="badge">Online</span>' : '<span class="badge" style="background: #e74c3c">Offline</span>'
+      };
+    }
+
+    function getOSInfo() {
+      const ua = navigator.userAgent;
+      let osName = 'Desconhecido';
+      
+      if (ua.indexOf('Win') > -1) osName = 'Windows';
+      else if (ua.indexOf('Mac') > -1) osName = 'macOS';
+      else if (ua.indexOf('Linux') > -1) osName = 'Linux';
+      else if (ua.indexOf('Android') > -1) osName = 'Android';
+      else if (ua.indexOf('iOS') > -1 || ua.indexOf('iPhone') > -1 || ua.indexOf('iPad') > -1) osName = 'iOS';
+
+      return {
+        name: osName,
+        platform: navigator.platform,
+        userAgent: navigator.userAgent
+      };
+    }
+
+    function getDeviceInfo() {
+      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      const isTablet = /iPad|Android/i.test(navigator.userAgent) && !/Mobile/i.test(navigator.userAgent);
+      
+      let deviceType = 'Desktop';
+      if (isTablet) deviceType = 'Tablet';
+      else if (isMobile) deviceType = 'Mobile';
+
+      return {
+        type: deviceType,
+        cores: navigator.hardwareConcurrency || 'N/A',
+        memory: navigator.deviceMemory ? `${navigator.deviceMemory} GB` : 'N/A',
+        touchSupport: navigator.maxTouchPoints > 0 ? 'Sim' : 'Não'
+      };
+    }
+
+    function getScreenInfo() {
+      return {
+        resolution: `${screen.width} x ${screen.height}`,
+        availableSize: `${screen.availWidth} x ${screen.availHeight}`,
+        colorDepth: `${screen.colorDepth} bits`,
+        pixelRatio: window.devicePixelRatio || 1,
+        orientation: screen.orientation?.type || 'N/A'
+      };
+    }
+
+    function getNetworkInfo() {
+      const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+      
+      return {
+        type: connection?.effectiveType || 'N/A',
+        downlink: connection?.downlink ? `${connection.downlink} Mbps` : 'N/A',
+        rtt: connection?.rtt ? `${connection.rtt} ms` : 'N/A',
+        saveData: connection?.saveData ? 'Ativado' : 'Desativado'
+      };
+    }
+
+    function getResourcesInfo() {
+      const performance = window.performance || {};
+      const memory = performance.memory || {};
+      
+      return {
+        jsHeapSize: memory.usedJSHeapSize ? `${(memory.usedJSHeapSize / 1048576).toFixed(2)} MB` : 'N/A',
+        jsHeapLimit: memory.jsHeapSizeLimit ? `${(memory.jsHeapSizeLimit / 1048576).toFixed(2)} MB` : 'N/A',
+        pageLoadTime: performance.timing ? `${((performance.timing.loadEventEnd - performance.timing.navigationStart) / 1000).toFixed(2)} s` : 'N/A',
+        timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone
+      };
+    }
+
+    function updateAllInfo() {
+      const browser = getBrowserInfo();
+      document.getElementById('browser-info').innerHTML = 
+        createInfoRow('Nome', browser.name) +
+        createInfoRow('Versão', browser.version) +
+        createInfoRow('Idioma', browser.language) +
+        createInfoRow('Cookies', browser.cookiesEnabled) +
+        createInfoRow('Status', browser.onlineStatus);
+
+      const os = getOSInfo();
+      document.getElementById('os-info').innerHTML = 
+        createInfoRow('Sistema', os.name) +
+        createInfoRow('Plataforma', os.platform);
+
+      const device = getDeviceInfo();
+      document.getElementById('device-info').innerHTML = 
+        createInfoRow('Tipo', device.type) +
+        createInfoRow('CPU Cores', device.cores) +
+        createInfoRow('Memória RAM', device.memory) +
+        createInfoRow('Touch', device.touchSupport);
+
+      const screen = getScreenInfo();
+      document.getElementById('screen-info').innerHTML = 
+        createInfoRow('Resolução', screen.resolution) +
+        createInfoRow('Área Útil', screen.availableSize) +
+        createInfoRow('Profundidade de Cor', screen.colorDepth) +
+        createInfoRow('Pixel Ratio', screen.pixelRatio) +
+        createInfoRow('Orientação', screen.orientation);
+
+      const network = getNetworkInfo();
+      document.getElementById('network-info').innerHTML = 
+        createInfoRow('Tipo de Conexão', network.type) +
+        createInfoRow('Velocidade', network.downlink) +
+        createInfoRow('Latência', network.rtt) +
+        createInfoRow('Economia de Dados', network.saveData);
+
+      const resources = getResourcesInfo();
+      document.getElementById('resources-info').innerHTML = 
+        createInfoRow('Heap JS Usado', resources.jsHeapSize) +
+        createInfoRow('Limite Heap JS', resources.jsHeapLimit) +
+        createInfoRow('Tempo de Carga', resources.pageLoadTime) +
+        createInfoRow('Fuso Horário', resources.timeZone);
+    }
+
+    async function onConfigChange(config) {
+      document.getElementById('main-title').textContent = config.main_title || defaultConfig.main_title;
+      document.getElementById('subtitle').textContent = config.subtitle || defaultConfig.subtitle;
+      
+      const customFont = config.font_family || defaultConfig.font_family;
+      const baseFontStack = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif';
+      document.body.style.fontFamily = `${customFont}, ${baseFontStack}`;
+      
+      const bgColor = config.background_color || defaultConfig.background_color;
+      document.body.style.background = `linear-gradient(135deg, ${bgColor} 0%, ${adjustColor(bgColor, -20)} 100%)`;
+      
+      const cardColor = config.card_color || defaultConfig.card_color;
+      document.querySelectorAll('.card').forEach(card => {
+        card.style.backgroundColor = cardColor;
+      });
+      
+      const textColor = config.text_color || defaultConfig.text_color;
+      document.querySelectorAll('.card-title, .info-value').forEach(el => {
+        el.style.color = textColor;
+      });
+      
+      const accentColor = config.accent_color || defaultConfig.accent_color;
+      document.querySelectorAll('.badge').forEach(badge => {
+        badge.style.backgroundColor = accentColor;
+      });
+      document.querySelector('.refresh-btn').style.color = accentColor;
+    }
+
+    function adjustColor(color, percent) {
+      const num = parseInt(color.replace("#",""), 16);
+      const amt = Math.round(2.55 * percent);
+      const R = (num >> 16) + amt;
+      const G = (num >> 8 & 0x00FF) + amt;
+      const B = (num & 0x0000FF) + amt;
+      return "#" + (0x1000000 + (R<255?R<1?0:R:255)*0x10000 +
+        (G<255?G<1?0:G:255)*0x100 + (B<255?B<1?0:B:255))
+        .toString(16).slice(1);
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities: (config) => ({
+          recolorables: [
+            {
+              get: () => config.background_color || defaultConfig.background_color,
+              set: (value) => {
+                config.background_color = value;
+                window.elementSdk.setConfig({ background_color: value });
+              }
+            },
+            {
+              get: () => config.card_color || defaultConfig.card_color,
+              set: (value) => {
+                config.card_color = value;
+                window.elementSdk.setConfig({ card_color: value });
+              }
+            },
+            {
+              get: () => config.text_color || defaultConfig.text_color,
+              set: (value) => {
+                config.text_color = value;
+                window.elementSdk.setConfig({ text_color: value });
+              }
+            },
+            {
+              get: () => config.accent_color || defaultConfig.accent_color,
+              set: (value) => {
+                config.accent_color = value;
+                window.elementSdk.setConfig({ accent_color: value });
+              }
+            }
+          ],
+          borderables: [],
+          fontEditable: {
+            get: () => config.font_family || defaultConfig.font_family,
+            set: (value) => {
+              config.font_family = value;
+              window.elementSdk.setConfig({ font_family: value });
+            }
+          },
+          fontSizeable: undefined
+        }),
+        mapToEditPanelValues: (config) => new Map([
+          ["main_title", config.main_title || defaultConfig.main_title],
+          ["subtitle", config.subtitle || defaultConfig.subtitle]
+        ])
+      });
+    }
+
+    // Atualizar informações ao carregar a página
+    updateAllInfo();
+
+    // Atualizar status online/offline em tempo real
+    window.addEventListener('online', updateAllInfo);
+    window.addEventListener('offline', updateAllInfo);
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9a230e4666ad2a36',t:'MTc2Mzc1ODE4OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
