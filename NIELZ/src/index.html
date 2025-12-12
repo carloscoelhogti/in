@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="pt-BR" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Administrativo | Financeiro | Estruturação de Processos | Custos</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500&amp;display=swap" rel="stylesheet">
+  <style>
+    body {
+      box-sizing: border-box;
+      font-family: 'Archivo', sans-serif;
+    }
+    
+    * {
+      box-sizing: border-box;
+    }
+
+    .font-title {
+      font-family: 'Archivo', sans-serif;
+      font-weight: 500;
+    }
+
+    .font-heading {
+      font-family: 'Archivo', sans-serif;
+      font-weight: 300;
+    }
+
+    .font-body {
+      font-family: 'Archivo', sans-serif;
+      font-weight: 400;
+    }
+
+    .nav-link {
+      transition: color 0.3s ease;
+    }
+
+    .nav-link:hover {
+      color: #4F46E5;
+    }
+
+    .card-overlay {
+      position: relative;
+      z-index: 10;
+    }
+
+    .card-image {
+      position: relative;
+      z-index: 1;
+    }
+
+    .image-placeholder {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 14px;
+      text-align: center;
+      padding: 20px;
+    }
+  </style>
+  
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full">
+  <div id="app" class="h-full w-full flex flex-col bg-gray-50"><!-- Header -->
+   <header class="bg-white shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div class="flex items-center gap-3"><span id="welcome-text" class="font-title text-xl text-gray-800">Bem-vindo a NIELZ Co.</span>
+       <div class="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">
+        <img src="./assets/logo.png" alt="">
+       </div>
+      </div>
+      <nav class="flex flex-wrap gap-6"><a href="./index.html" class="nav-link font-body text-gray-700">Inicio</a> <a href="./solucoes.html" class="nav-link font-body text-gray-700">Soluções</a> <a href="./produtos.html" class="nav-link font-body text-gray-700">Produtos</a> <a href="./sobre.html" class="nav-link font-body text-gray-700">Sobre</a> <a href="./contato.html" class="nav-link font-body text-gray-700">Contato</a>
+      </nav>
+     </div>
+    </div>
+   </header><!-- Main Content -->
+   <main class="flex-1 w-full overflow-auto">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+     <div class="flex flex-col gap-16"><!-- Card Set 1 -->
+      <div class="relative w-full">
+       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center"><!-- Image Card -->
+        <div class="card-image">
+         <div class="rounded-2xl overflow-hidden shadow-lg h-80 image-placeholder">
+          <img src="./assets/simplicidade.png" alt="" class="">
+         </div>
+        </div><!-- Text Card Overlay -->
+        <div class="card-overlay">
+         <div class="bg-white rounded-2xl shadow-xl p-8 lg:p-10">
+          <h2 id="card-title-1" class="font-heading text-3xl lg:text-4xl text-gray-900 mb-4 font-bold">Simplificamos. Otimizamos. Crescemos</h2>
+          <p id="card-description-1" class="font-body text-gray-600 text-base leading-relaxed">Ajudamos empresas a otimizar processos, fortalecer a gestão administrativa, financeira e estruturar operações com estratégia e eficiência.</p>
+         </div>
+        </div>
+       </div>
+      </div><!-- Card Set 2 -->
+      <div class="relative w-full">
+       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center"><!-- Text Card Overlay (reversed order on desktop) -->
+        <div class="card-overlay lg:order-1 order-2">
+         <div class="bg-white rounded-2xl shadow-xl p-8 lg:p-10">
+          <h2 id="card-title-2" class="font-heading text-3xl lg:text-4xl text-gray-900 mb-4 font-bold">Simplificamos. Otimizamos. Crescemos.</h2>
+          <p id="card-description-2" class="font-body text-gray-600 text-base leading-relaxed">Ajudamos empresas a otimizar processos, fortalecer a gestão administrativa, financeira e estruturar operações com estratégia e eficiência.</p>
+         </div>
+        </div><!-- Image Card -->
+        <div class="card-image lg:order-2 order-1">
+         <div class="rounded-2xl overflow-hidden shadow-lg h-80 image-placeholder">
+          <img src="./assets/processos.png" alt="">
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </main><!-- Footer -->
+   <footer class="bg-white border-t border-gray-200 mt-auto">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+     <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-4 text-center md:text-left"><span id="company-name" class="font-body text-gray-700">NIELZ Gestão e Consultoria Ltda.</span> <span id="company-address" class="font-body text-gray-600">Lago Norte, Brasília-DF/Brasil</span> <span id="company-cnpj" class="font-body text-gray-600">CNPJ: 52.506.418/0001-79</span>
+     </div>
+    </div>
+   </footer>
+  </div>
+  <script>
+    const defaultConfig = {
+      welcome_text: "Bem-vindo a NIELZ Co.",
+      card_title_1: "Simplificamos. Otimizamos. Crescemos",
+      card_description_1: "Ajudamos empresas a otimizar processos, fortalecer a gestão administrativa, financeira e estruturar operações com estratégia e eficiência.",
+      card_title_2: "Simplificamos. Otimizamos. Crescemos.",
+      card_description_2: "Ajudamos empresas a otimizar processos, fortalecer a gestão administrativa, financeira e estruturar operações com estratégia e eficiência.",
+      company_name: "NIELZ Gestão e Consultoria Ltda.",
+      company_address: "Lago Norte, Brasília-DF/Brasil",
+      company_cnpj: "CNPJ: 52.506.418/0001-79",
+      primary_color: "#4F46E5",
+      background_color: "#F9FAFB",
+      surface_color: "#FFFFFF",
+      text_color: "#1F2937",
+      secondary_action_color: "#6366F1"
+    };
+
+    async function onConfigChange(config) {
+      document.getElementById('welcome-text').textContent = config.welcome_text || defaultConfig.welcome_text;
+      document.getElementById('card-title-1').textContent = config.card_title_1 || defaultConfig.card_title_1;
+      document.getElementById('card-description-1').textContent = config.card_description_1 || defaultConfig.card_description_1;
+      document.getElementById('card-title-2').textContent = config.card_title_2 || defaultConfig.card_title_2;
+      document.getElementById('card-description-2').textContent = config.card_description_2 || defaultConfig.card_description_2;
+      document.getElementById('company-name').textContent = config.company_name || defaultConfig.company_name;
+      document.getElementById('company-address').textContent = config.company_address || defaultConfig.company_address;
+      document.getElementById('company-cnpj').textContent = config.company_cnpj || defaultConfig.company_cnpj;
+
+      // Apply colors
+      const primaryColor = config.primary_color || defaultConfig.primary_color;
+      const backgroundColor = config.background_color || defaultConfig.background_color;
+      const surfaceColor = config.surface_color || defaultConfig.surface_color;
+      const textColor = config.text_color || defaultConfig.text_color;
+      const secondaryActionColor = config.secondary_action_color || defaultConfig.secondary_action_color;
+
+      document.getElementById('app').style.backgroundColor = backgroundColor;
+      
+      const headers = document.querySelectorAll('header');
+      headers.forEach(header => header.style.backgroundColor = surfaceColor);
+      
+      const footers = document.querySelectorAll('footer');
+      footers.forEach(footer => footer.style.backgroundColor = surfaceColor);
+      
+      const cards = document.querySelectorAll('.card-overlay > div');
+      cards.forEach(card => card.style.backgroundColor = surfaceColor);
+      
+      const textElements = document.querySelectorAll('.text-gray-900');
+      textElements.forEach(el => el.style.color = textColor);
+      
+      const navLinks = document.querySelectorAll('.nav-link');
+      navLinks.forEach(link => {
+        link.style.color = secondaryActionColor;
+      });
+    }
+
+    function mapToCapabilities(config) {
+      return {
+        recolorables: [
+          {
+            get: () => config.primary_color || defaultConfig.primary_color,
+            set: (value) => {
+              if (window.elementSdk) {
+                window.elementSdk.setConfig({ primary_color: value });
+              }
+            }
+          },
+          {
+            get: () => config.background_color || defaultConfig.background_color,
+            set: (value) => {
+              if (window.elementSdk) {
+                window.elementSdk.setConfig({ background_color: value });
+              }
+            }
+          },
+          {
+            get: () => config.surface_color || defaultConfig.surface_color,
+            set: (value) => {
+              if (window.elementSdk) {
+                window.elementSdk.setConfig({ surface_color: value });
+              }
+            }
+          },
+          {
+            get: () => config.text_color || defaultConfig.text_color,
+            set: (value) => {
+              if (window.elementSdk) {
+                window.elementSdk.setConfig({ text_color: value });
+              }
+            }
+          },
+          {
+            get: () => config.secondary_action_color || defaultConfig.secondary_action_color,
+            set: (value) => {
+              if (window.elementSdk) {
+                window.elementSdk.setConfig({ secondary_action_color: value });
+              }
+            }
+          }
+        ],
+        borderables: [],
+        fontEditable: undefined,
+        fontSizeable: undefined
+      };
+    }
+
+    function mapToEditPanelValues(config) {
+      return new Map([
+        ["welcome_text", config.welcome_text || defaultConfig.welcome_text],
+        ["card_title_1", config.card_title_1 || defaultConfig.card_title_1],
+        ["card_description_1", config.card_description_1 || defaultConfig.card_description_1],
+        ["card_title_2", config.card_title_2 || defaultConfig.card_title_2],
+        ["card_description_2", config.card_description_2 || defaultConfig.card_description_2],
+        ["company_name", config.company_name || defaultConfig.company_name],
+        ["company_address", config.company_address || defaultConfig.company_address],
+        ["company_cnpj", config.company_cnpj || defaultConfig.company_cnpj]
+      ]);
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities,
+        mapToEditPanelValues
+      });
+    }
+
+    // Smooth scroll for navigation
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = this.getAttribute('href');
+        // In a single page, we just scroll to top for all links
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    });
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ab8f87147262754',t:'MTc2NTMzMDE1OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
