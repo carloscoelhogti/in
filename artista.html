@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Best - Projeto Next.js</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            box-sizing: border-box;
+        }
+        
+        .gradient-bg {
+            background: oklch(44.6% 0.03 256.802);
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-10px) scale(1.02);
+        }
+        
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .bounce-in {
+            animation: bounceIn 1s ease-out;
+        }
+        
+        @keyframes bounceIn {
+            0% { transform: scale(0.3); opacity: 0; }
+            50% { transform: scale(1.05); }
+            70% { transform: scale(0.9); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .slide-in {
+            animation: slideIn 0.8s ease-out forwards;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(-100px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        .vinyl-spin {
+            animation: vinylRotate 3s linear infinite;
+        }
+        
+        @keyframes vinylRotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .progress-bar {
+            animation: progressMove 7.5s linear infinite;
+        }
+        
+        @keyframes progressMove {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        // Header Component
+        const Header = () => {
+            return (
+                <header className="text-center py-6 px-4">
+                    <h1 className="text-6xl md:text-8xl font-bold text-white mb-4 bounce-in" style={{textShadow: '3px 3px 6px rgba(0,0,0,0.3)'}}>
+                        THE BEST
+                    </h1>
+                    <p className="text-xl md:text-2xl text-white font-medium slide-in" style={{textShadow: '2px 2px 4px rgba(0,0,0,0.3)'}}>
+                        🎵 Artista Musical 🎵
+                    </p>
+                    
+                    <div className="mt-4 flex justify-center">
+                        <div className="w-32 h-32 md:w-40 md:h-40 rounded-full bg-gradient-to-br from-pink-500 via-purple-500 to-blue-500 p-1 shadow-2xl bounce-in">
+                            <div className="w-full h-full rounded-full bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center overflow-hidden">
+                                <div className="w-full h-full bg-gradient-to-br from-pink-400 to-purple-600 rounded-full flex items-center justify-center">
+                                    <span className="text-4xl md:text-5xl">🎤</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+            );
+        };
+
+        // About Card Component
+        const AboutCard = ({ onShowAbout }) => {
+            return (
+                <div className="rounded-2xl shadow-2xl p-8 card-hover bg-white relative overflow-hidden">
+                    <svg className="absolute inset-0 w-full h-full opacity-10" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <pattern id="musicPattern1" patternUnits="userSpaceOnUse" width="40" height="40">
+                                <circle cx="20" cy="20" r="3" fill="#ff6b6b"/>
+                                <path d="M15 15 Q20 10 25 15 Q20 20 15 15" fill="#4ecdc4"/>
+                            </pattern>
+                        </defs>
+                        <rect width="100%" height="100%" fill="url(#musicPattern1)"/>
+                        <path d="M50 150 Q100 100 150 150 Q200 200 250 150 Q300 100 350 150" stroke="#ff6b6b" strokeWidth="3" fill="none" opacity="0.3"/>
+                        <circle cx="100" cy="120" r="15" fill="#4ecdc4" opacity="0.2"/>
+                        <circle cx="200" cy="180" r="20" fill="#45b7d1" opacity="0.2"/>
+                        <circle cx="300" cy="140" r="12" fill="#f9ca24" opacity="0.2"/>
+                    </svg>
+                    <div className="relative z-10">
+                        <div className="text-center mb-6">
+                            <div className="w-16 h-16 bg-gradient-to-r from-pink-500 to-red-500 rounded-full mx-auto mb-4 flex items-center justify-center">
+                                <span className="text-2xl">👤</span>
+                            </div>
+                            <h2 className="text-2xl font-bold text-gray-800 mb-4">Sobre Mim</h2>
+                        </div>
+                        <p className="text-gray-600 leading-relaxed">
+                            Sou um artista apaixonado por criar música que toca o coração das pessoas. Minha jornada musical começou há anos e continuo evoluindo a cada dia, sempre buscando novos sons e experiências.
+                        </p>
+                        <button 
+                            onClick={onShowAbout}
+                            className="mt-6 w-full bg-gradient-to-r from-pink-500 to-red-500 text-white py-3 px-6 rounded-lg font-semibold hover:from-pink-600 hover:to-red-600 transition-all duration-300 transform hover:scale-105"
+                        >
+                            Saiba Mais
+                        </button>
+                    </div>
+                </div>
+            );
+        };
+
+        // Social Networks Card Component
+        const SocialCard = () => {
+            const socialLinks = [
+                { name: '📱 Instagram', gradient: 'from-pink-500 to-red-500', hoverGradient: 'hover:from-pink-600 hover:to-red-600' },
+                { name: '🐦 Twitter', gradient: 'from-blue-400 to-blue-600', hoverGradient: 'hover:from-blue-500 hover:to-blue-700' },
+                { name: '🎵 Spotify', gradient: 'from-green-400 to-green-600', hoverGradient: 'hover:from-green-500 hover:to-green-700' },
+                { name: '📺 YouTube', gradient: 'from-red-500 to-red-600', hoverGradient: 'hover:from-red-600 hover:to-red-700' }
+            ];
+
+            return (
+                <div className="rounded-2xl shadow-2xl p-8 card-hover bg-white relative overflow-hidden">
+                    <svg className="absolute inset-0 w-full h-full opacity-10" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <pattern id="networkPattern" patternUnits="userSpaceOnUse" width="60" height="60">
+                                <circle cx="30" cy="30" r="4" fill="#4ecdc4"/>
+                                <line x1="30" y1="30" x2="50" y2="10" stroke="#45b7d1" strokeWidth="2"/>
+                                <line x1="30" y1="30" x2="10" y2="50" stroke="#45b7d1" strokeWidth="2"/>
+                            </pattern>
+                        </defs>
+                        <rect width="100%" height="100%" fill="url(#networkPattern)"/>
+                    </svg>
+                    <div className="relative z-10">
+                        <div className="text-center mb-6">
+                            <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full mx-auto mb-4 flex items-center justify-center">
+                                <span className="text-2xl">🌐</span>
+                            </div>
+                            <h2 className="text-2xl font-bold text-gray-800 mb-4">Minhas Redes</h2>
+                        </div>
+                        <div className="space-y-4">
+                            {socialLinks.map((link, index) => (
+                                <a 
+                                    key={index}
+                                    href="#" 
+                                    className={`flex items-center justify-center bg-gradient-to-r ${link.gradient} text-white py-3 px-6 rounded-lg font-semibold ${link.hoverGradient} transition-all duration-300 transform hover:scale-105`}
+                                >
+                                    {link.name}
+                                </a>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // Albums Card Component
+        const AlbumsCard = ({ onShowAlbums }) => {
+            const albums = [
+                { name: '🎵 Primeiro Álbum', year: '2023', gradient: 'from-yellow-100 to-orange-100', border: 'border-yellow-500' },
+                { name: '🎵 Segundo Álbum', year: '2024', gradient: 'from-pink-100 to-red-100', border: 'border-pink-500' }
+            ];
+
+            return (
+                <div className="rounded-2xl shadow-2xl p-8 card-hover bg-white relative overflow-hidden">
+                    <svg className="absolute inset-0 w-full h-full opacity-10" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <pattern id="albumPattern" patternUnits="userSpaceOnUse" width="80" height="80">
+                                <circle cx="40" cy="40" r="30" fill="none" stroke="#f9ca24" strokeWidth="3"/>
+                                <circle cx="40" cy="40" r="15" fill="none" stroke="#ff6b6b" strokeWidth="2"/>
+                                <circle cx="40" cy="40" r="5" fill="#4ecdc4"/>
+                            </pattern>
+                        </defs>
+                        <rect width="100%" height="100%" fill="url(#albumPattern)"/>
+                    </svg>
+                    <div className="relative z-10">
+                        <div className="text-center mb-6">
+                            <div className="w-16 h-16 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-full mx-auto mb-4 flex items-center justify-center">
+                                <span className="text-2xl">🎼</span>
+                            </div>
+                            <h2 className="text-2xl font-bold text-gray-800 mb-4">Meus Álbuns</h2>
+                        </div>
+                        <div className="space-y-4">
+                            {albums.map((album, index) => (
+                                <div key={index} className={`bg-gradient-to-r ${album.gradient} p-4 rounded-lg border-l-4 ${album.border}`}>
+                                    <h3 className="font-bold text-gray-800">{album.name}</h3>
+                                    <p className="text-gray-600 text-sm">{album.year}</p>
+                                </div>
+                            ))}
+                        </div>
+                        <button 
+                            onClick={onShowAlbums}
+                            className="mt-6 w-full bg-gradient-to-r from-yellow-500 to-orange-500 text-white py-3 px-6 rounded-lg font-semibold hover:from-yellow-600 hover:to-orange-600 transition-all duration-300 transform hover:scale-105"
+                        >
+                            Ver Todos
+                        </button>
+                    </div>
+                </div>
+            );
+        };
+
+        // Vinyl Player Component
+        const VinylPlayer = () => {
+            const playOnSpotify = () => {
+                const artistName = 'The Best';
+                const spotifySearchUrl = `https://open.spotify.com/search/${encodeURIComponent(artistName)}`;
+                window.open(spotifySearchUrl, '_blank', 'noopener,noreferrer');
+            };
+
+            const openSpotifyProfile = () => {
+                const artistName = 'The Best';
+                const spotifyUrl = `https://open.spotify.com/search/${encodeURIComponent(artistName)}`;
+                window.open(spotifyUrl, '_blank', 'noopener,noreferrer');
+            };
+
+            return (
+                <div className="rounded-2xl shadow-2xl p-8 mb-16 card-hover bg-white relative overflow-hidden">
+                    <div className="text-center mb-8">
+                        <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full mx-auto mb-4 flex items-center justify-center pulse-animation">
+                            <span className="text-2xl">🎵</span>
+                        </div>
+                        <h2 className="text-3xl font-bold text-gray-800 mb-4">Agora Tocando</h2>
+                        <p className="text-gray-600">Minha música favorita está rolando!</p>
+                    </div>
+                    
+                    <div className="flex justify-center items-center">
+                        <div className="relative">
+                            <div className="w-80 h-80 bg-gradient-to-br from-gray-800 to-gray-900 rounded-full shadow-2xl flex items-center justify-center relative">
+                                <div className="w-64 h-64 bg-black rounded-full relative vinyl-spin shadow-lg">
+                                    <div className="absolute inset-4 border-2 border-gray-700 rounded-full"></div>
+                                    <div className="absolute inset-8 border border-gray-600 rounded-full"></div>
+                                    <div className="absolute inset-12 border border-gray-600 rounded-full"></div>
+                                    <div className="absolute inset-16 border border-gray-600 rounded-full"></div>
+                                    
+                                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-20 h-20 bg-gradient-to-br from-red-600 to-red-800 rounded-full flex items-center justify-center shadow-inner">
+                                        <div className="w-2 h-2 bg-black rounded-full"></div>
+                                    </div>
+                                    
+                                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white text-xs font-bold text-center">
+                                        <div className="mt-6 text-yellow-300">THE BEST</div>
+                                    </div>
+                                </div>
+                                
+                                <div className="absolute top-8 right-8 w-32 h-2 bg-gradient-to-r from-gray-600 to-gray-400 rounded-full origin-right transform rotate-45 shadow-lg">
+                                    <div className="absolute right-0 top-1/2 transform -translate-y-1/2 w-4 h-4 bg-gray-300 rounded-full shadow-md"></div>
+                                    <div className="absolute right-2 top-1/2 transform -translate-y-1/2 w-1 h-6 bg-gray-500 rounded-full"></div>
+                                </div>
+                                
+                                <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-4">
+                                    <button 
+                                        onClick={playOnSpotify}
+                                        className="w-8 h-8 bg-gradient-to-br from-green-500 to-green-600 rounded-full shadow-lg hover:scale-110 transition-transform duration-200 flex items-center justify-center" 
+                                        title="Tocar no Spotify"
+                                    >
+                                        <span className="text-white text-xs">▶</span>
+                                    </button>
+                                    <button 
+                                        onClick={openSpotifyProfile}
+                                        className="w-8 h-8 bg-gradient-to-br from-green-400 to-green-500 rounded-full shadow-lg hover:scale-110 transition-transform duration-200 flex items-center justify-center" 
+                                        title="Ver Perfil no Spotify"
+                                    >
+                                        <span className="text-white text-xs">🎵</span>
+                                    </button>
+                                </div>
+                                
+                                <div className="absolute top-4 left-4 text-white text-xs font-bold bg-black bg-opacity-50 px-2 py-1 rounded">
+                                    33⅓ RPM
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div className="mt-8 text-center">
+                        <div className="bg-gradient-to-r from-purple-100 to-pink-100 p-6 rounded-xl border-l-4 border-purple-500">
+                            <h3 className="text-xl font-bold text-gray-800 mb-2">🎵 Minha Música Favorita</h3>
+                            <p className="text-gray-600 mb-2">The Best - Álbum Especial</p>
+                            <div className="flex justify-center items-center space-x-2 text-sm text-gray-500">
+                                <span>3:45</span>
+                                <div className="w-32 h-2 bg-gray-200 rounded-full overflow-hidden">
+                                    <div className="w-1/2 h-full bg-gradient-to-r from-purple-500 to-pink-500 rounded-full progress-bar"></div>
+                                </div>
+                                <span>7:30</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // Contact Form Component
+        const ContactForm = () => {
+            const [formData, setFormData] = useState({
+                name: '',
+                email: '',
+                message: ''
+            });
+            const [isSubmitting, setIsSubmitting] = useState(false);
+            const [isSubmitted, setIsSubmitted] = useState(false);
+
+            const handleInputChange = (e) => {
+                const { name, value } = e.target;
+                setFormData(prev => ({
+                    ...prev,
+                    [name]: value
+                }));
+            };
+
+            const handleSubmit = (e) => {
+                e.preventDefault();
+                
+                if (!formData.name || !formData.email || !formData.message) {
+                    alert('Por favor, preencha todos os campos!');
+                    return;
+                }
+                
+                setIsSubmitting(true);
+                
+                setTimeout(() => {
+                    setIsSubmitting(false);
+                    setIsSubmitted(true);
+                    
+                    setTimeout(() => {
+                        setIsSubmitted(false);
+                        setFormData({ name: '', email: '', message: '' });
+                    }, 2000);
+                }, 1500);
+            };
+
+            const socialIcons = [
+                { emoji: '📱', gradient: 'from-pink-500 to-red-500' },
+                { emoji: '🐦', gradient: 'from-blue-400 to-blue-600' },
+                { emoji: '🎵', gradient: 'from-green-400 to-green-600' },
+                { emoji: '📺', gradient: 'from-red-500 to-pink-500' }
+            ];
+
+            return (
+                <footer className="bg-black bg-opacity-20 backdrop-blur-sm py-12">
+                    <div className="container mx-auto px-4">
+                        <div className="rounded-2xl shadow-2xl p-8 max-w-2xl mx-auto card-hover" style={{backgroundColor: 'oklch(70.7% 0.022 261.325)'}}>
+                            <div className="text-center mb-6">
+                                <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full mx-auto mb-4 flex items-center justify-center pulse-animation">
+                                    <span className="text-2xl">📧</span>
+                                </div>
+                                <h2 className="text-3xl font-bold text-gray-800 mb-4">Entre em Contato</h2>
+                                <p className="text-gray-600">Vamos criar algo incrível juntos!</p>
+                            </div>
+                            
+                            <form className="space-y-6" onSubmit={handleSubmit}>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div>
+                                        <label className="block text-gray-700 font-semibold mb-2">Nome</label>
+                                        <input 
+                                            type="text" 
+                                            name="name"
+                                            value={formData.name}
+                                            onChange={handleInputChange}
+                                            className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-purple-500 focus:outline-none transition-colors duration-300" 
+                                            placeholder="Seu nome"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-gray-700 font-semibold mb-2">Email</label>
+                                        <input 
+                                            type="email" 
+                                            name="email"
+                                            value={formData.email}
+                                            onChange={handleInputChange}
+                                            className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-purple-500 focus:outline-none transition-colors duration-300" 
+                                            placeholder="seu@email.com"
+                                        />
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <label className="block text-gray-700 font-semibold mb-2">Mensagem</label>
+                                    <textarea 
+                                        rows="4" 
+                                        name="message"
+                                        value={formData.message}
+                                        onChange={handleInputChange}
+                                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-purple-500 focus:outline-none transition-colors duration-300 resize-none" 
+                                        placeholder="Sua mensagem..."
+                                    ></textarea>
+                                </div>
+                                
+                                <button 
+                                    type="submit" 
+                                    disabled={isSubmitting || isSubmitted}
+                                    className={`w-full py-4 px-8 rounded-lg font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-lg ${
+                                        isSubmitted 
+                                            ? 'bg-gradient-to-r from-green-500 to-green-600 text-white' 
+                                            : isSubmitting 
+                                                ? 'bg-gradient-to-r from-gray-400 to-gray-500 text-white cursor-not-allowed'
+                                                : 'bg-gradient-to-r from-purple-500 to-blue-500 text-white hover:from-purple-600 hover:to-blue-600'
+                                    }`}
+                                >
+                                    {isSubmitted ? 'Mensagem Enviada! ✅' : isSubmitting ? 'Enviando... ⏳' : 'Enviar Mensagem 🚀'}
+                                </button>
+                            </form>
+                            
+                            <div className="mt-8 pt-6 border-t border-gray-200 text-center">
+                                <p className="text-gray-600 mb-4">Ou me encontre nas redes sociais:</p>
+                                <div className="flex justify-center space-x-4">
+                                    {socialIcons.map((icon, index) => (
+                                        <a 
+                                            key={index}
+                                            href="#" 
+                                            className={`w-12 h-12 bg-gradient-to-r ${icon.gradient} rounded-full flex items-center justify-center text-white hover:scale-110 transition-transform duration-300`}
+                                        >
+                                            {icon.emoji}
+                                        </a>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div className="text-center mt-8">
+                        <p className="text-white text-lg font-semibold" style={{textShadow: '2px 2px 4px rgba(0,0,0,0.5)'}}>
+                            © 2024 The Best - Todos os direitos reservados ✨
+                        </p>
+                    </div>
+                </footer>
+            );
+        };
+
+        // Modal Component
+        const Modal = ({ isOpen, onClose, children }) => {
+            useEffect(() => {
+                const handleEscape = (e) => {
+                    if (e.key === 'Escape') {
+                        onClose();
+                    }
+                };
+
+                if (isOpen) {
+                    document.addEventListener('keydown', handleEscape);
+                    document.body.style.overflow = 'hidden';
+                } else {
+                    document.body.style.overflow = 'auto';
+                }
+
+                return () => {
+                    document.removeEventListener('keydown', handleEscape);
+                    document.body.style.overflow = 'auto';
+                };
+            }, [isOpen, onClose]);
+
+            if (!isOpen) return null;
+
+            return (
+                <div 
+                    className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+                    onClick={(e) => e.target === e.currentTarget && onClose()}
+                >
+                    {children}
+                </div>
+            );
+        };
+
+        // About Modal Content
+        const AboutModalContent = ({ onClose }) => {
+            return (
+                <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+                    <div className="relative">
+                        <button 
+                            onClick={onClose}
+                            className="absolute top-4 right-4 w-10 h-10 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors duration-300 flex items-center justify-center z-10"
+                        >
+                            ✕
+                        </button>
+                        
+                        <div className="bg-gradient-to-r from-pink-500 to-red-500 text-white p-8 rounded-t-2xl">
+                            <div className="flex items-center space-x-6">
+                                <div className="w-24 h-24 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+                                    <span className="text-4xl">🎤</span>
+                                </div>
+                                <div>
+                                    <h1 className="text-4xl font-bold mb-2">THE BEST</h1>
+                                    <p className="text-xl opacity-90">Artista Musical Profissional</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div className="p-8">
+                            <div className="mb-8">
+                                <h2 className="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+                                    <span className="w-8 h-8 bg-pink-500 rounded-full flex items-center justify-center text-white mr-3">📖</span>
+                                    Minha História
+                                </h2>
+                                <div className="bg-gradient-to-r from-pink-50 to-red-50 p-6 rounded-xl border-l-4 border-pink-500">
+                                    <p className="text-gray-700 leading-relaxed mb-4">
+                                        Minha jornada musical começou aos 15 anos, quando ganhei meu primeiro violão. Desde então, a música se tornou não apenas minha paixão, mas minha forma de me conectar com o mundo e expressar minhas emoções mais profundas.
+                                    </p>
+                                    <p className="text-gray-700 leading-relaxed mb-4">
+                                        Ao longo dos anos, desenvolvi um estilo único que mistura elementos do pop, rock e música eletrônica, sempre buscando criar algo que toque o coração das pessoas e as faça sentir algo especial.
+                                    </p>
+                                    <p className="text-gray-700 leading-relaxed">
+                                        Hoje, com mais de 10 anos de carreira, já lancei 2 álbuns de estúdio, realizei mais de 100 shows e continuo trabalhando em novas músicas que espero que façam parte da trilha sonora da vida dos meus fãs.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // Albums Modal Content
+        const AlbumsModalContent = ({ onClose }) => {
+            const playAlbumOnSpotify = (albumName) => {
+                const searchQuery = `The Best ${albumName}`;
+                const spotifyUrl = `https://open.spotify.com/search/${encodeURIComponent(searchQuery)}`;
+                window.open(spotifyUrl, '_blank', 'noopener,noreferrer');
+            };
+
+            const playTrackOnSpotify = (trackName) => {
+                const searchQuery = `The Best ${trackName}`;
+                const spotifyUrl = `https://open.spotify.com/search/${encodeURIComponent(searchQuery)}`;
+                window.open(spotifyUrl, '_blank', 'noopener,noreferrer');
+            };
+
+            return (
+                <div className="bg-white rounded-2xl shadow-2xl max-w-6xl w-full max-h-[90vh] overflow-y-auto">
+                    <div className="relative">
+                        <button 
+                            onClick={onClose}
+                            className="absolute top-4 right-4 w-10 h-10 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors duration-300 flex items-center justify-center z-10"
+                        >
+                            ✕
+                        </button>
+                        
+                        <div className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white p-8 rounded-t-2xl">
+                            <div className="flex items-center space-x-6">
+                                <div className="w-24 h-24 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+                                    <span className="text-4xl">🎼</span>
+                                </div>
+                                <div>
+                                    <h1 className="text-4xl font-bold mb-2">MEUS ÁLBUNS</h1>
+                                    <p className="text-xl opacity-90">Discografia Completa - The Best</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div className="p-8">
+                            <div className="mb-12">
+                                <div className="flex flex-col lg:flex-row gap-8 mb-6">
+                                    <div className="lg:w-64 lg:h-64 w-full h-64 bg-gradient-to-br from-pink-500 to-red-500 rounded-2xl shadow-2xl flex items-center justify-center relative overflow-hidden">
+                                        <div className="absolute inset-0 bg-black bg-opacity-20"></div>
+                                        <div className="relative z-10 text-center text-white">
+                                            <div className="text-6xl mb-4">🎵</div>
+                                            <h3 className="text-2xl font-bold">PRIMEIRO</h3>
+                                            <h3 className="text-2xl font-bold">ÁLBUM</h3>
+                                            <p className="text-sm opacity-80 mt-2">2023</p>
+                                        </div>
+                                        <div className="absolute inset-4 border-2 border-white border-opacity-30 rounded-full"></div>
+                                        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-black rounded-full"></div>
+                                    </div>
+                                    
+                                    <div className="flex-1">
+                                        <h2 className="text-3xl font-bold text-gray-800 mb-2">Primeiro Álbum</h2>
+                                        <p className="text-gray-600 mb-4">Lançado em 2023 • 8 faixas • 32 min</p>
+                                        <p className="text-gray-700 leading-relaxed mb-6">
+                                            Meu álbum de estreia marca o início de uma jornada musical única. Com 8 faixas cuidadosamente produzidas, este trabalho explora temas de amor, superação e descoberta pessoal.
+                                        </p>
+                                        <button 
+                                            onClick={() => playAlbumOnSpotify('Primeiro Álbum')}
+                                            className="bg-gradient-to-r from-green-500 to-green-600 text-white py-2 px-6 rounded-lg font-semibold hover:from-green-600 hover:to-green-700 transition-all duration-300 transform hover:scale-105"
+                                        >
+                                            🎵 Ouvir no Spotify
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // Main App Component
+        const App = () => {
+            const [showAboutModal, setShowAboutModal] = useState(false);
+            const [showAlbumsModal, setShowAlbumsModal] = useState(false);
+
+            return (
+                <div className="gradient-bg min-h-screen">
+                    <Header />
+                    
+                    <main className="container mx-auto px-4 pb-20">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+                            <AboutCard onShowAbout={() => setShowAboutModal(true)} />
+                            <SocialCard />
+                            <AlbumsCard onShowAlbums={() => setShowAlbumsModal(true)} />
+                        </div>
+                        
+                        <VinylPlayer />
+                        
+                        <div className="rounded-2xl shadow-2xl p-8 mb-16 card-hover bg-transparent backdrop-blur-sm border border-white border-opacity-20">
+                            <div className="text-center mb-6">
+                                <div className="w-16 h-16 bg-gradient-to-r from-red-500 to-pink-500 rounded-full mx-auto mb-4 flex items-center justify-center pulse-animation">
+                                    <span className="text-2xl">📺</span>
+                                </div>
+                                <h2 className="text-3xl font-bold text-white mb-4" style={{textShadow: '2px 2px 4px rgba(0,0,0,0.5)'}}>Meu Último Vídeo</h2>
+                                <p className="text-white text-opacity-90" style={{textShadow: '1px 1px 2px rgba(0,0,0,0.5)'}}>Cole aqui o link do seu vídeo do YouTube</p>
+                            </div>
+                            
+                            <div className="bg-gradient-to-r from-gray-100 to-gray-200 rounded-xl p-8 text-center border-2 border-dashed border-gray-300">
+                                <div className="text-6xl mb-4">🎬</div>
+                                <p className="text-gray-600 text-lg mb-4">
+                                    <strong>Área para Vídeo do YouTube</strong>
+                                </p>
+                                <p className="text-gray-500">
+                                    Substitua esta área pelo código embed do seu vídeo do YouTube
+                                </p>
+                            </div>
+                        </div>
+                    </main>
+
+                    <ContactForm />
+
+                    <Modal isOpen={showAboutModal} onClose={() => setShowAboutModal(false)}>
+                        <AboutModalContent onClose={() => setShowAboutModal(false)} />
+                    </Modal>
+
+                    <Modal isOpen={showAlbumsModal} onClose={() => setShowAlbumsModal(false)}>
+                        <AlbumsModalContent onClose={() => setShowAlbumsModal(false)} />
+                    </Modal>
+                </div>
+            );
+        };
+
+        // Render the app
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9b068c4f43cd2754',t:'MTc2NjE0MzYxOC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
