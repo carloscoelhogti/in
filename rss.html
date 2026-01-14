@@ -88,14 +88,19 @@
       </div><input type="file" id="file-import" accept=".json" class="hidden">
      </div><!-- Instructions -->
      <div class="mt-8 bg-gradient-to-r from-purple-900/30 to-pink-900/30 backdrop-blur-lg rounded-2xl p-6 border border-purple-500/20">
-      <h3 class="text-lg font-bold text-white mb-4">📖 Como Usar no OBS</h3>
+      <h3 class="text-lg font-bold text-white mb-4">📖 Como Usar no OBS</h3><!-- URL for OBS -->
+      <div class="mb-6 p-4 bg-green-900/20 border-2 border-green-500/50 rounded-lg">
+       <p class="text-green-300 font-bold mb-2">🎯 URL PARA USAR NO OBS:</p>
+       <div class="flex gap-2"><input type="text" id="obs-url" readonly class="flex-1 px-4 py-2 bg-slate-900/50 border border-green-500/30 rounded-lg text-green-400 font-mono text-sm select-all" value=""> <button id="btn-copy-url" class="px-6 py-2 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 transition-colors whitespace-nowrap"> 📋 Copiar </button>
+       </div>
+       <p class="text-green-200 text-xs mt-2">⚠️ Use ESTA URL no OBS (com ?view=viewer no final), não a URL do editor!</p>
+      </div>
       <ol class="space-y-3 text-slate-300">
        <li class="flex items-start"><span class="font-bold text-purple-400 mr-3">1.</span> <span>Adicione seus slides usando o formulário acima</span></li>
-       <li class="flex items-start"><span class="font-bold text-purple-400 mr-3">2.</span> <span>Clique em "📺 Visualizar" no topo da página</span></li>
-       <li class="flex items-start"><span class="font-bold text-purple-400 mr-3">3.</span> <span>Copie a URL da página do navegador (funciona mesmo em localhost ou GitHub Pages)</span></li>
-       <li class="flex items-start"><span class="font-bold text-purple-400 mr-3">4.</span> <span>No OBS, adicione uma fonte "Navegador" (Browser Source)</span></li>
-       <li class="flex items-start"><span class="font-bold text-purple-400 mr-3">5.</span> <span>Cole a URL e configure: Largura 1080px, Altura 1920px</span></li>
-       <li class="flex items-start"><span class="font-bold text-purple-400 mr-3">6.</span> <span>Os slides vão trocar automaticamente a cada 20 segundos! 🎉</span></li>
+       <li class="flex items-start"><span class="font-bold text-purple-400 mr-3">2.</span> <span><strong>Copie a URL verde acima</strong> (ela abre direto no modo visualização)</span></li>
+       <li class="flex items-start"><span class="font-bold text-purple-400 mr-3">3.</span> <span>No OBS, adicione uma fonte "Navegador" (Browser Source)</span></li>
+       <li class="flex items-start"><span class="font-bold text-purple-400 mr-3">4.</span> <span>Cole a URL verde e configure: Largura 1080px, Altura 1920px</span></li>
+       <li class="flex items-start"><span class="font-bold text-purple-400 mr-3">5.</span> <span>Os slides vão trocar automaticamente a cada 20 segundos! 🎉</span></li>
       </ol>
       <div class="mt-4 p-4 bg-yellow-900/20 border border-yellow-500/30 rounded-lg">
        <p class="text-yellow-300 text-sm"><strong>💡 Dica:</strong> Os dados são salvos no navegador (localStorage). Use "Exportar Dados" para fazer backup!</p>
@@ -149,9 +154,31 @@
       renderSlidesList();
     }
     
+    // Update OBS URL display
+    function updateOBSUrl() {
+      const currentUrl = window.location.href.split('?')[0];
+      const obsUrl = currentUrl + '?view=viewer';
+      const urlInput = document.getElementById('obs-url');
+      if (urlInput) {
+        urlInput.value = obsUrl;
+      }
+    }
+    
+    // Check URL parameters to auto-switch to viewer mode
+    function checkURLParams() {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('view') === 'viewer') {
+        // Hide navigation for clean OBS display
+        document.querySelector('nav').style.display = 'none';
+        switchView('viewer');
+      }
+    }
+    
     // Initialize app
     function initApp() {
       loadData();
+      updateOBSUrl();
+      checkURLParams();
       setupEventListeners();
     }
     
@@ -226,6 +253,21 @@
         };
         reader.readAsText(file);
         e.target.value = '';
+      });
+      
+      // Copy OBS URL to clipboard
+      document.getElementById('btn-copy-url').addEventListener('click', () => {
+        const urlInput = document.getElementById('obs-url');
+        urlInput.select();
+        urlInput.setSelectionRange(0, 99999);
+        
+        navigator.clipboard.writeText(urlInput.value).then(() => {
+          showToast('URL copiada! Cole no OBS agora 📋', 'success');
+        }).catch(() => {
+          // Fallback for older browsers
+          document.execCommand('copy');
+          showToast('URL copiada para área de transferência!', 'success');
+        });
       });
     }
     
@@ -383,5 +425,5 @@
       initApp();
     }
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9bdf0fd06725125c',t:'MTc2ODQxMzkyOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9bdf293a11e3125c',t:'MTc2ODQxNDk3MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
