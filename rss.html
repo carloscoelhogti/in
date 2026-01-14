@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RSS Feed OBS - Editor e Visualizador</title>
+  <script src="/_sdk/data_sdk.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    
+    * {
+      font-family: 'Inter', sans-serif;
+    }
+    
+    .slide-enter {
+      animation: slideIn 0.6s ease-out;
+    }
+    
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(100px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+    
+    .fade-transition {
+      transition: opacity 0.3s ease-in-out;
+    }
+  </style>
+</head>
+<body class="h-full bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+  <div id="app-container" class="h-full w-full flex flex-col">
+    <!-- Navigation -->
+    <nav class="bg-slate-800/50 backdrop-blur-lg border-b border-purple-500/20">
+      <div class="max-w-7xl mx-auto px-6 py-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
+              <span class="text-2xl">📡</span>
+            </div>
+            <h1 class="text-2xl font-bold text-white" id="feed-title">RSS Feed OBS</h1>
+          </div>
+          <div class="flex space-x-3">
+            <button id="btn-editor" class="px-6 py-2 bg-purple-600 text-white rounded-lg font-medium hover:bg-purple-700 transition-colors">
+              ✏️ Editor
+            </button>
+            <button id="btn-viewer" class="px-6 py-2 bg-slate-700 text-white rounded-lg font-medium hover:bg-slate-600 transition-colors">
+              📺 Visualizar
+            </button>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Editor View -->
+    <div id="editor-view" class="flex-1 overflow-auto">
+      <div class="max-w-6xl mx-auto px-6 py-8">
+        <!-- Add New Slide Card -->
+        <div class="bg-slate-800/50 backdrop-blur-lg rounded-2xl p-6 mb-8 border border-purple-500/20">
+          <h2 class="text-xl font-bold text-white mb-6">➕ Adicionar Novo Slide</h2>
+          
+          <form id="add-slide-form" class="space-y-5">
+            <div>
+              <label for="slide-title" class="block text-sm font-medium text-purple-300 mb-2">Título</label>
+              <input type="text" id="slide-title" required
+                class="w-full px-4 py-3 bg-slate-900/50 border border-purple-500/30 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 transition-colors"
+                placeholder="Ex: Novidades da Live">
+            </div>
+            
+            <div>
+              <label for="slide-description" class="block text-sm font-medium text-purple-300 mb-2">Descrição</label>
+              <textarea id="slide-description" required rows="3"
+                class="w-full px-4 py-3 bg-slate-900/50 border border-purple-500/30 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 transition-colors resize-none"
+                placeholder="Descreva o conteúdo do slide..."></textarea>
+            </div>
+            
+            <div>
+              <label for="slide-image" class="block text-sm font-medium text-purple-300 mb-2">URL da Imagem</label>
+              <input type="url" id="slide-image" required
+                class="w-full px-4 py-3 bg-slate-900/50 border border-purple-500/30 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 transition-colors"
+                placeholder="https://exemplo.com/imagem.jpg">
+              <p class="mt-2 text-sm text-slate-400">💡 Use URLs públicas de imagens (ex: Imgur, Dropbox, Google Drive com link público)</p>
+            </div>
+            
+            <button type="submit" id="btn-add-slide"
+              class="w-full px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg font-semibold hover:from-purple-700 hover:to-pink-700 transition-all transform hover:scale-105">
+              Adicionar Slide
+            </button>
+          </form>
+        </div>
+
+        <!-- Slides List -->
+        <div class="bg-slate-800/50 backdrop-blur-lg rounded-2xl p-6 border border-purple-500/20">
+          <div class="flex items-center justify-between mb-6">
+            <h2 class="text-xl font-bold text-white">📋 Slides Criados</h2>
+            <span id="slide-count" class="px-4 py-2 bg-purple-600/20 text-purple-300 rounded-lg font-medium">0 slides</span>
+          </div>
+          
+          <div id="slides-list" class="space-y-4">
+            <!-- Slides will be inserted here -->
+          </div>
+          
+          <div id="empty-state" class="text-center py-12">
+            <div class="text-6xl mb-4">📭</div>
+            <p class="text-slate-400 text-lg">Nenhum slide criado ainda</p>
+            <p class="text-slate-500 mt-2">Adicione seu primeiro slide acima!</p>
+          </div>
+        </div>
+
+        <!-- Instructions -->
+        <div class="mt-8 bg-gradient-to-r from-purple-900/30 to-pink-900/30 backdrop-blur-lg rounded-2xl p-6 border border-purple-500/20">
+          <h3 class="text-lg font-bold text-white mb-4">📖 Como Usar no OBS</h3>
+          <ol class="space-y-3 text-slate-300">
+            <li class="flex items-start">
+              <span class="font-bold text-purple-400 mr-3">1.</span>
+              <span>Clique em "📺 Visualizar" no topo da página</span>
+            </li>
+            <li class="flex items-start">
+              <span class="font-bold text-purple-400 mr-3">2.</span>
+              <span>Copie a URL da página do navegador</span>
+            </li>
+            <li class="flex items-start">
+              <span class="font-bold text-purple-400 mr-3">3.</span>
+              <span>No OBS, adicione uma fonte "Navegador" (Browser Source)</span>
+            </li>
+            <li class="flex items-start">
+              <span class="font-bold text-purple-400 mr-3">4.</span>
+              <span>Cole a URL e configure: Largura 1080px, Altura 1920px</span>
+            </li>
+            <li class="flex items-start">
+              <span class="font-bold text-purple-400 mr-3">5.</span>
+              <span>Os slides vão trocar automaticamente a cada 20 segundos! 🎉</span>
+            </li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <!-- Viewer (Carousel) View -->
+    <div id="viewer-view" class="hidden flex-1 bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden">
+      <div class="absolute inset-0 flex items-center justify-center">
+        <div id="carousel-container" class="w-full h-full relative">
+          <div id="carousel-slide" class="w-full h-full flex items-center justify-center p-8">
+            <!-- Slide content will be inserted here -->
+          </div>
+          
+          <!-- Slide Indicator -->
+          <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2" id="slide-indicators">
+            <!-- Indicators will be inserted here -->
+          </div>
+        </div>
+        
+        <div id="viewer-empty-state" class="text-center">
+          <div class="text-8xl mb-6">📺</div>
+          <p class="text-white text-3xl font-bold mb-4">Nenhum slide para exibir</p>
+          <p class="text-purple-300 text-xl">Adicione slides no Editor primeiro</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const defaultConfig = {
+      feed_title: 'RSS Feed OBS'
+    };
+    
+    let currentRecords = [];
+    let currentView = 'editor';
+    let currentSlideIndex = 0;
+    let carouselInterval = null;
+    
+    const dataHandler = {
+      onDataChanged(data) {
+        currentRecords = data.sort((a, b) => a.order - b.order);
+        
+        if (currentView === 'editor') {
+          renderSlidesList(data);
+        } else {
+          renderCarousel();
+        }
+      }
+    };
+    
+    async function initApp() {
+      const initResult = await window.dataSdk.init(dataHandler);
+      if (!initResult.isOk) {
+        console.error('Failed to initialize data SDK');
+        return;
+      }
+      
+      await window.elementSdk.init({
+        defaultConfig,
+        onConfigChange: async (config) => {
+          const titleElement = document.getElementById('feed-title');
+          if (titleElement) {
+            titleElement.textContent = config.feed_title || defaultConfig.feed_title;
+          }
+        },
+        mapToCapabilities: (config) => ({
+          recolorables: [
+            {
+              get: () => config.primary_color || '#9333ea',
+              set: (value) => {
+                config.primary_color = value;
+                window.elementSdk.setConfig({ primary_color: value });
+              }
+            },
+            {
+              get: () => config.background_color || '#0f172a',
+              set: (value) => {
+                config.background_color = value;
+                window.elementSdk.setConfig({ background_color: value });
+              }
+            }
+          ],
+          borderables: [],
+          fontEditable: undefined,
+          fontSizeable: undefined
+        }),
+        mapToEditPanelValues: (config) => new Map([
+          ['feed_title', config.feed_title || defaultConfig.feed_title]
+        ])
+      });
+      
+      setupEventListeners();
+    }
+    
+    function setupEventListeners() {
+      document.getElementById('btn-editor').addEventListener('click', () => switchView('editor'));
+      document.getElementById('btn-viewer').addEventListener('click', () => switchView('viewer'));
+      
+      document.getElementById('add-slide-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        if (currentRecords.length >= 999) {
+          showToast('Limite máximo de 999 slides atingido!', 'error');
+          return;
+        }
+        
+        const title = document.getElementById('slide-title').value;
+        const description = document.getElementById('slide-description').value;
+        const imageUrl = document.getElementById('slide-image').value;
+        
+        const button = document.getElementById('btn-add-slide');
+        button.disabled = true;
+        button.textContent = 'Adicionando...';
+        
+        const result = await window.dataSdk.create({
+          id: Date.now().toString(),
+          title,
+          description,
+          image_url: imageUrl,
+          order: currentRecords.length,
+          created_at: new Date().toISOString()
+        });
+        
+        button.disabled = false;
+        button.textContent = 'Adicionar Slide';
+        
+        if (result.isOk) {
+          document.getElementById('add-slide-form').reset();
+          showToast('Slide adicionado com sucesso!', 'success');
+        } else {
+          showToast('Erro ao adicionar slide. Tente novamente.', 'error');
+        }
+      });
+    }
+    
+    function renderSlidesList(data) {
+      const container = document.getElementById('slides-list');
+      const emptyState = document.getElementById('empty-state');
+      const countElement = document.getElementById('slide-count');
+      
+      countElement.textContent = `${data.length} ${data.length === 1 ? 'slide' : 'slides'}`;
+      
+      if (data.length === 0) {
+        container.classList.add('hidden');
+        emptyState.classList.remove('hidden');
+        return;
+      }
+      
+      container.classList.remove('hidden');
+      emptyState.classList.add('hidden');
+      
+      container.innerHTML = data.map(slide => `
+        <div class="bg-slate-900/50 rounded-xl p-5 border border-purple-500/20 hover:border-purple-500/40 transition-colors">
+          <div class="flex gap-5">
+            <img src="${slide.image_url}" 
+              alt="${slide.title}"
+              class="w-32 h-32 object-cover rounded-lg border-2 border-purple-500/30"
+              onerror="this.src=''; this.alt='Imagem não carregou'; this.style.display='none';">
+            <div class="flex-1 min-w-0">
+              <h3 class="text-lg font-bold text-white mb-2">${slide.title}</h3>
+              <p class="text-slate-400 text-sm mb-4 line-clamp-2">${slide.description}</p>
+              <div class="flex items-center justify-between">
+                <span class="text-xs text-purple-400">Ordem: ${slide.order + 1}</span>
+                <button onclick="deleteSlide('${slide.__backendId}')" 
+                  class="px-4 py-2 bg-red-600/20 text-red-400 rounded-lg text-sm font-medium hover:bg-red-600/30 transition-colors">
+                  🗑️ Deletar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+    
+    async function deleteSlide(backendId) {
+      const slide = currentRecords.find(s => s.__backendId === backendId);
+      if (!slide) return;
+      
+      const result = await window.dataSdk.delete(slide);
+      
+      if (result.isOk) {
+        showToast('Slide deletado com sucesso!', 'success');
+      } else {
+        showToast('Erro ao deletar slide. Tente novamente.', 'error');
+      }
+    }
+    
+    function switchView(view) {
+      currentView = view;
+      
+      const editorView = document.getElementById('editor-view');
+      const viewerView = document.getElementById('viewer-view');
+      const btnEditor = document.getElementById('btn-editor');
+      const btnViewer = document.getElementById('btn-viewer');
+      
+      if (view === 'editor') {
+        editorView.classList.remove('hidden');
+        viewerView.classList.add('hidden');
+        btnEditor.classList.remove('bg-slate-700');
+        btnEditor.classList.add('bg-purple-600');
+        btnViewer.classList.remove('bg-purple-600');
+        btnViewer.classList.add('bg-slate-700');
+        stopCarousel();
+      } else {
+        editorView.classList.add('hidden');
+        viewerView.classList.remove('hidden');
+        btnEditor.classList.remove('bg-purple-600');
+        btnEditor.classList.add('bg-slate-700');
+        btnViewer.classList.remove('bg-slate-700');
+        btnViewer.classList.add('bg-purple-600');
+        renderCarousel();
+        startCarousel();
+      }
+    }
+    
+    function renderCarousel() {
+      const container = document.getElementById('carousel-slide');
+      const emptyState = document.getElementById('viewer-empty-state');
+      const indicatorsContainer = document.getElementById('slide-indicators');
+      
+      if (currentRecords.length === 0) {
+        container.classList.add('hidden');
+        emptyState.classList.remove('hidden');
+        indicatorsContainer.innerHTML = '';
+        return;
+      }
+      
+      container.classList.remove('hidden');
+      emptyState.classList.add('hidden');
+      
+      const slide = currentRecords[currentSlideIndex];
+      
+      container.innerHTML = `
+        <div class="w-full max-w-2xl mx-auto slide-enter">
+          <div class="bg-gradient-to-br from-slate-800/80 to-purple-900/80 backdrop-blur-xl rounded-3xl p-8 border-2 border-purple-500/30 shadow-2xl">
+            <img src="${slide.image_url}" 
+              alt="${slide.title}"
+              class="w-full h-96 object-cover rounded-2xl mb-6 border-2 border-purple-500/50"
+              onerror="this.src=''; this.alt='Imagem não disponível'; this.classList.add('hidden');">
+            <h2 class="text-4xl font-bold text-white mb-4">${slide.title}</h2>
+            <p class="text-xl text-purple-200 leading-relaxed">${slide.description}</p>
+          </div>
+        </div>
+      `;
+      
+      indicatorsContainer.innerHTML = currentRecords.map((_, index) => `
+        <div class="w-3 h-3 rounded-full transition-all ${
+          index === currentSlideIndex 
+            ? 'bg-purple-500 w-8' 
+            : 'bg-purple-500/30'
+        }"></div>
+      `).join('');
+    }
+    
+    function startCarousel() {
+      stopCarousel();
+      if (currentRecords.length <= 1) return;
+      
+      carouselInterval = setInterval(() => {
+        currentSlideIndex = (currentSlideIndex + 1) % currentRecords.length;
+        renderCarousel();
+      }, 20000);
+    }
+    
+    function stopCarousel() {
+      if (carouselInterval) {
+        clearInterval(carouselInterval);
+        carouselInterval = null;
+      }
+    }
+    
+    function showToast(message, type) {
+      const toast = document.createElement('div');
+      toast.className = `fixed top-24 right-6 px-6 py-4 rounded-lg shadow-lg text-white font-medium z-50 ${
+        type === 'success' ? 'bg-green-600' : 'bg-red-600'
+      }`;
+      toast.textContent = message;
+      document.body.appendChild(toast);
+      
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transition = 'opacity 0.3s';
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+    
+    window.deleteSlide = deleteSlide;
+    
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initApp);
+    } else {
+      initApp();
+    }
+  </script>
+</body>
+</html>
