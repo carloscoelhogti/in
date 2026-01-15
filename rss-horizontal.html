@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="pt-BR" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feed de Notícias Live</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      width: 100%;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      overflow: hidden;
+    }
+
+    .ticker-container {
+      width: 100%;
+      height: 100%;
+      background: transparent;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ticker-wrapper {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ticker-content {
+      display: flex;
+      align-items: center;
+      white-space: nowrap;
+      animation: scroll-left 90s linear infinite;
+      gap: 80px;
+      padding: 0 40px;
+    }
+
+    @keyframes scroll-left {
+      0% {
+        transform: translateX(0);
+      }
+      100% {
+        transform: translateX(-50%);
+      }
+    }
+
+    .news-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 16px;
+      padding: 20px 32px;
+      background: linear-gradient(to right, #f42c16, #feb47b, #f6d931);
+      /*background: rgba(242, 27, 27, 0.95);*/
+      border-radius: 12px;
+      border: 1px solid rgba(100, 150, 255, 0.2);
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+    }
+
+    .news-item:hover {
+      background: rgba(30, 45, 80, 0.98);
+      border-color: rgba(100, 150, 255, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .news-icon {
+      font-size: 32px;
+      flex-shrink: 0;
+    }
+
+    .news-text {
+      color: #ffffff;
+      font-size: 24px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .separator {
+      width: 8px;
+      height: 8px;
+      background: linear-gradient(135deg, #e94560 0%, #f39c12 100%);
+      border-radius: 50%;
+      flex-shrink: 0;
+      box-shadow: 0 0 20px rgba(233, 69, 96, 0.5);
+    }
+
+    .prefix {
+      color: #e94560;
+      font-weight: 700;
+      margin-right: 8px;
+    }
+  </style>
+  
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body class="h-full">
+  <div class="ticker-container">
+   <div class="ticker-wrapper">
+    <div class="ticker-content" id="tickerContent"><!-- As notícias serão inseridas aqui -->
+    </div>
+   </div>
+  </div>
+  <script>
+    const defaultConfig = {
+      breaking_news_prefix: '🔴 AO VIVO'
+    };
+
+    let config = { ...defaultConfig };
+
+    // Notícias iniciais - você pode adicionar mais aqui
+    const newsItems = [
+      { icon: '📰', text: 'Os Sete Relógios de Agatha Christie: veja final explicado da série Netflix' },
+      { icon: '📰', text: 'Musk volta a prometer transparência no X — mas o que isso muda pra você?' },
+      { icon: '📰', text: 'Falha em roteadores D-Link antigos expõe usuários a ataque hacker' },
+      { icon: '📰', text: 'Controlador MIDI com 64 pads sensíveis à velocidade' },
+      { icon: '📰', text: 'Interface de áudio Thunderbolt 4 com pré-amps classe A' },
+      { icon: '📰', text: 'Streaming em 4K agora suporta áudio espacial Dolby Atmos' },
+      { icon: '📰', text: 'Nova plataforma de distribuição musical com blockchain' },
+      { icon: '📰', text: 'Software de edição de vídeo com sincronização automática de áudio' }
+    ];
+
+    function createNewsElement(newsItem, includePrefix = false) {
+      const item = document.createElement('div');
+      item.className = 'news-item';
+      
+      const icon = document.createElement('span');
+      icon.className = 'news-icon';
+      icon.textContent = newsItem.icon;
+      
+      const text = document.createElement('span');
+      text.className = 'news-text';
+      const prefix = includePrefix ? config.breaking_news_prefix : '';
+      text.innerHTML = prefix ? `<span class="prefix">${prefix}</span>${newsItem.text}` : newsItem.text;
+      
+      item.appendChild(icon);
+      item.appendChild(text);
+      
+      return item;
+    }
+
+    function renderNews() {
+      const container = document.getElementById('tickerContent');
+      container.innerHTML = '';
+      
+      // Criar primeiro conjunto de notícias
+      newsItems.forEach(newsItem => {
+        container.appendChild(createNewsElement(newsItem));
+        
+        const separator = document.createElement('div');
+        separator.className = 'separator';
+        container.appendChild(separator);
+      });
+      
+      // Duplicar para loop contínuo
+      newsItems.forEach(newsItem => {
+        container.appendChild(createNewsElement(newsItem));
+        
+        const separator = document.createElement('div');
+        separator.className = 'separator';
+        container.appendChild(separator);
+      });
+    }
+
+    async function onConfigChange(newConfig) {
+      config = { ...defaultConfig, ...newConfig };
+      renderNews();
+    }
+
+    function mapToCapabilities(config) {
+      return {
+        recolorables: [
+          {
+            get: () => config.background_color || '#1a1a2e',
+            set: (value) => {
+              config.background_color = value;
+              window.elementSdk.setConfig({ background_color: value });
+            }
+          },
+          {
+            get: () => config.accent_color || '#e94560',
+            set: (value) => {
+              config.accent_color = value;
+              window.elementSdk.setConfig({ accent_color: value });
+            }
+          },
+          {
+            get: () => config.text_color || '#ffffff',
+            set: (value) => {
+              config.text_color = value;
+              window.elementSdk.setConfig({ text_color: value });
+            }
+          }
+        ],
+        borderables: [],
+        fontEditable: {
+          get: () => config.font_family || 'Inter',
+          set: (value) => {
+            config.font_family = value;
+            window.elementSdk.setConfig({ font_family: value });
+          }
+        },
+        fontSizeable: {
+          get: () => config.font_size || 16,
+          set: (value) => {
+            config.font_size = value;
+            window.elementSdk.setConfig({ font_size: value });
+          }
+        }
+      };
+    }
+
+    function mapToEditPanelValues(config) {
+      return new Map([
+        ['breaking_news_prefix', config.breaking_news_prefix || defaultConfig.breaking_news_prefix]
+      ]);
+    }
+
+    // Inicializar
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities,
+        mapToEditPanelValues
+      });
+    }
+
+    renderNews();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9be637d1a361e2cd',t:'MTc2ODQ4ODk2OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
