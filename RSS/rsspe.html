@@ -2,7 +2,7 @@
 <html lang="pt-BR" class="h-full">
  <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=0.5">
   <title>RSS Feed OBS - Visualizador</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
@@ -37,11 +37,11 @@
         transform: translateX(0) scale(1);
       }
     }
-    
+    /*
     .glow {
       box-shadow: 0 0 40px rgba(168, 85, 247, 0.4),
                   0 0 80px rgba(236, 72, 153, 0.2);
-    }
+    }*/
     
     /* Responsividade para diferentes tamanhos de tela */
     @media (max-width: 768px) {
@@ -65,7 +65,7 @@
   <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
   <script src="/_sdk/element_sdk.js" type="text/javascript"></script>
  </head>
- <body class="h-full w-full bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950">
+ <body class="h-full w-full ">
   <div id="viewer-container" class="h-full w-full relative overflow-hidden"><!-- Background decorative elements -->
    <div class="absolute top-0 left-0 w-full h-full opacity-20 pointer-events-none">
     <div class="absolute top-20 left-20 w-96 h-96 bg-purple-500 rounded-full blur-3xl"></div>
@@ -92,25 +92,144 @@
     // Edite aqui seus slides! Adicione quantos quiser!
     const slides = [
       {
+        title: "Carlloff The Best lança um novo remix Feeling Vibes para encerrar 2025 em grande estilo",
+        description: "O ano de 2025 foi muito promissor e com grandes mudanças. Fiz um novo remix do single de Anna Grace 'Let the Feelings Go', que foi lançado originalmente em 2009. A faixa traz uma vibe nostálgica dos anos 2010, mas com uma pegada moderna e atualizada para os dias de hoje. Estou muito feliz com o resultado e espero que todos curtam essa nova versão tanto quanto eu.",
+        image_url: "./AVATAR SPOTIFY.png",
+        datanoticia: "21 de dezembro de 2025"
+      },
+      {
         title: "Edifício Martinelli recebe nesta sexta 2º evento de lançamento de “Tempo”, álbum de estreia de Leo Janeiro",
         description: "Leo Janeiro segue colhendo os frutos de seu recém-lançado primeiro álbum de estúdio, “Tempo”. Neste final de semana, na sexta-feira (16) e no sábado (17), rolam em São Paulo e no Rio de Janeiro, respectivamente, mais dois eventos da Cocada Music – gravadora de Leo, por onde o disco chegou em 05 de dezembro – que celebram a chegada da obra.",
-        image_url: "https://www.housemag.com.br/wp-content/uploads/2026/01/leo-janeiro-1300x540.jpeg"
+        image_url: "https://www.housemag.com.br/wp-content/uploads/2026/01/leo-janeiro-1300x540.jpeg",
+        datanoticia: "8 de janeiro de 2026"
       },
       {
         title: "Em meio ao carnaval, D-Nox on Board ganha segunda edição em Florianópolis com long set do DJ alemão",
         description: "Após o sucesso da primeira edição, o evento D-Nox on Board confirma sua segunda realização no dia 15 de fevereiro de 2026, das 14h às 20h. A festa, que acontece em uma escuna privada ancorada próximo a uma ilha na Baía Norte, promete uma experiência íntima e premium com o craque D-Nox em um long set exclusivo de progressive house.",
-        image_url: "https://www.housemag.com.br/wp-content/uploads/2026/01/d-nox-on-board-1179x540.jpeg"
+        image_url: "https://www.housemag.com.br/wp-content/uploads/2026/01/d-nox-on-board-1179x540.jpeg",
+        datanoticia: "8 de janeiro de 2026"
       },
       {
         title: "De Dubai a Bassiani: Eli Iwasa encerra 2025 em ritmo acelerado e celebra seu ano mais internacional",
         description: "A reta final começa no Greenvalley, em Camboriú, no dia 27 de dezembro, retornando a um dos clubes mais simbólicos da música eletrônica nacional. De lá, segue para o Silk Beach Club, em Búzios (28/12), e depois para o Ceará, onde toca em um dos eventos mais aguardados: o AYÁ Music & Arts em Jericoacoara (29/12), no Boat Heels of Love em Canoa Quebrada (30/12) e vira o ano na mesma praia, com edição da tradicional festa Cardume.",
-        image_url: "https://www.housemag.com.br/wp-content/uploads/2025/12/NYC1-1066x540.png"
+        image_url: "https://www.housemag.com.br/wp-content/uploads/2025/12/NYC1-1066x540.png",
+        datanoticia: "8 de janeiro de 2026"
       },
       {
         title: "Com 3 pistas e lendas como Vini Vici, Wrecked Machines, Eli Iwasa e Ratier, INFNTY estreia em Floripa",
         description: "Do House ao Techno, do Tech House ao Psy Trance, o INFNTY conecta todos os universos da cena. A Terraza e o Stage Music Park se unem para criar uma estrutura inédita com três ambientes distintos: Pista FRQNCY by Heaven, Pista TRANCE e Pista TRRZ – cada uma com sua própria identidade sonora. O festival ainda conta com o Palco Red Bull, um espaço exclusivo com ativação da marca e warm-up especial. ",
-        image_url: "https://www.housemag.com.br/wp-content/uploads/2026/01/infnty-1300x540.jpg"
-      }
+        image_url: "https://www.housemag.com.br/wp-content/uploads/2026/01/infnty-1300x540.jpg",
+        datanoticia: "8 de janeiro de 2026"
+      },
+      {
+      title:"Ame Club inicia temporada de 2026 com dois gigantes do techno: Adam Beyer e Joris Voorn",
+      description:"No próximo dia 9 de janeiro de 2026, o Ame Club em Valinhos (SP) abre sua temporada eletrônica com uma noite histórica: duas das maiores lendas da cena techno mundial desembarcam no interior paulista para uma festa que promete marcar o início de um novo ciclo de música, energia e profundidade sonora.",
+      image_url:"https://djnews.com.br/wp-content/uploads/2026/01/2DX28039-1024x662.jpg",
+      datanoticia:"8 de janeiro de 2026"
+      },
+      {
+      title:"Adam Beyer: o mestre sueco que redefiniu o techno modernoAdam Beyer em ação — referência global na cena techno",
+      description:"Adam Thomas Beyer, nascido em 15 de maio de 1976 em Estocolmo (Suécia), é uma figura seminal no universo da música eletrônica. DJ, produtor e fundador do selo Drumcode Records, Beyer tem estado no centro da evolução do techno desde os anos 1990 — seja nos clubes underground da Europa ou nos maiores palcos de festivais como Tomorrowland, Awakenings e Ultra Music Festival.",
+      image_url:"https://djnews.com.br/wp-content/uploads/2026/01/2DX28039-1024x662.jpg",
+      datanoticia:"8 de janeiro de 2026"
+      },
+      {
+      title:"Joris Voorn: da Holanda para o coração da pista",
+      description:"Nascido em 25 de fevereiro de 1977 em Tilburg, na Holanda, Joris Voorn é um dos DJs e produtores mais respeitados da cena eletrônica global. Com raízes que mesclam house, techno e elementos melódicos, Voorn construiu uma carreira marcada pela musicalidade refinada e pela capacidade de guiar o público por jornadas sonoras intensas e emocionais.",
+      image_url:"https://djnews.com.br/wp-content/uploads/2026/01/2DX28039-1024x662.jpg",
+      datanoticia:"8 de janeiro de 2026"
+      },
+      {
+      title:"Armin van Buuren lança novo single, 'Sun Shines On Me', com Glockenbach",
+      description:"Armin van Buuren lançou uma nova música, 'Sun Shines On Me'.O single, já disponível pela sua própria gravadora , Armada Music , é construído em torno de sintetizadores eufóricos e conta com os vocais do artista mascarado Glockenbach. 'Sun Shines On Me' é o primeiro lançamento de van Buuren em 2026.",
+      image_url:"https://djmag.com/sites/default/files/styles/djm_23_1005x565/public/2026-01/AVB-CROP.png.jpg.webp?itok=NiBGjanX",
+      datanoticia:"9 de janeiro de 2026"
+      },
+
+      {
+      title:"Ninajirachi anuncia turnê UE/Reino Unido em 2026",
+      description:"Ninajirachi embarcará em uma turnê pela Europa e pelo Reino Unido este ano.Com início no Le Trabendo, em Paris, no dia 17 de março de 2026, a turnê passará por Glasgow, Dublin, Manchester, Brighton e Londres, antes de terminar em Bristol, no Strange Brew, no dia 28 de março.A artista nascida na Austrália será acompanhada pelo DJ KAVARI, radicado em Glasgow, e pelo produtor Laces, de Gadigal/Sydney.",
+      image_url:"https://djmag.com/sites/default/files/styles/djm_23_1005x565/public/2026-01/img.webp?itok=PaVf7aA-",
+      datanoticia:"12 de janeiro de 2026"
+      },
+      {
+      title:"I. JORDAN compartilha set de DJ gravado nos carrosséis da Feira de Hull",
+      description:"“Um show dos sonhos, com a oportunidade de voltar às minhas raízes, um nortista de verdade e muito orgulhoso!”, escreveu o artista nascido em Doncaster no Instagram  em dezembro, descrevendo a apresentação como um dos destaques de 2025. O setlist contou com uma hora de donk, happy hardcore, “scouse house” e muito mais.",
+      image_url:"https://djmag.com/sites/default/files/styles/djm_23_1005x565/public/2026-01/LEAD%20-%20landscape%20-%20I_JORDAN_PR6_credit_Declan_Kelly.jpg.webp?itok=jqvHx1S5",
+      datanoticia:"12 de janeiro de 2026"
+      },
+      {
+      title:"Moby anuncia show na praia de Brighton para o verão de 2026",
+      description:"O produtor e DJ americano será a atração principal do último dia do festival ao ar livre On The Beach Festival 2026, apresentando um show completo com banda ao vivo no domingo, 26 de julho. O show marcará o retorno de Moby a Brighton em quase 25 anos, desde sua última apresentação no Brighton Centre em novembro de 2002.",
+      image_url:"https://djmag.com/sites/default/files/styles/djm_23_1005x565/public/2026-01/541818728_1331666868325648_2401420895579022525_n.jpg.webp?itok=3WdnJhPW",
+      datanoticia:"12 de janeiro de 2026"
+      },
+      {
+      title:"Stevie Hyper D: crescem os pedidos por placa azul em homenagem ao lendário MC de jungle",
+      description:"Os apelos para que o lendário MC de jungle Stevie Hyper D seja homenageado com uma placa azul estão ganhando força.",
+      image_url:"https://djmag.com/sites/default/files/styles/djm_23_1005x565/public/2026-01/Stevie%20Hyper%20D%20Shirt%201%20photo%20by%20Tristan%20O%27Neil.jpg.webp?itok=6t6wxMiQ",
+      datanoticia:"12 de janeiro de 2026"
+      },
+      {
+      title:"A Audio-Technica anuncia o toca-discos minimalista AT-LP7X",
+      description:`"A Audio-Technica lançou um novo toca-discos com acionamento por correia, o AT-LP7X. A unidade preta fosca, lançada na Consumer Electronics Show (CES) 2026 em Las Vegas, tem um design minimalista, com "linhas nítidas", uma base robusta de MDF e um prato de acrílico para um som mais suave."`,
+      image_url:"https://djmag.com/sites/default/files/styles/djm_23_1005x565/public/2026-01/AT-LP7X_3_RGB.jpg.webp?itok=vBwFDIrB",
+      datanoticia:"12 de janeiro de 2026"
+      },
+
+      {
+      title:"Elon Musk processa grandes editoras musicais por supostas violações de direitos autorais",
+      description:`"O processo, aberto em um tribunal federal do Texas, alega que 18 grandes editoras musicais, incluindo Sony Music, Warner Music Group e Universal Music, e a Associação Nacional de Editores Musicais negaram à plataforma X de Musk "a possibilidade de adquirir uma licença de composição musical nos EUA de qualquer editora musical individual em condições competitivas", segundo a Reuters . "`,
+      image_url:"https://djmag.com/sites/default/files/styles/djm_23_1005x565/public/2026-01/elon-musk-x-logo-lawsuit-music-publisher-copryright.png.webp?itok=YZEyp8x7",
+      datanoticia:"13 de janeiro de 2026"
+      },
+      {
+      title:"Raros itens de memorabilia da The Haçienda e da Factory Records vão a leilão no eBay",
+      description:"O acervo de memorabilia provém dos arquivos da Factory Records e de Tony Wilson, fundador da Haçienda , e inclui um pôster original anunciando a estreia do Joy Division no The Factory Club em 1978, dois cartões de sócio da FAC51 Haçienda preservados, um kit de modelo da Haçienda oferecido como brinde e uma revista dos Buzzcocks com arte de Linda Sterling.",
+      image_url:"https://djmag.com/sites/default/files/styles/djm_23_1005x565/public/2026-01/img.webp?itok=PaVf7aA-",
+      datanoticia:"13 de janeiro de 2026"
+      },
+      {
+      title:"Hï Ibiza anuncia residência Dom Dolla 2026",
+      description:"O clube número 1 do mundo , segundo votação dos leitores da DJ Mag em 2025, está transferindo o DJ australiano das noites de quarta-feira, horário em que estreou como residente em Ibiza no verão passado, para as noites de sexta-feira a partir de 5 de junho. Ele também apresentará mais festas desta vez, com sua residência semanal se estendendo até o final de agosto, dia 28. ",
+      image_url:"https://djmag.com/sites/default/files/styles/djm_23_1005x565/public/2026-01/img.webp?itok=PaVf7aA-",
+      datanoticia:"13 de janeiro de 2026"
+      },
+
+
+      {
+      title:"Fatboy Slim, Josh Baker e Rossi farão shows intimistas na BRITs Week 2026 em prol da War Child",
+      description:"Começando no dia 12 de fevereiro, Fatboy Slim se apresentará no Boiler Shop, em Newcastle, com capacidade para 1.000 pessoas, em um de seus shows menores dos últimos anos. Em seguida, no dia 16 de fevereiro, a banda punk britânica Lambrini Girls se apresentará no The Garage, em Londres, seguida por um show de retorno à sua cidade natal, Nottingham, do vencedor do BRIT Award, Myles Smith, no dia 24 de fevereiro, no Rescue Rooms.",
+      image_url:"https://djmag.com/sites/default/files/styles/djm_23_1005x565/public/2026-01/brit-awards-2026.png.webp?itok=JB97OoOc",
+      datanoticia:"14 de janeiro de 2026"
+      },
+      {
+      title:"Novo relatório da AGF revela os festivais mais ecológicos do mundo para 2025",
+      description:"O Boom Festival em Portugal, o DGTL na Holanda, o Øyafestivalen na Noruega e o Paradise City na Bélgica foram todos classificados como excelentes. No Reino Unido, o Green Man e o LIDO Festival receberam a certificação de Altamente Recomendados, o Godiva Festival em Coventry recebeu a certificação de Recomendado e o We Out Here em Dorset foi classificado na categoria de festivais em desenvolvimento.",
+      image_url:"https://djmag.com/sites/default/files/styles/djm_23_1005x565/public/2026-01/we-out-here-festival.jpg.webp?itok=9E50DYLu",
+      datanoticia:"14 de janeiro de 2026"
+      },
+      {
+      title:"O tricampeão mundial da PDC foi visto dançando ao lado dos DJs Fantasm e Klofama",
+      description:"O tricampeão mundial, apelidado de 'Mighty Mike', foi visto dançando com os DJs Fantasm e Klofama no evento em Den Bosch, na Holanda, na noite de sábado.Fã de longa data de música eletrônica, van Gerwen já compareceu a grandes eventos como o Tomorrowland na Bélgica e o Ushuaïa Ibiza, onde visitou os bastidores com Martin Garrix e conheceu Paul Kalkbrenner. Veja uma foto do trio  aqui.",
+      image_url:"https://djmag.com/sites/default/files/styles/djm_23_1005x565/public/2026-01/skysports-michael-van-gerwen_6338399.jpg.webp?itok=I054EU1H",
+      datanoticia:"14 de janeiro de 2026"
+      },
+      {
+      title:"Shy One anuncia novo álbum, 'Mali', e lança 'I Can Tell' com participação de George Riley",
+      description:"O álbum de 10 faixas será lançado em 12 de março pela gravadora Touching Bass , do sul de Londres , e apresenta um som que, segundo ela, “me representa mais”. O título do álbum faz referência ao nome da artista residente da NTS e é descrito como um símbolo de “uma fase de desapego, tanto mental quanto sonoro”.",
+      image_url:"https://djmag.com/sites/default/files/styles/djm_23_1005x565/public/2026-01/shy-one-credit-ronan-mckenzie-1.jpg.webp?itok=KN4BGSj7",
+      datanoticia:"14 de janeiro de 2026"
+      },
+      {
+      title:"Bandcamp proíbe música gerada por IA",
+      description:`"Em uma postagem no blog  publicada em 13 de janeiro, intitulada "Mantendo o Bandcamp Humano", a plataforma de música delineou suas novas diretrizes para inteligência artificial generativa. A empresa afirmou que qualquer música "gerada total ou substancialmente por IA" não será mais permitida na plataforma e que a imitação de obras de outros artistas com auxílio de IA também é "estritamente proibida"."`,
+      image_url:"https://djmag.com/sites/default/files/styles/djm_23_1005x565/public/2026-01/SnapInsta.to_613762243_18554592616019642_1101373819019058640_n.jpg.webp?itok=fpXWKQR-",
+      datanoticia:"14 de janeiro de 2026"
+      },
+
+
+
     ];
     
     // ⚙️ CONFIGURAÇÕES DO CARROSSEL
@@ -141,14 +260,15 @@
       const slide = slides[currentSlideIndex];
       
       container.innerHTML = `
-        <div class="w-full max-w-sm sm:max-w-2xl md:max-w-3xl lg:max-w-4xl mx-auto slide-enter">
-          <div class="bg-gradient-to-br from-slate-900/90 to-purple-900/90 backdrop-blur-2xl rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 lg:p-10 border-2 border-purple-500/40 glow">
+        <div class="w-full max-w-sm sm:max-w-2xl md:max-w-3xl lg:max-w-3xl mx-auto slide-enter">
+          <div class="bg-gradient-to-br from-red-500 to-yellow-500 backdrop-blur-2xl rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 lg:p-10 border-2 border-red-50/40 glow">
             <img src="${slide.image_url}" 
               alt="${slide.title}"
-              class="w-full h-48 sm:h-64 md:h-80 lg:h-[500px] object-cover rounded-xl sm:rounded-2xl mb-4 sm:mb-6 md:mb-8 border-2 border-purple-400/60 shadow-2xl"
+              class="w-full h-48 sm:h-64 md:h-80 lg:h-[500px] object-cover rounded-xl sm:rounded-2xl mb-4 sm:mb-6 md:mb-8 border-2 border-red-600/60 shadow-2xl"
               onerror="this.src=''; this.alt='Imagem não disponível'; this.classList.add('hidden');">
-            <h2 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-white mb-3 sm:mb-4 md:mb-6 leading-tight">${slide.title}</h2>
-            <p class="text-base sm:text-lg md:text-xl lg:text-2xl text-purple-100 leading-relaxed">${slide.description}</p>
+            <h2 class="text-2xl sm:text-3xl md:text-4xl lg:text-3xl font-extrabold text-white mb-3 sm:mb-4 md:mb-6 leading-tight">${slide.title}</h2>
+            <p class="text-base sm:text-lg md:text-xl lg:text-3xl text-purple-100 leading-relaxed">${slide.description}</p>
+            <p class="text-3xl text-yellow-100 font-bold leading-relaxed">${slide.datanoticia}</p>
           </div>
         </div>
       `;
@@ -191,5 +311,7 @@
       init();
     }
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9be002549447125c',t:'MTc2ODQyMzg2Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>
+ (function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9be002549447125c',t:'MTc2ODQyMzg2Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+ </body>
 </html>
