@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jogo do Coelho - Segurança da Informação</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="/_sdk/data_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; padding: 0; }
+    
+    .font-bangers { font-family: 'Bangers', cursive; }
+    .font-nunito { font-family: 'Nunito', sans-serif; }
+    
+    @keyframes bunnyHop {
+      0%, 100% { transform: translateY(0) scaleY(1); }
+      30% { transform: translateY(-30px) scaleY(1.1); }
+      50% { transform: translateY(-40px) scaleY(0.95); }
+      70% { transform: translateY(-20px) scaleY(1.05); }
+    }
+    
+    @keyframes bunnyMove {
+      0% { left: 10%; }
+      25% { left: 40%; }
+      50% { left: 70%; }
+      75% { left: 40%; }
+      100% { left: 10%; }
+    }
+    
+    @keyframes bunnyEating {
+      0% { transform: scaleX(1); }
+      20% { transform: scaleX(1.1); }
+      40% { transform: scaleX(1); }
+      60% { transform: scaleX(1.1); }
+      80% { transform: scaleX(1); }
+      100% { transform: scaleX(1); }
+    }
+    
+    @keyframes bunnyHappy {
+      0%, 100% { transform: translateY(0) rotate(0deg) scaleY(1); }
+      25% { transform: translateY(-10px) rotate(-3deg) scaleY(1.05); }
+      50% { transform: translateY(0) rotate(0deg) scaleY(1); }
+      75% { transform: translateY(-10px) rotate(3deg) scaleY(1.05); }
+    }
+    
+    @keyframes bunnyJump {
+      0% { transform: translateY(0) scaleY(1); }
+      25% { transform: translateY(-80px) scaleY(0.9); }
+      50% { transform: translateY(0) scaleY(1.1); }
+      75% { transform: translateY(-60px) scaleY(0.9); }
+      100% { transform: translateY(0) scaleY(1); }
+    }
+    
+    @keyframes bunnyCry {
+      0%, 100% { transform: translateY(0) scaleX(1); }
+      10% { transform: translateY(5px) scaleX(1); }
+      20% { transform: translateY(0) scaleX(0.98); }
+      30% { transform: translateY(5px) scaleX(1); }
+      40% { transform: translateY(0) scaleX(0.98); }
+      50% { transform: translateY(5px) scaleX(1); }
+      60% { transform: translateY(0) scaleX(0.98); }
+      70% { transform: translateY(5px) scaleX(1); }
+      80% { transform: translateY(0) scaleX(0.98); }
+      90% { transform: translateY(5px) scaleX(1); }
+    }
+    
+    @keyframes bunnySad {
+      0%, 100% { transform: translateY(0) scaleY(1); }
+      50% { transform: translateY(5px) scaleY(0.95); }
+    }
+    
+    @keyframes teardrop {
+      0% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(60px); opacity: 0; }
+    }
+    
+    @keyframes confetti {
+      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(400px) rotate(720deg); opacity: 0; }
+    }
+    
+    @keyframes glow {
+      0%, 100% { box-shadow: 0 0 20px rgba(255, 183, 77, 0.5); }
+      50% { box-shadow: 0 0 40px rgba(255, 183, 77, 0.8), 0 0 60px rgba(255, 183, 77, 0.4); }
+    }
+    
+    @keyframes slideIn {
+      from { transform: translateX(-100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+    
+    .bunny-idle {
+      animation: bunnyHop 0.6s ease-in-out infinite, bunnyMove 4s ease-in-out infinite;
+    }
+    
+    .bunny-eating {
+      animation: bunnyEating 0.5s ease-in-out;
+    }
+    
+    .bunny-happy {
+      animation: bunnyHappy 0.8s ease-in-out;
+    }
+    
+    .bunny-jump {
+      animation: bunnyJump 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) !important;
+    }
+    
+    .bunny-cry {
+      animation: bunnyCry 1.2s ease-in-out !important;
+    }
+    
+    .bunny-sad {
+      animation: bunnySad 0.6s ease-in-out;
+    }
+    
+    .confetti-piece {
+      animation: confetti 2.5s ease-out forwards;
+    }
+    
+    .tear {
+      animation: teardrop 1.2s ease-in forwards;
+      position: absolute;
+    }
+    
+    .btn-glow {
+      animation: glow 2s ease-in-out infinite;
+    }
+    
+    .float {
+      animation: float 3s ease-in-out infinite;
+    }
+    
+    .slide-in {
+      animation: slideIn 0.5s ease-out forwards;
+    }
+    
+    .pulse-effect {
+      animation: pulse 0.6s ease-out;
+    }
+    
+    .option-btn {
+      transition: all 0.3s ease;
+    }
+    
+    .option-btn:hover:not(:disabled) {
+      transform: translateY(-3px) scale(1.02);
+    }
+    
+    .option-btn:active:not(:disabled) {
+      transform: translateY(0) scale(0.98);
+    }
+    
+    .grass-pattern {
+      background: linear-gradient(180deg, #4ade80 0%, #22c55e 50%, #16a34a 100%);
+    }
+    
+    .sky-gradient {
+      background: linear-gradient(180deg, #1e3a5f 0%, #2d5a87 30%, #3b82f6 60%, #60a5fa 100%);
+    }
+    
+    .stars {
+      background-image: 
+        radial-gradient(2px 2px at 20px 30px, white, transparent),
+        radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.8), transparent),
+        radial-gradient(1px 1px at 90px 40px, white, transparent),
+        radial-gradient(2px 2px at 130px 80px, rgba(255,255,255,0.6), transparent),
+        radial-gradient(1px 1px at 160px 120px, white, transparent);
+      background-repeat: repeat;
+      background-size: 200px 150px;
+    }
+  </style>
+</head>
+<body class="h-full font-nunito overflow-auto">
+  <div id="app" class="min-h-full w-full sky-gradient stars relative overflow-hidden">
+    
+    <!-- Tela Inicial -->
+    <div id="startScreen" class="min-h-full w-full flex flex-col items-center justify-center p-4 relative z-10">
+      <div class="text-center mb-8">
+        <div class="relative inline-block">
+          <h1 id="titleText" class="font-bangers text-5xl md:text-7xl text-yellow-400 drop-shadow-lg tracking-wider" style="text-shadow: 3px 3px 0 #b45309, 6px 6px 0 rgba(0,0,0,0.3);">
+            JOGO DO COELHO
+          </h1>
+          <div class="absolute -top-4 -right-4 text-4xl float">🥕</div>
+          <div class="absolute -bottom-2 -left-4 text-3xl float" style="animation-delay: 0.5s;">🐰</div>
+        </div>
+        <p id="subtitleText" class="text-xl md:text-2xl text-white mt-4 font-bold drop-shadow-md">
+          Segurança da Informação
+        </p>
+      </div>
+      
+      <!-- Coelho Animado -->
+      <div class="relative w-48 h-48 mb-8">
+        <div class="bunny-container absolute inset-0 flex items-center justify-center">
+          <svg class="w-32 h-32 float" viewBox="0 0 100 100">
+            <ellipse cx="50" cy="65" rx="25" ry="20" fill="#f5f5f5" stroke="#e0e0e0" stroke-width="2"/>
+            <circle cx="50" cy="40" r="18" fill="#f5f5f5" stroke="#e0e0e0" stroke-width="2"/>
+            <ellipse cx="38" cy="15" rx="6" ry="18" fill="#f5f5f5" stroke="#e0e0e0" stroke-width="2"/>
+            <ellipse cx="38" cy="15" rx="3" ry="12" fill="#ffb7c5"/>
+            <ellipse cx="62" cy="15" rx="6" ry="18" fill="#f5f5f5" stroke="#e0e0e0" stroke-width="2"/>
+            <ellipse cx="62" cy="15" rx="3" ry="12" fill="#ffb7c5"/>
+            <circle cx="43" cy="38" r="5" fill="#1a1a1a"/>
+            <circle cx="57" cy="38" r="5" fill="#1a1a1a"/>
+            <circle cx="44" cy="36" r="2" fill="white"/>
+            <circle cx="58" cy="36" r="2" fill="white"/>
+            <ellipse cx="50" cy="45" rx="3" ry="2" fill="#ffb7c5"/>
+            <path d="M 47 48 Q 50 52 53 48" stroke="#1a1a1a" stroke-width="1.5" fill="none"/>
+            <line x1="30" y1="44" x2="42" y2="46" stroke="#ccc" stroke-width="1"/>
+            <line x1="30" y1="48" x2="42" y2="48" stroke="#ccc" stroke-width="1"/>
+            <line x1="58" y1="46" x2="70" y2="44" stroke="#ccc" stroke-width="1"/>
+            <line x1="58" y1="48" x2="70" y2="48" stroke="#ccc" stroke-width="1"/>
+            <ellipse cx="35" cy="82" rx="8" ry="5" fill="#f5f5f5" stroke="#e0e0e0" stroke-width="2"/>
+            <ellipse cx="65" cy="82" rx="8" ry="5" fill="#f5f5f5" stroke="#e0e0e0" stroke-width="2"/>
+            <circle cx="75" cy="65" r="6" fill="#f5f5f5" stroke="#e0e0e0" stroke-width="2"/>
+          </svg>
+        </div>
+      </div>
+      
+      <button id="startBtn" class="btn-glow bg-gradient-to-r from-yellow-400 to-orange-500 text-white font-bold text-xl md:text-2xl px-12 py-4 rounded-full shadow-2xl hover:from-yellow-300 hover:to-orange-400 transition-all duration-300 transform hover:scale-105">
+        🎮 JOGAR AGORA
+      </button>
+      
+      <div class="mt-8 text-white/80 text-center max-w-md">
+        <p class="text-sm md:text-base">Acerte as perguntas para alimentar o coelho com cenouras! 🥕</p>
+      </div>
+      
+      <!-- Ranking -->
+      <div id="rankingSection" class="mt-8 w-full max-w-md bg-white/10 backdrop-blur-sm rounded-2xl p-4 hidden">
+        <h3 class="text-yellow-400 font-bold text-lg mb-3 text-center">🏆 Ranking</h3>
+        <div id="rankingList" class="space-y-2"></div>
+      </div>
+    </div>
+    
+    <!-- Tela do Jogo -->
+    <div id="gameScreen" class="min-h-full w-full hidden flex-col relative">
+      <!-- Header do Jogo -->
+      <div class="bg-gradient-to-r from-purple-900/90 to-blue-900/90 backdrop-blur-sm p-3 md:p-4 flex justify-between items-center shadow-lg relative z-20">
+        <div class="flex items-center gap-2 md:gap-4">
+          <div class="bg-yellow-400 rounded-full px-3 py-1 md:px-4 md:py-2">
+            <span class="font-bold text-purple-900 text-sm md:text-base">💰 <span id="scoreDisplay">0</span></span>
+          </div>
+          <div class="bg-green-500 rounded-full px-3 py-1 md:px-4 md:py-2">
+            <span class="font-bold text-white text-sm md:text-base">✅ <span id="correctDisplay">0</span></span>
+          </div>
+        </div>
+        <div class="text-white font-bold text-sm md:text-base">
+          Pergunta <span id="questionNum">1</span>/<span id="totalQuestions">10</span>
+        </div>
+      </div>
+      
+      <!-- Área do Coelho -->
+      <div class="relative min-h-96 bg-gradient-to-b from-transparent to-green-600/30 overflow-hidden flex flex-col items-center justify-center p-4 md:p-6 gap-4">
+        <!-- Coelho Animado -->
+        <div id="bunnyGameContainer" class="relative w-40 h-40 md:w-56 md:h-56">
+          <div id="bunnyGame" class="absolute inset-0 bunny-idle flex items-center justify-center">
+            <svg class="w-28 h-28 md:w-40 md:h-40" viewBox="0 0 100 100">
+              <ellipse cx="50" cy="65" rx="25" ry="20" fill="#f5f5f5" stroke="#e0e0e0" stroke-width="2"/>
+              <circle cx="50" cy="40" r="18" fill="#f5f5f5" stroke="#e0e0e0" stroke-width="2"/>
+              <ellipse cx="38" cy="15" rx="6" ry="18" fill="#f5f5f5" stroke="#e0e0e0" stroke-width="2"/>
+              <ellipse cx="38" cy="15" rx="3" ry="12" fill="#ffb7c5"/>
+              <ellipse cx="62" cy="15" rx="6" ry="18" fill="#f5f5f5" stroke="#e0e0e0" stroke-width="2"/>
+              <ellipse cx="62" cy="15" rx="3" ry="12" fill="#ffb7c5"/>
+              <circle cx="43" cy="38" r="5" fill="#1a1a1a"/>
+              <circle cx="57" cy="38" r="5" fill="#1a1a1a"/>
+              <circle cx="44" cy="36" r="2" fill="white"/>
+              <circle cx="58" cy="36" r="2" fill="white"/>
+              <ellipse cx="50" cy="45" rx="3" ry="2" fill="#ffb7c5"/>
+              <path d="M 47 48 Q 50 52 53 48" stroke="#1a1a1a" stroke-width="1.5" fill="none"/>
+              <line x1="30" y1="44" x2="42" y2="46" stroke="#ccc" stroke-width="1"/>
+              <line x1="30" y1="48" x2="42" y2="48" stroke="#ccc" stroke-width="1"/>
+              <line x1="58" y1="46" x2="70" y2="44" stroke="#ccc" stroke-width="1"/>
+              <line x1="58" y1="48" x2="70" y2="48" stroke="#ccc" stroke-width="1"/>
+              <ellipse cx="35" cy="82" rx="8" ry="5" fill="#f5f5f5" stroke="#e0e0e0" stroke-width="2"/>
+              <ellipse cx="65" cy="82" rx="8" ry="5" fill="#f5f5f5" stroke="#e0e0e0" stroke-width="2"/>
+              <circle cx="75" cy="65" r="6" fill="#f5f5f5" stroke="#e0e0e0" stroke-width="2"/>
+            </svg>
+          </div>
+          
+          <!-- Lágrimas -->
+          <div id="tearsContainer" class="absolute inset-0"></div>
+          
+          <!-- Cenouras coletadas -->
+          <div id="bunnyFood" class="absolute -bottom-4 left-1/2 transform -translate-x-1/2 text-2xl whitespace-nowrap overflow-x-auto max-w-full">
+          </div>
+        </div>
+
+        <!-- Status de Fome -->
+        <div id="statusBubble" class="text-center">
+          <div class="bg-white/95 rounded-full px-4 py-2 inline-block shadow-lg">
+            <p id="statusText" class="font-bold text-base md:text-lg text-gray-800">Coelho faminto! 😢</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Grama -->
+      <div class="grass-pattern h-4 md:h-6 relative z-10"></div>
+      
+      <!-- Área de Perguntas -->
+      <div class="flex-1 bg-gradient-to-b from-green-800 to-green-900 p-4 md:p-6 relative z-10 overflow-auto">
+        <div class="max-w-2xl mx-auto">
+          <!-- Pergunta -->
+          <div class="bg-white/95 rounded-2xl p-4 md:p-6 shadow-2xl mb-4 md:mb-6">
+            <div class="flex items-start gap-3">
+              <span class="text-2xl md:text-3xl flex-shrink-0">❓</span>
+              <p id="questionText" class="text-base md:text-lg font-bold text-gray-800 flex-1"></p>
+            </div>
+          </div>
+          
+          <!-- Opções -->
+          <div id="optionsContainer" class="space-y-3"></div>
+          
+          <!-- Área de Resultado -->
+          <div id="resultArea" class="hidden mt-6">
+            <div id="resultBox" class="rounded-2xl p-4 md:p-6 text-center shadow-2xl">
+              <div id="resultIcon" class="text-5xl md:text-6xl mb-3"></div>
+              <p id="resultText" class="text-lg md:text-xl font-bold mb-2"></p>
+              <p id="explanationText" class="text-sm md:text-base opacity-90"></p>
+            </div>
+            <button id="nextBtn" class="w-full mt-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-bold text-lg py-4 rounded-full shadow-xl hover:from-blue-400 hover:to-purple-500 transition-all">
+              Próxima Pergunta ➡️
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Tela de Resultado Final -->
+    <div id="endScreen" class="min-h-full w-full hidden flex-col items-center justify-center p-4 relative z-10">
+      <div class="bg-white/95 rounded-3xl p-6 md:p-10 max-w-md w-full shadow-2xl text-center">
+        <div class="text-6xl md:text-7xl mb-4" id="finalEmoji">🐰</div>
+        <h2 class="font-bangers text-3xl md:text-4xl text-purple-700 mb-2">Parabéns!</h2>
+        <p class="text-gray-600 mb-6">Você completou o quiz!</p>
+        
+        <div class="bg-gradient-to-r from-yellow-400 to-orange-500 rounded-2xl p-4 mb-6">
+          <p class="text-white text-lg">Pontuação Final</p>
+          <p class="text-white font-bangers text-5xl md:text-6xl" id="finalScore">0</p>
+        </div>
+        
+        <div class="grid grid-cols-2 gap-4 mb-6">
+          <div class="bg-green-100 rounded-xl p-3">
+            <p class="text-green-600 text-sm">Acertos</p>
+            <p class="text-green-700 font-bold text-2xl" id="finalCorrect">0</p>
+          </div>
+          <div class="bg-red-100 rounded-xl p-3">
+            <p class="text-red-600 text-sm">Erros</p>
+            <p class="text-red-700 font-bold text-2xl" id="finalWrong">0</p>
+          </div>
+        </div>
+        
+        <div class="mb-6 text-2xl text-center overflow-x-auto">
+          <p id="finalFoodDisplay">Cenouras: 🥕🥕🥕🥕🥕</p>
+        </div>
+        
+        <div class="mb-6">
+          <input type="text" id="playerName" placeholder="Seu nome para o ranking" class="w-full px-4 py-3 rounded-full border-2 border-purple-300 focus:border-purple-500 focus:outline-none text-center" maxlength="20">
+        </div>
+        
+        <div class="flex flex-col gap-3">
+          <button id="saveScoreBtn" class="bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold text-lg py-3 rounded-full shadow-xl hover:from-green-400 hover:to-emerald-500 transition-all">
+            💾 Salvar Pontuação
+          </button>
+          <button id="shareWhatsappBtn" class="bg-gradient-to-r from-green-400 to-green-600 text-white font-bold text-lg py-3 rounded-full shadow-xl hover:from-green-300 hover:to-green-500 transition-all flex items-center justify-center gap-2">
+            📱 Compartilhar no WhatsApp
+          </button>
+          <button id="playAgainBtn" class="bg-gradient-to-r from-purple-500 to-pink-600 text-white font-bold text-lg py-3 rounded-full shadow-xl hover:from-purple-400 hover:to-pink-500 transition-all">
+            🔄 Jogar Novamente
+          </button>
+        </div>
+      </div>
+      
+      <!-- Confetes -->
+      <div id="confettiContainer" class="fixed inset-0 pointer-events-none overflow-hidden"></div>
+    </div>
+    
+  </div>
+
+  <script>
+    const defaultConfig = {
+      game_title: 'JOGO DO COELHO',
+      subtitle: 'Segurança da Informação',
+      background_color: '#1e3a5f',
+      surface_color: '#ffffff',
+      text_color: '#1f2937',
+      primary_action: '#f59e0b',
+      secondary_action: '#8b5cf6'
+    };
+
+    let config = { ...defaultConfig };
+    let scores = [];
+    let currentQuestion = 0;
+    let score = 0;
+    let correctAnswers = 0;
+    let selectedOption = null;
+    let isAnimating = false;
+
+    const questions = [
+      {
+        question: "O que é phishing?",
+        options: [
+          "Um tipo de peixe digital",
+          "Técnica para roubar dados através de mensagens falsas",
+          "Software de proteção"
+        ],
+        correct: 1,
+        explanation: "Phishing é uma técnica de engenharia social usada para enganar usuários e obter informações confidenciais através de e-mails, mensagens ou sites falsos."
+      },
+      {
+        question: "Qual é a melhor prática para criar senhas seguras?",
+        options: [
+          "Usar o nome do pet",
+          "Usar data de nascimento",
+          "Combinar letras, números e símbolos"
+        ],
+        correct: 2,
+        explanation: "Senhas fortes devem ter pelo menos 12 caracteres, combinando letras maiúsculas, minúsculas, números e símbolos especiais."
+      },
+      {
+        question: "O que fazer ao receber um e-mail suspeito do 'banco'?",
+        options: [
+          "Clicar no link para verificar",
+          "Não clicar e verificar diretamente no site oficial",
+          "Responder pedindo mais informações"
+        ],
+        correct: 1,
+        explanation: "Nunca clique em links de e-mails suspeitos. Acesse sempre o site oficial do banco digitando o endereço diretamente no navegador."
+      },
+      {
+        question: "O que é autenticação de dois fatores (2FA)?",
+        options: [
+          "Usar duas senhas diferentes",
+          "Verificação adicional além da senha",
+          "Fazer login duas vezes"
+        ],
+        correct: 1,
+        explanation: "2FA adiciona uma camada extra de segurança, exigindo algo que você sabe (senha) e algo que você tem (celular, token)."
+      },
+      {
+        question: "Qual é o risco de usar Wi-Fi público?",
+        options: [
+          "Nenhum risco",
+          "Hackers podem interceptar seus dados",
+          "Apenas deixa a conexão lenta"
+        ],
+        correct: 1,
+        explanation: "Redes Wi-Fi públicas podem ser monitoradas por hackers. Evite acessar informações sensíveis ou use uma VPN."
+      },
+      {
+        question: "O que é engenharia social?",
+        options: [
+          "Curso de engenharia",
+          "Manipulação psicológica para obter informações",
+          "Construção de redes sociais"
+        ],
+        correct: 1,
+        explanation: "Engenharia social é a manipulação de pessoas para que revelem informações confidenciais ou realizem ações que comprometam a segurança."
+      },
+      {
+        question: "Como proteger dados em dispositivos móveis?",
+        options: [
+          "Não usar senha de bloqueio",
+          "Usar bloqueio biométrico e criptografia",
+          "Deixar sempre desbloqueado"
+        ],
+        correct: 1,
+        explanation: "Use bloqueio de tela, biometria, mantenha o sistema atualizado e ative a criptografia para proteger seus dados móveis."
+      },
+      {
+        question: "O que fazer antes de descartar um computador antigo?",
+        options: [
+          "Apenas deletar os arquivos",
+          "Formatar e destruir o disco rígido de forma segura",
+          "Doar sem apagar nada"
+        ],
+        correct: 1,
+        explanation: "Dados podem ser recuperados de discos formatados. Use software de limpeza segura ou destrua fisicamente o disco."
+      },
+      {
+        question: "Qual é a importância de manter softwares atualizados?",
+        options: [
+          "Apenas deixa mais bonito",
+          "Corrige vulnerabilidades de segurança",
+          "Não tem importância"
+        ],
+        correct: 1,
+        explanation: "Atualizações frequentemente corrigem falhas de segurança descobertas que podem ser exploradas por hackers."
+      },
+      {
+        question: "O que é um ransomware?",
+        options: [
+          "Programa de resgate animal",
+          "Malware que sequestra dados e exige resgate",
+          "Antivírus especial"
+        ],
+        correct: 1,
+        explanation: "Ransomware é um tipo de malware que criptografa seus arquivos e exige pagamento para liberá-los. Faça backups regulares!"
+      }
+    ];
+
+    const dataHandler = {
+      onDataChanged(data) {
+        scores = data.sort((a, b) => b.score - a.score).slice(0, 5);
+        updateRanking();
+      }
+    };
+
+    function updateRanking() {
+      const rankingList = document.getElementById('rankingList');
+      const rankingSection = document.getElementById('rankingSection');
+      
+      if (scores.length > 0) {
+        rankingSection.classList.remove('hidden');
+        rankingList.innerHTML = scores.map((s, i) => `
+          <div class="flex items-center justify-between bg-white/20 rounded-lg px-3 py-2">
+            <div class="flex items-center gap-2">
+              <span class="text-lg">${i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : '🏅'}</span>
+              <span class="text-white font-semibold">${s.player_name}</span>
+            </div>
+            <span class="text-yellow-400 font-bold">${s.score}</span>
+          </div>
+        `).join('');
+      } else {
+        rankingSection.classList.add('hidden');
+      }
+    }
+
+    function applyConfig() {
+      document.getElementById('titleText').textContent = config.game_title || defaultConfig.game_title;
+      document.getElementById('subtitleText').textContent = config.subtitle || defaultConfig.subtitle;
+    }
+
+    function updateBunnyStatus() {
+      const statusText = document.getElementById('statusText');
+      const bunnyFood = document.getElementById('bunnyFood');
+      const bunny = document.getElementById('bunnyGame');
+      
+      bunny.classList.remove('bunny-happy', 'bunny-sad', 'bunny-eating', 'bunny-jump', 'bunny-cry');
+      
+      const carrotCount = correctAnswers;
+      let carrots = '';
+      for (let i = 0; i < carrotCount; i++) {
+        carrots += '🥕';
+      }
+      bunnyFood.textContent = carrots;
+      
+      if (carrotCount === 0) {
+        statusText.textContent = 'Coelho faminto! 😢';
+        statusText.style.color = '#dc2626';
+        bunny.classList.add('bunny-sad');
+      } else if (carrotCount < 3) {
+        statusText.textContent = 'Coelho um pouco triste... 😐';
+        statusText.style.color = '#f59e0b';
+      } else if (carrotCount < 6) {
+        statusText.textContent = 'Coelho feliz! 😊';
+        statusText.style.color = '#16a34a';
+        bunny.classList.add('bunny-happy');
+      } else if (carrotCount < 10) {
+        statusText.textContent = 'Coelho muito feliz! 🤩';
+        statusText.style.color = '#059669';
+        bunny.classList.add('bunny-happy');
+      } else {
+        statusText.textContent = 'Coelho SUPER FELIZ! 😍';
+        statusText.style.color = '#0d9488';
+        bunny.classList.add('bunny-happy');
+      }
+    }
+
+    function startGame() {
+      currentQuestion = 0;
+      score = 0;
+      correctAnswers = 0;
+      selectedOption = null;
+      
+      document.getElementById('startScreen').classList.add('hidden');
+      document.getElementById('gameScreen').classList.remove('hidden');
+      document.getElementById('gameScreen').classList.add('flex');
+      document.getElementById('endScreen').classList.add('hidden');
+      
+      shuffleQuestions();
+      updateBunnyStatus();
+      loadQuestion();
+    }
+
+    function shuffleQuestions() {
+      for (let i = questions.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [questions[i], questions[j]] = [questions[j], questions[i]];
+      }
+    }
+
+    function loadQuestion() {
+      const q = questions[currentQuestion];
+      document.getElementById('questionText').textContent = q.question;
+      document.getElementById('questionNum').textContent = currentQuestion + 1;
+      document.getElementById('totalQuestions').textContent = questions.length;
+      document.getElementById('scoreDisplay').textContent = score;
+      document.getElementById('correctDisplay').textContent = correctAnswers;
+      
+      const container = document.getElementById('optionsContainer');
+      container.innerHTML = '';
+      
+      q.options.forEach((opt, i) => {
+        const btn = document.createElement('button');
+        btn.className = `option-btn w-full bg-white/95 hover:bg-white text-gray-800 font-semibold text-sm md:text-base py-3 md:py-4 px-4 md:px-6 rounded-xl shadow-lg flex items-center gap-3 text-left slide-in`;
+        btn.style.animationDelay = `${i * 0.1}s`;
+        btn.innerHTML = `
+          <span class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold flex-shrink-0">${String.fromCharCode(65 + i)}</span>
+          <span class="flex-1">${opt}</span>
+        `;
+        btn.onclick = () => selectOption(i, q);
+        container.appendChild(btn);
+      });
+      
+      document.getElementById('resultArea').classList.add('hidden');
+      
+      const bunny = document.getElementById('bunnyGame');
+      bunny.classList.remove('bunny-eating', 'bunny-happy', 'bunny-sad', 'bunny-jump', 'bunny-cry');
+      bunny.classList.add('bunny-idle');
+    }
+
+    function selectOption(index, q) {
+      if (isAnimating) return;
+      isAnimating = true;
+      selectedOption = index;
+      
+      const buttons = document.querySelectorAll('.option-btn');
+      buttons.forEach(btn => btn.disabled = true);
+      buttons[index].classList.add('ring-4', 'ring-yellow-400');
+      
+      const isCorrect = index === q.correct;
+      const bunny = document.getElementById('bunnyGame');
+      
+      setTimeout(() => {
+        if (isCorrect) {
+          bunny.classList.remove('bunny-idle', 'bunny-sad');
+          bunny.classList.add('bunny-jump');
+          createConfetti(10);
+          
+          setTimeout(() => {
+            score += 100;
+            correctAnswers++;
+            updateBunnyStatus();
+            showResult(true, q);
+            isAnimating = false;
+          }, 800);
+        } else {
+          bunny.classList.remove('bunny-idle', 'bunny-eating', 'bunny-happy', 'bunny-jump');
+          bunny.classList.add('bunny-cry');
+          createTears();
+          
+          setTimeout(() => {
+            showResult(false, q);
+            isAnimating = false;
+          }, 1200);
+        }
+      }, 300);
+    }
+
+    function createTears() {
+      const tearsContainer = document.getElementById('tearsContainer');
+      tearsContainer.innerHTML = '';
+      
+      for (let i = 0; i < 4; i++) {
+        const tear = document.createElement('div');
+        tear.className = 'tear';
+        tear.innerHTML = '💧';
+        tear.style.left = `${20 + i * 15}%`;
+        tear.style.top = '30%';
+        tear.style.fontSize = '12px';
+        tearsContainer.appendChild(tear);
+        
+        setTimeout(() => tear.remove(), 1200);
+      }
+    }
+
+    function showResult(isCorrect, q) {
+      const resultArea = document.getElementById('resultArea');
+      const resultBox = document.getElementById('resultBox');
+      const resultIcon = document.getElementById('resultIcon');
+      const resultText = document.getElementById('resultText');
+      const explanationText = document.getElementById('explanationText');
+      
+      if (isCorrect) {
+        resultBox.className = 'bg-gradient-to-r from-green-400 to-emerald-500 text-white rounded-2xl p-4 md:p-6 text-center shadow-2xl';
+        resultIcon.textContent = '🥕';
+        resultText.textContent = 'Acertou! +100 pontos!';
+      } else {
+        resultBox.className = 'bg-gradient-to-r from-red-400 to-pink-500 text-white rounded-2xl p-4 md:p-6 text-center shadow-2xl';
+        resultIcon.textContent = '😢';
+        resultText.textContent = `A resposta correta era: ${String.fromCharCode(65 + q.correct)}`;
+      }
+      
+      explanationText.textContent = q.explanation;
+      resultArea.classList.remove('hidden');
+      
+      document.getElementById('scoreDisplay').textContent = score;
+      document.getElementById('correctDisplay').textContent = correctAnswers;
+    }
+
+    function nextQuestion() {
+      currentQuestion++;
+      
+      if (currentQuestion >= questions.length) {
+        showEndScreen();
+      } else {
+        loadQuestion();
+      }
+    }
+
+    function showEndScreen() {
+      document.getElementById('gameScreen').classList.add('hidden');
+      document.getElementById('gameScreen').classList.remove('flex');
+      document.getElementById('endScreen').classList.remove('hidden');
+      document.getElementById('endScreen').classList.add('flex');
+      
+      document.getElementById('finalScore').textContent = score;
+      document.getElementById('finalCorrect').textContent = correctAnswers;
+      document.getElementById('finalWrong').textContent = questions.length - correctAnswers;
+      
+      let carrots = '';
+      for (let i = 0; i < correctAnswers; i++) {
+        carrots += '🥕';
+      }
+      document.getElementById('finalFoodDisplay').textContent = `Cenouras: ${carrots}`;
+      
+      const percentage = (correctAnswers / questions.length) * 100;
+      let emoji = '😢';
+      if (percentage === 100) emoji = '🏆';
+      else if (percentage >= 80) emoji = '😍';
+      else if (percentage >= 60) emoji = '😊';
+      else if (percentage >= 40) emoji = '😐';
+      else emoji = '😢';
+      
+      document.getElementById('finalEmoji').textContent = emoji;
+      
+      createConfetti(20);
+    }
+
+    async function saveScore() {
+      const nameInput = document.getElementById('playerName');
+      const name = nameInput.value.trim() || 'Jogador Anônimo';
+      const saveBtn = document.getElementById('saveScoreBtn');
+      
+      if (scores.length >= 999) {
+        saveBtn.textContent = '⚠️ Ranking cheio!';
+        saveBtn.disabled = true;
+        return;
+      }
+      
+      saveBtn.disabled = true;
+      saveBtn.textContent = '💾 Salvando...';
+      
+      const result = await window.dataSdk.create({
+        player_name: name,
+        score: score,
+        correct_answers: correctAnswers,
+        total_questions: questions.length,
+        played_at: new Date().toISOString()
+      });
+      
+      if (result.isOk) {
+        saveBtn.textContent = '✅ Salvo!';
+        setTimeout(() => {
+          goToStart();
+        }, 1000);
+      } else {
+        saveBtn.textContent = '❌ Erro ao salvar';
+        saveBtn.disabled = false;
+      }
+    }
+
+    function shareWhatsapp() {
+      const nameInput = document.getElementById('playerName');
+      const name = nameInput.value.trim() || 'Jogador Anônimo';
+      const percentage = Math.round((correctAnswers / questions.length) * 100);
+      
+      const message = `🐰 Jogo do Coelho - Segurança da Informação 🐰
+
+Olha só que show! Eu consegui ${correctAnswers} acertos em ${questions.length} perguntas!
+
+📊 Resultado:
+• Pontuação: ${score} pontos
+• Acertos: ${correctAnswers}/${questions.length}
+• Percentual: ${percentage}%
+• Cenouras: ${Array(correctAnswers).fill('🥕').join('')}
+
+Jogador: ${name}
+
+Venha jogar também! 🎮`;
+      
+      const encodedMessage = encodeURIComponent(message);
+      window.open(`https://wa.me/?text=${encodedMessage}`, '_blank');
+    }
+
+    function goToStart() {
+      document.getElementById('endScreen').classList.add('hidden');
+      document.getElementById('endScreen').classList.remove('flex');
+      document.getElementById('startScreen').classList.remove('hidden');
+      document.getElementById('playerName').value = '';
+      document.getElementById('saveScoreBtn').disabled = false;
+      document.getElementById('saveScoreBtn').textContent = '💾 Salvar Pontuação';
+    }
+
+    function createConfetti(count) {
+      const container = document.getElementById('confettiContainer');
+      const colors = ['#ff6b6b', '#4ecdc4', '#ffe66d', '#95e1d3', '#f38181', '#aa96da', '#fcbad3', '#a8d8ea'];
+      
+      for (let i = 0; i < count; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti-piece absolute';
+        confetti.style.left = `${Math.random() * 100}%`;
+        confetti.style.top = '-20px';
+        confetti.style.width = `${Math.random() * 10 + 5}px`;
+        confetti.style.height = `${Math.random() * 10 + 5}px`;
+        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+        confetti.style.animationDelay = `${Math.random() * 0.5}s`;
+        container.appendChild(confetti);
+        
+        setTimeout(() => confetti.remove(), 2500);
+      }
+    }
+
+    document.getElementById('startBtn').addEventListener('click', startGame);
+    document.getElementById('nextBtn').addEventListener('click', nextQuestion);
+    document.getElementById('saveScoreBtn').addEventListener('click', saveScore);
+    document.getElementById('shareWhatsappBtn').addEventListener('click', shareWhatsapp);
+    document.getElementById('playAgainBtn').addEventListener('click', startGame);
+
+    async function init() {
+      if (window.elementSdk) {
+        window.elementSdk.init({
+          defaultConfig,
+          onConfigChange: async (newConfig) => {
+            config = { ...defaultConfig, ...newConfig };
+            applyConfig();
+          },
+          mapToCapabilities: (cfg) => ({
+            recolorables: [
+              {
+                get: () => cfg.background_color || defaultConfig.background_color,
+                set: (v) => window.elementSdk.setConfig({ background_color: v })
+              },
+              {
+                get: () => cfg.surface_color || defaultConfig.surface_color,
+                set: (v) => window.elementSdk.setConfig({ surface_color: v })
+              },
+              {
+                get: () => cfg.text_color || defaultConfig.text_color,
+                set: (v) => window.elementSdk.setConfig({ text_color: v })
+              },
+              {
+                get: () => cfg.primary_action || defaultConfig.primary_action,
+                set: (v) => window.elementSdk.setConfig({ primary_action: v })
+              },
+              {
+                get: () => cfg.secondary_action || defaultConfig.secondary_action,
+                set: (v) => window.elementSdk.setConfig({ secondary_action: v })
+              }
+            ],
+            borderables: [],
+            fontEditable: undefined,
+            fontSizeable: undefined
+          }),
+          mapToEditPanelValues: (cfg) => new Map([
+            ['game_title', cfg.game_title || defaultConfig.game_title],
+            ['subtitle', cfg.subtitle || defaultConfig.subtitle]
+          ])
+        });
+      }
+
+      if (window.dataSdk) {
+        await window.dataSdk.init(dataHandler);
+      }
+
+      applyConfig();
+    }
+
+    init();
+  </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9cf7c690523a6499',t:'MTc3MTM1NzQyNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
