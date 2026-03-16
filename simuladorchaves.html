@@ -1,0 +1,935 @@
+<!doctype html>
+<html lang="pt-BR" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Encryption Visualizer</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: 'Space Grotesk', sans-serif; margin: 0; }
+    .mono { font-family: 'JetBrains Mono', monospace; }
+
+    @keyframes dataFlow {
+      0% { transform: translateX(-100%); opacity: 0; }
+      20% { opacity: 1; }
+      80% { opacity: 1; }
+      100% { transform: translateX(100%); opacity: 0; }
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 5px rgba(99, 255, 182, 0.3); }
+      50% { box-shadow: 0 0 25px rgba(99, 255, 182, 0.6); }
+    }
+
+    @keyframes bitShuffle {
+      0% { transform: translateY(0); }
+      25% { transform: translateY(-4px) rotateX(90deg); }
+      50% { transform: translateY(0) rotateX(180deg); }
+      75% { transform: translateY(4px) rotateX(270deg); }
+      100% { transform: translateY(0) rotateX(360deg); }
+    }
+
+    @keyframes slideIn {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    @keyframes xorFlash {
+      0% { background: transparent; }
+      50% { background: rgba(255, 183, 77, 0.3); }
+      100% { background: transparent; }
+    }
+
+    .step-active { animation: pulseGlow 1.5s ease-in-out infinite; }
+    .bit-animate { animation: bitShuffle 0.6s ease-in-out; }
+    .slide-in { animation: slideIn 0.4s ease-out forwards; }
+    .xor-flash { animation: xorFlash 0.5s ease-out; }
+
+    .step-box {
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .step-box.active {
+      transform: scale(1.03);
+    }
+
+    .tab-btn {
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .tab-btn::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      width: 0;
+      height: 3px;
+      transition: all 0.3s ease;
+      transform: translateX(-50%);
+    }
+    .tab-btn.active::after {
+      width: 80%;
+    }
+
+    .data-block {
+      transition: all 0.3s ease;
+    }
+    .data-block:hover {
+      transform: translateY(-2px);
+    }
+
+    .progress-bar {
+      transition: width 0.5s ease;
+    }
+
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb { background: rgba(99,255,182,0.3); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(99,255,182,0.5); }
+  </style>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            bg: '#0a0e1a',
+            surface: '#131a2e',
+            accent: '#63ffb6',
+            text: '#e2e8f0',
+            secondary: '#ff6b6b'
+          }
+        }
+      }
+    }
+  </script>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full bg-bg text-text">
+  <div id="app" class="h-full w-full overflow-auto"><!-- Header -->
+   <header class="px-6 py-5 border-b border-white/5">
+    <div class="max-w-6xl mx-auto flex items-center justify-between">
+     <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-accent to-emerald-600 flex items-center justify-center"><i data-lucide="shield-check" class="w-5 h-5 text-bg"></i>
+      </div>
+      <div>
+       <h1 id="mainTitle" class="text-xl font-bold text-accent">Como a Criptografia Funciona</h1>
+       <p class="text-xs text-text/50 mono">Visualização Interativa • DES &amp; AES</p>
+      </div>
+     </div>
+     <div class="flex gap-1 p-1 bg-surface rounded-xl border border-white/5"><button class="tab-btn active px-5 py-2 rounded-lg text-sm font-semibold" data-tab="des" id="tabDes">DES</button> <button class="tab-btn px-5 py-2 rounded-lg text-sm font-semibold" data-tab="aes" id="tabAes">AES</button> <button class="tab-btn px-5 py-2 rounded-lg text-sm font-semibold" data-tab="compare" id="tabCompare">Comparar</button>
+     </div>
+    </div>
+   </header><!-- Content -->
+   <main class="max-w-6xl mx-auto px-6 py-6"><!-- Input Section -->
+    <div class="mb-6 p-5 bg-surface rounded-2xl border border-white/5">
+     <div class="flex items-center gap-2 mb-3"><i data-lucide="type" class="w-4 h-4 text-accent"></i> <span class="text-sm font-semibold text-accent">Texto para Cifrar</span>
+     </div>
+     <div class="flex gap-3 flex-wrap"><input type="text" id="inputText" value="HELLO" maxlength="16" class="flex-1 min-w-[200px] bg-bg border border-white/10 rounded-xl px-4 py-3 mono text-sm text-text focus:outline-none focus:border-accent/50 placeholder-text/30" placeholder="Digite seu texto..."> <input type="text" id="inputKey" value="SECRET" maxlength="16" class="flex-1 min-w-[200px] bg-bg border border-white/10 rounded-xl px-4 py-3 mono text-sm text-text focus:outline-none focus:border-accent/50 placeholder-text/30" placeholder="Chave de criptografia..."> <button id="btnAnimate" class="px-6 py-3 bg-gradient-to-r from-accent to-emerald-500 text-bg font-bold rounded-xl hover:opacity-90 transition-opacity flex items-center gap-2"> <i data-lucide="play" class="w-4 h-4"></i> Animar </button>
+     </div>
+     <div class="mt-3 flex items-center gap-4">
+      <div class="flex items-center gap-2"><span class="text-xs text-text/40">Binário:</span> <span id="binaryPreview" class="mono text-xs text-accent/60 truncate max-w-md"></span>
+      </div>
+     </div>
+    </div><!-- DES Panel -->
+    <div id="panelDes" class="tab-panel">
+     <div class="flex items-center gap-2 mb-4">
+      <div class="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center"><i data-lucide="lock" class="w-4 h-4 text-accent"></i>
+      </div>
+      <div>
+       <h2 id="desTitle" class="text-lg font-bold">DES — Data Encryption Standard</h2>
+       <p class="text-xs text-text/40">Bloco de 64 bits • Chave de 56 bits • 16 rodadas Feistel</p>
+      </div>
+     </div><!-- DES Steps -->
+     <div class="grid gap-3" id="desSteps"><!-- Step 0: Input -->
+      <div class="step-box p-4 bg-surface rounded-xl border border-white/5" data-step="0">
+       <div class="flex items-start gap-3">
+        <div class="w-7 h-7 rounded-lg bg-accent/20 flex items-center justify-center flex-shrink-0 mt-0.5"><span class="text-xs font-bold text-accent">1</span>
+        </div>
+        <div class="flex-1">
+         <h3 class="text-sm font-bold mb-1">Permutação Inicial (IP)</h3>
+         <p class="text-xs text-text/50 mb-3">Os 64 bits do texto são reorganizados em uma ordem fixa definida pela tabela IP.</p>
+         <div class="flex items-center gap-3 flex-wrap">
+          <div class="data-block bg-bg/50 rounded-lg px-3 py-2 mono text-xs"><span class="text-text/40 text-[10px] block">Entrada</span> <span id="des-ip-in" class="text-accent">01001000...</span>
+          </div><i data-lucide="arrow-right" class="w-4 h-4 text-accent/40"></i>
+          <div class="data-block bg-bg/50 rounded-lg px-3 py-2 mono text-xs"><span class="text-text/40 text-[10px] block">Após IP</span> <span id="des-ip-out" class="text-secondary">11001100...</span>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div><!-- Step 1: Split -->
+      <div class="step-box p-4 bg-surface rounded-xl border border-white/5" data-step="1">
+       <div class="flex items-start gap-3">
+        <div class="w-7 h-7 rounded-lg bg-accent/20 flex items-center justify-center flex-shrink-0 mt-0.5"><span class="text-xs font-bold text-accent">2</span>
+        </div>
+        <div class="flex-1">
+         <h3 class="text-sm font-bold mb-1">Divisão em L e R (32 bits cada)</h3>
+         <p class="text-xs text-text/50 mb-3">O bloco é dividido em duas metades para entrar na rede Feistel.</p>
+         <div class="flex items-center gap-3 flex-wrap">
+          <div class="data-block bg-bg/50 rounded-lg px-3 py-2 mono text-xs border-l-2 border-blue-400"><span class="text-blue-400 text-[10px] block">L₀ (32 bits)</span> <span id="des-l0">11001100...</span>
+          </div>
+          <div class="data-block bg-bg/50 rounded-lg px-3 py-2 mono text-xs border-l-2 border-orange-400"><span class="text-orange-400 text-[10px] block">R₀ (32 bits)</span> <span id="des-r0">10101010...</span>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div><!-- Step 2: Feistel Round -->
+      <div class="step-box p-4 bg-surface rounded-xl border border-white/5" data-step="2">
+       <div class="flex items-start gap-3">
+        <div class="w-7 h-7 rounded-lg bg-accent/20 flex items-center justify-center flex-shrink-0 mt-0.5"><span class="text-xs font-bold text-accent">3</span>
+        </div>
+        <div class="flex-1">
+         <h3 class="text-sm font-bold mb-1">Rodadas Feistel (16 rodadas)</h3>
+         <p class="text-xs text-text/50 mb-3">Cada rodada: Expansão (32→48 bits) → XOR com subchave → S-Boxes (48→32 bits) → Permutação P</p>
+         <div id="feistelRounds" class="space-y-2 max-h-64 overflow-y-auto pr-2"><!-- Rounds generated by JS -->
+         </div>
+         <div class="mt-3 flex items-center gap-2"><span class="text-xs text-text/40">Rodada atual:</span>
+          <div class="flex-1 h-2 bg-bg/50 rounded-full overflow-hidden">
+           <div id="desRoundProgress" class="progress-bar h-full bg-gradient-to-r from-accent to-emerald-500 rounded-full" style="width: 0%"></div>
+          </div><span id="desRoundNum" class="mono text-xs text-accent">0/16</span>
+         </div>
+        </div>
+       </div>
+      </div><!-- Step 3: S-Box Detail -->
+      <div class="step-box p-4 bg-surface rounded-xl border border-white/5" data-step="3">
+       <div class="flex items-start gap-3">
+        <div class="w-7 h-7 rounded-lg bg-accent/20 flex items-center justify-center flex-shrink-0 mt-0.5"><span class="text-xs font-bold text-accent">4</span>
+        </div>
+        <div class="flex-1">
+         <h3 class="text-sm font-bold mb-1">S-Boxes — Substituição Não-Linear</h3>
+         <p class="text-xs text-text/50 mb-3">8 caixas de substituição convertem 6 bits em 4 bits. Esta é a parte que torna o DES seguro — não é linear!</p>
+         <div id="sboxGrid" class="grid grid-cols-8 gap-1"><!-- S-box cells -->
+         </div>
+        </div>
+       </div>
+      </div><!-- Step 4: Final -->
+      <div class="step-box p-4 bg-surface rounded-xl border border-white/5" data-step="4">
+       <div class="flex items-start gap-3">
+        <div class="w-7 h-7 rounded-lg bg-accent/20 flex items-center justify-center flex-shrink-0 mt-0.5"><span class="text-xs font-bold text-accent">5</span>
+        </div>
+        <div class="flex-1">
+         <h3 class="text-sm font-bold mb-1">Permutação Final (IP⁻¹)</h3>
+         <p class="text-xs text-text/50 mb-3">Os bits são reorganizados pela permutação inversa, produzindo o texto cifrado final.</p>
+         <div class="flex items-center gap-3 flex-wrap">
+          <div class="data-block bg-bg/50 rounded-lg px-3 py-2 mono text-xs"><span class="text-text/40 text-[10px] block">Antes de IP⁻¹</span> <span id="des-pre-fp">10110011...</span>
+          </div><i data-lucide="arrow-right" class="w-4 h-4 text-accent/40"></i>
+          <div class="data-block bg-accent/10 border border-accent/30 rounded-lg px-3 py-2 mono text-xs"><span class="text-accent text-[10px] block">🔒 Texto Cifrado</span> <span id="des-cipher" class="text-accent font-bold">????????</span>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div><!-- AES Panel -->
+    <div id="panelAes" class="tab-panel hidden">
+     <div class="flex items-center gap-2 mb-4">
+      <div class="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center"><i data-lucide="shield" class="w-4 h-4 text-accent"></i>
+      </div>
+      <div>
+       <h2 id="aesTitle" class="text-lg font-bold">AES — Advanced Encryption Standard</h2>
+       <p class="text-xs text-text/40">Bloco de 128 bits • Chave de 128/192/256 bits • 10/12/14 rodadas</p>
+      </div>
+     </div>
+     <div class="grid gap-3" id="aesSteps"><!-- Step 0: State Matrix -->
+      <div class="step-box p-4 bg-surface rounded-xl border border-white/5" data-step="0">
+       <div class="flex items-start gap-3">
+        <div class="w-7 h-7 rounded-lg bg-accent/20 flex items-center justify-center flex-shrink-0 mt-0.5"><span class="text-xs font-bold text-accent">1</span>
+        </div>
+        <div class="flex-1">
+         <h3 class="text-sm font-bold mb-1">Matriz de Estado (4×4 bytes)</h3>
+         <p class="text-xs text-text/50 mb-3">Os 16 bytes do texto são organizados em uma matriz 4×4 que será transformada a cada rodada.</p>
+         <div id="aesStateMatrix" class="grid grid-cols-4 gap-1 w-fit"><!-- 4x4 matrix generated by JS -->
+         </div>
+        </div>
+       </div>
+      </div><!-- Step 1: AddRoundKey -->
+      <div class="step-box p-4 bg-surface rounded-xl border border-white/5" data-step="1">
+       <div class="flex items-start gap-3">
+        <div class="w-7 h-7 rounded-lg bg-accent/20 flex items-center justify-center flex-shrink-0 mt-0.5"><span class="text-xs font-bold text-accent">2</span>
+        </div>
+        <div class="flex-1">
+         <h3 class="text-sm font-bold mb-1">AddRoundKey — XOR com a Subchave</h3>
+         <p class="text-xs text-text/50 mb-3">Cada byte do estado é combinado (XOR) com o byte correspondente da chave da rodada.</p>
+         <div class="flex items-center gap-4 flex-wrap">
+          <div id="aes-ark-state" class="grid grid-cols-4 gap-1"><!-- state -->
+          </div>
+          <div class="flex flex-col items-center"><span class="text-xs text-text/40 mb-1">⊕</span> <i data-lucide="plus-circle" class="w-5 h-5 text-orange-400"></i>
+          </div>
+          <div id="aes-ark-key" class="grid grid-cols-4 gap-1"><!-- key -->
+          </div><i data-lucide="arrow-right" class="w-4 h-4 text-accent/40"></i>
+          <div id="aes-ark-result" class="grid grid-cols-4 gap-1"><!-- result -->
+          </div>
+         </div>
+        </div>
+       </div>
+      </div><!-- Step 2: SubBytes -->
+      <div class="step-box p-4 bg-surface rounded-xl border border-white/5" data-step="2">
+       <div class="flex items-start gap-3">
+        <div class="w-7 h-7 rounded-lg bg-accent/20 flex items-center justify-center flex-shrink-0 mt-0.5"><span class="text-xs font-bold text-accent">3</span>
+        </div>
+        <div class="flex-1">
+         <h3 class="text-sm font-bold mb-1">SubBytes — Substituição via S-Box</h3>
+         <p class="text-xs text-text/50 mb-3">Cada byte é substituído usando uma tabela de lookup (S-Box) — garante não-linearidade.</p>
+         <div class="flex items-center gap-4 flex-wrap">
+          <div id="aes-sub-before" class="grid grid-cols-4 gap-1"></div>
+          <div class="flex flex-col items-center"><i data-lucide="shuffle" class="w-5 h-5 text-purple-400"></i> <span class="text-[10px] text-purple-400">S-Box</span>
+          </div>
+          <div id="aes-sub-after" class="grid grid-cols-4 gap-1"></div>
+         </div>
+        </div>
+       </div>
+      </div><!-- Step 3: ShiftRows -->
+      <div class="step-box p-4 bg-surface rounded-xl border border-white/5" data-step="3">
+       <div class="flex items-start gap-3">
+        <div class="w-7 h-7 rounded-lg bg-accent/20 flex items-center justify-center flex-shrink-0 mt-0.5"><span class="text-xs font-bold text-accent">4</span>
+        </div>
+        <div class="flex-1">
+         <h3 class="text-sm font-bold mb-1">ShiftRows — Deslocamento de Linhas</h3>
+         <p class="text-xs text-text/50 mb-3">Cada linha da matriz é deslocada ciclicamente: linha 0 fica parada, linha 1 desloca 1, etc.</p>
+         <div class="flex items-center gap-4 flex-wrap">
+          <div id="aes-shift-before" class="grid grid-cols-4 gap-1"></div>
+          <div class="flex flex-col items-center"><i data-lucide="move-horizontal" class="w-5 h-5 text-cyan-400"></i> <span class="text-[10px] text-cyan-400">Shift</span>
+          </div>
+          <div id="aes-shift-after" class="grid grid-cols-4 gap-1"></div>
+         </div>
+        </div>
+       </div>
+      </div><!-- Step 4: MixColumns -->
+      <div class="step-box p-4 bg-surface rounded-xl border border-white/5" data-step="4">
+       <div class="flex items-start gap-3">
+        <div class="w-7 h-7 rounded-lg bg-accent/20 flex items-center justify-center flex-shrink-0 mt-0.5"><span class="text-xs font-bold text-accent">5</span>
+        </div>
+        <div class="flex-1">
+         <h3 class="text-sm font-bold mb-1">MixColumns — Mistura de Colunas</h3>
+         <p class="text-xs text-text/50 mb-3">Cada coluna é multiplicada por uma matriz fixa no campo de Galois — difunde os bytes entre colunas.</p>
+         <div class="flex items-center gap-4 flex-wrap">
+          <div id="aes-mix-before" class="grid grid-cols-4 gap-1"></div>
+          <div class="flex flex-col items-center"><i data-lucide="blend" class="w-5 h-5 text-pink-400"></i> <span class="text-[10px] text-pink-400">Mix</span>
+          </div>
+          <div id="aes-mix-after" class="grid grid-cols-4 gap-1"></div>
+         </div>
+        </div>
+       </div>
+      </div><!-- AES Round Progress -->
+      <div class="step-box p-4 bg-surface rounded-xl border border-white/5" data-step="5">
+       <div class="flex items-start gap-3">
+        <div class="w-7 h-7 rounded-lg bg-accent/20 flex items-center justify-center flex-shrink-0 mt-0.5"><span class="text-xs font-bold text-accent">6</span>
+        </div>
+        <div class="flex-1">
+         <h3 class="text-sm font-bold mb-1">Resultado Final — 10 Rodadas</h3>
+         <p class="text-xs text-text/50 mb-3">Após 10 rodadas completas, a matriz de estado contém o texto cifrado.</p>
+         <div class="flex items-center gap-2 mb-2"><span class="text-xs text-text/40">Progresso:</span>
+          <div class="flex-1 h-2 bg-bg/50 rounded-full overflow-hidden">
+           <div id="aesRoundProgress" class="progress-bar h-full bg-gradient-to-r from-accent to-emerald-500 rounded-full" style="width: 0%"></div>
+          </div><span id="aesRoundNum" class="mono text-xs text-accent">0/10</span>
+         </div>
+         <div class="data-block bg-accent/10 border border-accent/30 rounded-lg px-3 py-2 mono text-xs mt-2"><span class="text-accent text-[10px] block">🔒 Texto Cifrado AES</span> <span id="aes-cipher" class="text-accent font-bold">????????</span>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div><!-- Compare Panel -->
+    <div id="panelCompare" class="tab-panel hidden">
+     <div class="flex items-center gap-2 mb-4">
+      <div class="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center"><i data-lucide="git-compare" class="w-4 h-4 text-accent"></i>
+      </div>
+      <h2 class="text-lg font-bold">DES vs AES — Comparação</h2>
+     </div>
+     <div class="grid md:grid-cols-2 gap-4"><!-- DES Card -->
+      <div class="p-5 bg-surface rounded-2xl border border-white/5">
+       <div class="flex items-center gap-2 mb-4">
+        <div class="w-6 h-6 rounded bg-orange-500/20 flex items-center justify-center"><i data-lucide="lock" class="w-3 h-3 text-orange-400"></i>
+        </div>
+        <h3 class="font-bold text-orange-400">DES</h3><span class="ml-auto text-[10px] mono px-2 py-0.5 rounded-full bg-red-500/20 text-red-400">Obsoleto</span>
+       </div>
+       <div class="space-y-3">
+        <div class="flex justify-between text-xs"><span class="text-text/50">Ano</span><span class="mono">1977</span>
+        </div>
+        <div class="flex justify-between text-xs"><span class="text-text/50">Tamanho do bloco</span><span class="mono">64 bits</span>
+        </div>
+        <div class="flex justify-between text-xs"><span class="text-text/50">Tamanho da chave</span><span class="mono text-red-400">56 bits</span>
+        </div>
+        <div class="flex justify-between text-xs"><span class="text-text/50">Rodadas</span><span class="mono">16</span>
+        </div>
+        <div class="flex justify-between text-xs"><span class="text-text/50">Estrutura</span><span class="mono">Rede Feistel</span>
+        </div>
+        <div class="flex justify-between text-xs"><span class="text-text/50">Segurança</span>
+         <div class="flex gap-0.5">
+          <div class="w-2 h-2 rounded-full bg-red-500"></div>
+          <div class="w-2 h-2 rounded-full bg-red-500"></div>
+          <div class="w-2 h-2 rounded-full bg-red-500/30"></div>
+          <div class="w-2 h-2 rounded-full bg-red-500/30"></div>
+          <div class="w-2 h-2 rounded-full bg-red-500/30"></div>
+         </div>
+        </div>
+        <div class="mt-3 p-3 bg-red-500/10 rounded-lg text-xs text-red-300">
+         ⚠️ Chave de 56 bits pode ser quebrada por força bruta em horas com hardware moderno.
+        </div>
+       </div>
+      </div><!-- AES Card -->
+      <div class="p-5 bg-surface rounded-2xl border border-white/5">
+       <div class="flex items-center gap-2 mb-4">
+        <div class="w-6 h-6 rounded bg-accent/20 flex items-center justify-center"><i data-lucide="shield" class="w-3 h-3 text-accent"></i>
+        </div>
+        <h3 class="font-bold text-accent">AES</h3><span class="ml-auto text-[10px] mono px-2 py-0.5 rounded-full bg-accent/20 text-accent">Padrão Atual</span>
+       </div>
+       <div class="space-y-3">
+        <div class="flex justify-between text-xs"><span class="text-text/50">Ano</span><span class="mono">2001</span>
+        </div>
+        <div class="flex justify-between text-xs"><span class="text-text/50">Tamanho do bloco</span><span class="mono">128 bits</span>
+        </div>
+        <div class="flex justify-between text-xs"><span class="text-text/50">Tamanho da chave</span><span class="mono text-accent">128/192/256 bits</span>
+        </div>
+        <div class="flex justify-between text-xs"><span class="text-text/50">Rodadas</span><span class="mono">10/12/14</span>
+        </div>
+        <div class="flex justify-between text-xs"><span class="text-text/50">Estrutura</span><span class="mono">SPN (Substituição-Permutação)</span>
+        </div>
+        <div class="flex justify-between text-xs"><span class="text-text/50">Segurança</span>
+         <div class="flex gap-0.5">
+          <div class="w-2 h-2 rounded-full bg-accent"></div>
+          <div class="w-2 h-2 rounded-full bg-accent"></div>
+          <div class="w-2 h-2 rounded-full bg-accent"></div>
+          <div class="w-2 h-2 rounded-full bg-accent"></div>
+          <div class="w-2 h-2 rounded-full bg-accent"></div>
+         </div>
+        </div>
+        <div class="mt-3 p-3 bg-accent/10 rounded-lg text-xs text-accent/80">
+         ✅ AES-256 levaria bilhões de anos para ser quebrado por força bruta.
+        </div>
+       </div>
+      </div>
+     </div><!-- Visual Timeline -->
+     <div class="mt-6 p-5 bg-surface rounded-2xl border border-white/5">
+      <h3 class="text-sm font-bold mb-4">Fluxo de Operações</h3>
+      <div class="grid md:grid-cols-2 gap-6">
+       <div><span class="text-xs text-orange-400 font-bold mb-2 block">DES — Rede Feistel</span>
+        <div class="space-y-1">
+         <div class="flex items-center gap-2 text-xs">
+          <div class="w-3 h-3 rounded bg-blue-400/30"></div><span class="text-text/60">Permutação Inicial</span>
+         </div>
+         <div class="flex items-center gap-2 text-xs">
+          <div class="w-3 h-3 rounded bg-orange-400/30"></div><span class="text-text/60">Dividir L e R</span>
+         </div>
+         <div class="flex items-center gap-2 text-xs">
+          <div class="w-3 h-3 rounded bg-purple-400/30"></div><span class="text-text/60">16× Rodada Feistel (Expansão → XOR → S-Box → P)</span>
+         </div>
+         <div class="flex items-center gap-2 text-xs">
+          <div class="w-3 h-3 rounded bg-accent/30"></div><span class="text-text/60">Permutação Final</span>
+         </div>
+        </div>
+       </div>
+       <div><span class="text-xs text-accent font-bold mb-2 block">AES — Rede SPN</span>
+        <div class="space-y-1">
+         <div class="flex items-center gap-2 text-xs">
+          <div class="w-3 h-3 rounded bg-blue-400/30"></div><span class="text-text/60">Criar Matriz 4×4</span>
+         </div>
+         <div class="flex items-center gap-2 text-xs">
+          <div class="w-3 h-3 rounded bg-orange-400/30"></div><span class="text-text/60">AddRoundKey (XOR com chave)</span>
+         </div>
+         <div class="flex items-center gap-2 text-xs">
+          <div class="w-3 h-3 rounded bg-purple-400/30"></div><span class="text-text/60">10× (SubBytes → ShiftRows → MixColumns → AddRoundKey)</span>
+         </div>
+         <div class="flex items-center gap-2 text-xs">
+          <div class="w-3 h-3 rounded bg-accent/30"></div><span class="text-text/60">Última rodada (sem MixColumns)</span>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </main>
+  </div>
+  <script>
+  // -- Utility functions --
+  function textToBinary(text, bits) {
+    let bin = '';
+    for (let i = 0; i < text.length && bin.length < bits; i++) {
+      bin += text.charCodeAt(i).toString(2).padStart(8, '0');
+    }
+    while (bin.length < bits) bin += '0';
+    return bin.substring(0, bits);
+  }
+
+  function textToHexBytes(text, count) {
+    const bytes = [];
+    for (let i = 0; i < count; i++) {
+      const ch = i < text.length ? text.charCodeAt(i) : 0;
+      bytes.push(ch.toString(16).toUpperCase().padStart(2, '0'));
+    }
+    return bytes;
+  }
+
+  function xorBinary(a, b) {
+    let result = '';
+    for (let i = 0; i < a.length; i++) {
+      result += (a[i] === b[i]) ? '0' : '1';
+    }
+    return result;
+  }
+
+  function permuteBits(bits, table) {
+    return table.map(i => bits[i - 1] || '0').join('');
+  }
+
+  function pseudoSBox(input6) {
+    const val = parseInt(input6, 2);
+    return ((val * 7 + 3) % 16).toString(2).padStart(4, '0');
+  }
+
+  function pseudoAesSBox(byte) {
+    const v = parseInt(byte, 16);
+    return ((v * 13 + 99) % 256).toString(16).toUpperCase().padStart(2, '0');
+  }
+
+  function galoisMul(a, b) {
+    let p = 0;
+    for (let i = 0; i < 8; i++) {
+      if (b & 1) p ^= a;
+      const hi = a & 0x80;
+      a = (a << 1) & 0xFF;
+      if (hi) a ^= 0x1B;
+      b >>= 1;
+    }
+    return p;
+  }
+
+  // Simplified IP table (first 64 entries)
+  const IP = [58,50,42,34,26,18,10,2,60,52,44,36,28,20,12,4,62,54,46,38,30,22,14,6,64,56,48,40,32,24,16,8,57,49,41,33,25,17,9,1,59,51,43,35,27,19,11,3,61,53,45,37,29,21,13,5,63,55,47,39,31,23,15,7];
+  const FP = [40,8,48,16,56,24,64,32,39,7,47,15,55,23,63,31,38,6,46,14,54,22,62,30,37,5,45,13,53,21,61,29,36,4,44,12,52,20,60,28,35,3,43,11,51,19,59,27,34,2,42,10,50,18,58,26,33,1,41,9,49,17,57,25];
+
+  // Generate pseudo subkeys from key text
+  function generateSubKeys(keyBin) {
+    const keys = [];
+    for (let i = 0; i < 16; i++) {
+      let subkey = '';
+      for (let j = 0; j < 48; j++) {
+        const idx = (i * 3 + j * 7 + 5) % keyBin.length;
+        subkey += keyBin[idx];
+      }
+      keys.push(subkey);
+    }
+    return keys;
+  }
+
+  // -- Animation state --
+  let animating = false;
+  let currentTab = 'des';
+
+  // -- Tab switching --
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentTab = btn.dataset.tab;
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
+      document.getElementById('panel' + currentTab.charAt(0).toUpperCase() + currentTab.slice(1)).classList.remove('hidden');
+    });
+  });
+
+  // -- Binary preview --
+  const inputText = document.getElementById('inputText');
+  const inputKey = document.getElementById('inputKey');
+  const binaryPreview = document.getElementById('binaryPreview');
+
+  function updatePreview() {
+    const bin = textToBinary(inputText.value || 'A', 64);
+    binaryPreview.textContent = bin.match(/.{1,8}/g).join(' ');
+  }
+  inputText.addEventListener('input', updatePreview);
+  updatePreview();
+
+  // -- Render 4x4 hex grid --
+  function renderHexGrid(containerId, bytes, highlightIdx) {
+    const el = document.getElementById(containerId);
+    if (!el) return;
+    el.innerHTML = '';
+    for (let i = 0; i < 16; i++) {
+      const cell = document.createElement('div');
+      cell.className = 'w-9 h-9 flex items-center justify-center rounded mono text-[10px] font-bold transition-all duration-300 '
+        + (i === highlightIdx ? 'bg-accent/30 text-accent scale-110' : 'bg-bg/50 text-text/70');
+      cell.textContent = bytes[i] || '00';
+      el.appendChild(cell);
+    }
+  }
+
+  // -- S-Box grid --
+  function renderSBoxGrid() {
+    const grid = document.getElementById('sboxGrid');
+    grid.innerHTML = '';
+    for (let i = 0; i < 8; i++) {
+      const box = document.createElement('div');
+      box.className = 'bg-bg/50 rounded p-2 text-center';
+      box.innerHTML = `<div class="text-[9px] text-text/40 mb-1">S${i+1}</div><div class="mono text-[10px] text-purple-400" id="sbox-${i}">—</div>`;
+      grid.appendChild(box);
+    }
+  }
+  renderSBoxGrid();
+
+  // -- DES Animation --
+  async function animateDES() {
+    const text = inputText.value || 'HELLO';
+    const key = inputKey.value || 'SECRET';
+    const plainBin = textToBinary(text, 64);
+    const keyBin = textToBinary(key, 64);
+
+    // Step 0: IP
+    activateStep('desSteps', 0);
+    document.getElementById('des-ip-in').textContent = plainBin.substring(0, 16) + '...';
+    await sleep(400);
+    const afterIP = permuteBits(plainBin, IP);
+    document.getElementById('des-ip-out').textContent = afterIP.substring(0, 16) + '...';
+    await sleep(600);
+
+    // Step 1: Split
+    activateStep('desSteps', 1);
+    const L0 = afterIP.substring(0, 32);
+    const R0 = afterIP.substring(32, 64);
+    document.getElementById('des-l0').textContent = L0.substring(0, 16) + '...';
+    document.getElementById('des-r0').textContent = R0.substring(0, 16) + '...';
+    await sleep(600);
+
+    // Step 2: Feistel rounds
+    activateStep('desSteps', 2);
+    const subKeys = generateSubKeys(keyBin);
+    let L = L0, R = R0;
+    const roundsContainer = document.getElementById('feistelRounds');
+    roundsContainer.innerHTML = '';
+
+    for (let round = 0; round < 16; round++) {
+      if (!animating) return;
+
+      // Expansion: 32 -> 48 (simplified)
+      let expanded = '';
+      for (let j = 0; j < 48; j++) expanded += R[(j * 5 + 3) % 32];
+
+      // XOR with subkey
+      const xored = xorBinary(expanded, subKeys[round]);
+
+      // S-Box substitution (8 boxes, 6 bits -> 4 bits each)
+      let sboxOut = '';
+      for (let s = 0; s < 8; s++) {
+        const chunk = xored.substring(s * 6, s * 6 + 6);
+        const out = pseudoSBox(chunk);
+        sboxOut += out;
+        const sboxEl = document.getElementById(`sbox-${s}`);
+        if (sboxEl) sboxEl.textContent = chunk + '→' + out;
+      }
+
+      // P permutation (simplified)
+      let pOut = '';
+      for (let j = 0; j < 32; j++) pOut += sboxOut[(j * 3 + 1) % 32];
+
+      // Feistel: new L = R, new R = L XOR f(R)
+      const newR = xorBinary(L, pOut);
+      L = R;
+      R = newR;
+
+      // Add round element
+      const roundEl = document.createElement('div');
+      roundEl.className = 'slide-in flex items-center gap-2 p-2 bg-bg/30 rounded-lg';
+      roundEl.innerHTML = `
+        <span class="text-[10px] text-accent/60 mono w-8">R${round+1}</span>
+        <span class="text-[10px] mono text-blue-400 truncate flex-1">L=${L.substring(0,8)}…</span>
+        <span class="text-[10px] mono text-orange-400 truncate flex-1">R=${R.substring(0,8)}…</span>
+      `;
+      roundsContainer.appendChild(roundEl);
+      roundsContainer.scrollTop = roundsContainer.scrollHeight;
+
+      document.getElementById('desRoundProgress').style.width = `${((round + 1) / 16) * 100}%`;
+      document.getElementById('desRoundNum').textContent = `${round + 1}/16`;
+      await sleep(300);
+    }
+
+    // Step 3: highlight S-boxes
+    activateStep('desSteps', 3);
+    await sleep(800);
+
+    // Step 4: Final permutation
+    activateStep('desSteps', 4);
+    const combined = R + L; // Note: swap before FP
+    document.getElementById('des-pre-fp').textContent = combined.substring(0, 16) + '...';
+    await sleep(400);
+    const cipherBin = permuteBits(combined, FP);
+    // Convert to hex
+    let cipherHex = '';
+    for (let i = 0; i < 64; i += 8) {
+      cipherHex += parseInt(cipherBin.substring(i, i + 8), 2).toString(16).toUpperCase().padStart(2, '0');
+    }
+    document.getElementById('des-cipher').textContent = cipherHex;
+    await sleep(200);
+  }
+
+  // -- AES Animation --
+  async function animateAES() {
+    const text = inputText.value || 'HELLO';
+    const key = inputKey.value || 'SECRET';
+    const stateBytes = textToHexBytes(text, 16);
+    const keyBytes = textToHexBytes(key, 16);
+
+    // Step 0: State Matrix
+    activateStep('aesSteps', 0);
+    renderHexGrid('aesStateMatrix', stateBytes, -1);
+    await sleep(600);
+
+    let state = [...stateBytes];
+
+    for (let round = 0; round < 10; round++) {
+      if (!animating) return;
+
+      // Generate round key (simplified)
+      const roundKey = keyBytes.map((b, i) => {
+        const v = (parseInt(b, 16) + round * 13 + i * 7) % 256;
+        return v.toString(16).toUpperCase().padStart(2, '0');
+      });
+
+      // Step 1: AddRoundKey
+      activateStep('aesSteps', 1);
+      renderHexGrid('aes-ark-state', state, round % 16);
+      renderHexGrid('aes-ark-key', roundKey, round % 16);
+      const arkResult = state.map((b, i) => {
+        const v = parseInt(b, 16) ^ parseInt(roundKey[i], 16);
+        return v.toString(16).toUpperCase().padStart(2, '0');
+      });
+      await sleep(250);
+      renderHexGrid('aes-ark-result', arkResult, -1);
+      state = arkResult;
+      await sleep(250);
+
+      // Step 2: SubBytes
+      activateStep('aesSteps', 2);
+      renderHexGrid('aes-sub-before', state, -1);
+      const subResult = state.map(b => pseudoAesSBox(b));
+      await sleep(250);
+      renderHexGrid('aes-sub-after', subResult, -1);
+      state = subResult;
+      await sleep(250);
+
+      // Step 3: ShiftRows
+      activateStep('aesSteps', 3);
+      renderHexGrid('aes-shift-before', state, -1);
+      // Shift rows in 4x4 column-major format
+      const matrix = [];
+      for (let r = 0; r < 4; r++) {
+        matrix[r] = [];
+        for (let c = 0; c < 4; c++) {
+          matrix[r][c] = state[c * 4 + r];
+        }
+      }
+      for (let r = 1; r < 4; r++) {
+        for (let s = 0; s < r; s++) matrix[r].push(matrix[r].shift());
+      }
+      const shifted = [];
+      for (let c = 0; c < 4; c++) {
+        for (let r = 0; r < 4; r++) shifted[c * 4 + r] = matrix[r][c];
+      }
+      state = shifted;
+      await sleep(250);
+      renderHexGrid('aes-shift-after', state, -1);
+      await sleep(250);
+
+      // Step 4: MixColumns (skip on last round)
+      if (round < 9) {
+        activateStep('aesSteps', 4);
+        renderHexGrid('aes-mix-before', state, -1);
+        const mixed = [...state];
+        for (let c = 0; c < 4; c++) {
+          const s0 = parseInt(state[c*4], 16), s1 = parseInt(state[c*4+1], 16);
+          const s2 = parseInt(state[c*4+2], 16), s3 = parseInt(state[c*4+3], 16);
+          mixed[c*4]   = (galoisMul(2,s0) ^ galoisMul(3,s1) ^ s2 ^ s3).toString(16).toUpperCase().padStart(2,'0');
+          mixed[c*4+1] = (s0 ^ galoisMul(2,s1) ^ galoisMul(3,s2) ^ s3).toString(16).toUpperCase().padStart(2,'0');
+          mixed[c*4+2] = (s0 ^ s1 ^ galoisMul(2,s2) ^ galoisMul(3,s3)).toString(16).toUpperCase().padStart(2,'0');
+          mixed[c*4+3] = (galoisMul(3,s0) ^ s1 ^ s2 ^ galoisMul(2,s3)).toString(16).toUpperCase().padStart(2,'0');
+        }
+        state = mixed;
+        await sleep(200);
+        renderHexGrid('aes-mix-after', state, -1);
+        await sleep(200);
+      }
+
+      document.getElementById('aesRoundProgress').style.width = `${((round + 1) / 10) * 100}%`;
+      document.getElementById('aesRoundNum').textContent = `${round + 1}/10`;
+    }
+
+    // Step 5: Final
+    activateStep('aesSteps', 5);
+    document.getElementById('aes-cipher').textContent = state.join('');
+    await sleep(200);
+  }
+
+  function activateStep(containerId, stepIdx) {
+    const steps = document.getElementById(containerId).querySelectorAll('.step-box');
+    steps.forEach((s, i) => {
+      s.classList.toggle('active', i === stepIdx);
+      s.classList.toggle('step-active', i === stepIdx);
+    });
+  }
+
+  function sleep(ms) {
+    return new Promise(r => setTimeout(r, ms));
+  }
+
+  // -- Main animate button --
+  document.getElementById('btnAnimate').addEventListener('click', async () => {
+    if (animating) return;
+    animating = true;
+    const btn = document.getElementById('btnAnimate');
+    btn.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Animando...';
+    btn.classList.add('opacity-70');
+
+    try {
+      if (currentTab === 'des') {
+        await animateDES();
+      } else if (currentTab === 'aes') {
+        await animateAES();
+      } else {
+        // Compare: run both
+        currentTab = 'des';
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById('tabDes').classList.add('active');
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
+        document.getElementById('panelDes').classList.remove('hidden');
+        await animateDES();
+
+        if (animating) {
+          await sleep(500);
+          currentTab = 'aes';
+          document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+          document.getElementById('tabAes').classList.add('active');
+          document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
+          document.getElementById('panelAes').classList.remove('hidden');
+          await animateAES();
+
+          await sleep(500);
+          currentTab = 'compare';
+          document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+          document.getElementById('tabCompare').classList.add('active');
+          document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
+          document.getElementById('panelCompare').classList.remove('hidden');
+        }
+      }
+    } finally {
+      animating = false;
+      btn.innerHTML = '<i data-lucide="play" class="w-4 h-4"></i> Animar';
+      btn.classList.remove('opacity-70');
+      lucide.createIcons();
+    }
+  });
+
+  // -- Element SDK --
+  const defaultConfig = {
+    background_color: '#0a0e1a',
+    surface_color: '#131a2e',
+    text_color: '#e2e8f0',
+    accent_color: '#63ffb6',
+    secondary_color: '#ff6b6b',
+    font_family: 'Space Grotesk',
+    font_size: 14,
+    main_title: 'Como a Criptografia Funciona',
+    des_label: 'DES — Data Encryption Standard',
+    aes_label: 'AES — Advanced Encryption Standard'
+  };
+
+  function applyConfig(config) {
+    const bg = config.background_color || defaultConfig.background_color;
+    const surface = config.surface_color || defaultConfig.surface_color;
+    const text = config.text_color || defaultConfig.text_color;
+    const accent = config.accent_color || defaultConfig.accent_color;
+    const secondary = config.secondary_color || defaultConfig.secondary_color;
+    const font = config.font_family || defaultConfig.font_family;
+    const fontSize = config.font_size || defaultConfig.font_size;
+
+    document.body.style.backgroundColor = bg;
+    document.body.style.color = text;
+    document.body.style.fontFamily = `${font}, Space Grotesk, sans-serif`;
+    document.body.style.fontSize = `${fontSize}px`;
+
+    document.querySelectorAll('.bg-surface').forEach(el => el.style.backgroundColor = surface);
+
+    const title = document.getElementById('mainTitle');
+    if (title) {
+      title.textContent = config.main_title || defaultConfig.main_title;
+      title.style.color = accent;
+      title.style.fontSize = `${fontSize * 1.5}px`;
+    }
+
+    const desTitle = document.getElementById('desTitle');
+    if (desTitle) {
+      desTitle.textContent = config.des_label || defaultConfig.des_label;
+      desTitle.style.fontSize = `${fontSize * 1.3}px`;
+    }
+
+    const aesTitle = document.getElementById('aesTitle');
+    if (aesTitle) {
+      aesTitle.textContent = config.aes_label || defaultConfig.aes_label;
+      aesTitle.style.fontSize = `${fontSize * 1.3}px`;
+    }
+
+    document.querySelectorAll('.text-accent').forEach(el => el.style.color = accent);
+
+    // Update tab active styles
+    const style = document.getElementById('dynamicStyle') || document.createElement('style');
+    style.id = 'dynamicStyle';
+    style.textContent = `
+      .tab-btn.active { background: ${accent}20; color: ${accent}; }
+      .tab-btn.active::after { background: ${accent}; }
+      .tab-btn:not(.active) { color: ${text}80; }
+      .step-active { box-shadow: 0 0 5px ${accent}30; }
+      .data-block:hover { box-shadow: 0 2px 8px ${accent}20; }
+    `;
+    if (!document.getElementById('dynamicStyle')) document.head.appendChild(style);
+  }
+
+  window.elementSdk.init({
+    defaultConfig,
+    onConfigChange: async (config) => {
+      applyConfig(config);
+    },
+    mapToCapabilities: (config) => ({
+      recolorables: [
+        {
+          get: () => config.background_color || defaultConfig.background_color,
+          set: (v) => { config.background_color = v; window.elementSdk.setConfig({ background_color: v }); }
+        },
+        {
+          get: () => config.surface_color || defaultConfig.surface_color,
+          set: (v) => { config.surface_color = v; window.elementSdk.setConfig({ surface_color: v }); }
+        },
+        {
+          get: () => config.text_color || defaultConfig.text_color,
+          set: (v) => { config.text_color = v; window.elementSdk.setConfig({ text_color: v }); }
+        },
+        {
+          get: () => config.accent_color || defaultConfig.accent_color,
+          set: (v) => { config.accent_color = v; window.elementSdk.setConfig({ accent_color: v }); }
+        },
+        {
+          get: () => config.secondary_color || defaultConfig.secondary_color,
+          set: (v) => { config.secondary_color = v; window.elementSdk.setConfig({ secondary_color: v }); }
+        }
+      ],
+      borderables: [],
+      fontEditable: {
+        get: () => config.font_family || defaultConfig.font_family,
+        set: (v) => { config.font_family = v; window.elementSdk.setConfig({ font_family: v }); }
+      },
+      fontSizeable: {
+        get: () => config.font_size || defaultConfig.font_size,
+        set: (v) => { config.font_size = v; window.elementSdk.setConfig({ font_size: v }); }
+      }
+    }),
+    mapToEditPanelValues: (config) => new Map([
+      ['main_title', config.main_title || defaultConfig.main_title],
+      ['des_label', config.des_label || defaultConfig.des_label],
+      ['aes_label', config.aes_label || defaultConfig.aes_label]
+    ])
+  });
+
+  lucide.createIcons();
+</script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9dd608130264650b',t:'MTc3MzY4Nzk0OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
